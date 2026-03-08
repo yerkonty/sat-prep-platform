@@ -42,11 +42,38 @@ def get_analytics(
     correct = sum(1 for p in progress if p.is_correct)
     accuracy = (correct / total * 100) if total > 0 else 0.0
     
+    # Get question types from progress
+    from app.models import Question
+    by_type = {"reading": 0, "writing": 0, "math": 0}
+    by_difficulty = {"easy": 0, "medium": 0, "hard": 0}
+    
+    for p in progress:
+        question = db.query(Question).filter(Question.id == p.question_id).first()
+        if question:
+            q_type = question.type.lower()
+            q_diff = question.difficulty.lower()
+            if q_type in by_type:
+                by_type[q_type] = by_type.get(q_type, 0) + 1
+            if q_diff in by_difficulty:
+                by_difficulty[q_diff] = by_difficulty.get(q_diff, 0) + 1
+    
+    # Recent activity (last 10 attempts)
+    recent = progress[-10:] if len(progress) > 10 else progress
+    recent_activity = []
+    for p in recent:
+        question = db.query(Question).filter(Question.id == p.question_id).first()
+        recent_activity.append({
+            "question_id": p.question_id,
+            "is_correct": p.is_correct,
+            "type": question.type if question else "unknown",
+            "answered_at": p.answered_at.isoformat() if p.answered_at else None
+        })
+    
     return AnalyticsResponse(
         total_questions=total,
         correct_answers=correct,
         accuracy=round(accuracy, 2),
-        by_type={"reading": 0, "writing": 0, "math": 0},
-        by_difficulty={"easy": 0, "medium": 0, "hard": 0},
-        recent_activity=[]
+        by_type=by_type,
+        by_difficulty=by_difficulty,
+        recent_activity=recent_activity
     )
