@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from pydantic import BaseModel
 from typing import Optional, List
 import uuid
@@ -13,13 +14,15 @@ router = APIRouter(prefix="/api/questions", tags=["Questions"])
 
 class QuestionResponse(BaseModel):
     id: str
-    type: str
-    category: str
-    difficulty: str
+    section: Optional[str] = None
+    type: Optional[str] = None
+    domain: Optional[str] = None
+    category: Optional[str] = None
+    difficulty: Optional[str] = None
     content: str
     options: list
     explanation: Optional[str] = None
-    
+
     class Config:
         from_attributes = True
 
@@ -38,22 +41,28 @@ class AnswerResponse(BaseModel):
 
 @router.get("", response_model=List[QuestionResponse])
 def get_questions(
+    section: Optional[str] = None,
+    domain: Optional[str] = None,
     type: Optional[str] = None,
     category: Optional[str] = None,
     difficulty: Optional[str] = None,
-    limit: int = 10,
+    limit: int = Query(10, ge=1, le=50),
     db: Session = Depends(get_db)
 ):
     """Get practice questions with optional filters"""
     query = db.query(Question)
-    
+
+    if section:
+        query = query.filter(func.lower(Question.section) == section.lower())
+    if domain:
+        query = query.filter(func.lower(Question.domain) == domain.lower())
     if type:
-        query = query.filter(Question.type == type)
+        query = query.filter(func.lower(Question.type) == type.lower())
     if category:
-        query = query.filter(Question.category == category)
+        query = query.filter(func.lower(Question.category) == category.lower())
     if difficulty:
-        query = query.filter(Question.difficulty == difficulty)
-    
+        query = query.filter(func.lower(Question.difficulty) == difficulty.lower())
+
     questions = query.limit(limit).all()
     return questions
 
@@ -65,11 +74,25 @@ def get_types(db: Session = Depends(get_db)):
     return {"types": [t[0] for t in types]}
 
 
+@router.get("/sections")
+def get_sections(db: Session = Depends(get_db)):
+    """Get all question sections"""
+    sections = db.query(Question.section).distinct().all()
+    return {"sections": [s[0] for s in sections if s[0]]}
+
+
 @router.get("/categories")
 def get_categories(db: Session = Depends(get_db)):
     """Get all question categories"""
     categories = db.query(Question.category).distinct().all()
     return {"categories": [c[0] for c in categories]}
+
+
+@router.get("/domains")
+def get_domains(db: Session = Depends(get_db)):
+    """Get all question domains"""
+    domains = db.query(Question.domain).distinct().all()
+    return {"domains": [d[0] for d in domains if d[0]]}
 
 
 @router.post("/answer", response_model=AnswerResponse)
@@ -84,6 +107,9 @@ def answer_question(
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
     
+    if request.answer < 0 or request.answer >= len(question.options):
+        raise HTTPException(status_code=400, detail="Invalid answer index")
+
     is_correct = request.answer == question.correct_answer
     
     progress = Progress(

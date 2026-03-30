@@ -12,6 +12,10 @@ class User(Base):
     password_hash = Column(String, nullable=False)
     name = Column(String)
     created_at = Column(DateTime, server_default=func.now())
+    email_verified = Column(Boolean, default=False)
+    verification_token = Column(String)
+    reset_token = Column(String)
+    reset_token_expires = Column(DateTime)
     
     stripe_customer_id = Column(String)
     subscription_plan = Column(String, default="free")
@@ -29,14 +33,17 @@ class Question(Base):
     __tablename__ = "questions"
     
     id = Column(String, primary_key=True, index=True)
+    section = Column(String, index=True)
     type = Column(String, index=True)
     category = Column(String, index=True)
+    domain = Column(String, index=True)
     difficulty = Column(String, index=True)
     content = Column(Text, nullable=False)
     options = Column(JSON, nullable=False)
     correct_answer = Column(Integer, nullable=False)
     explanation = Column(Text)
     source = Column(String)
+    external_id = Column(String, unique=True, index=True)
     
     progress = relationship("Progress", back_populates="question")
 
@@ -62,6 +69,7 @@ class FlashcardDeck(Base):
     user_id = Column(String, ForeignKey("users.id"), nullable=True)
     name = Column(String, nullable=False)
     is_premium = Column(Boolean, default=False)
+    is_shared = Column(Boolean, default=False)
     
     user = relationship("User", back_populates="flashcard_decks")
     cards = relationship("Flashcard", back_populates="deck")

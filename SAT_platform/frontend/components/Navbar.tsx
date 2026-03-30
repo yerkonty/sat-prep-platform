@@ -37,6 +37,9 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             {user ? (
               <>
+                <Link href="/profile" className="text-gray-700 hover:text-blue-600">
+                  Settings
+                </Link>
                 <span className="text-gray-700">{user.name}</span>
                 <button
                   onClick={logout}

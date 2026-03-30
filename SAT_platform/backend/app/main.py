@@ -5,8 +5,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from app.database import engine, Base
+from app.migrations import run_startup_migrations
 from app.routers import auth, questions, progress, ai_tutor, flashcards
 
+run_startup_migrations(engine)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(

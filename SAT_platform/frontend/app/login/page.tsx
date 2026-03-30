@@ -22,7 +22,9 @@ export default function LoginPage() {
       await login(email, password);
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Login failed');
+      console.error('Login error:', err);
+      const message = err.response?.data?.detail || err.message || 'Login failed. Make sure backend is running on port 8000.';
+      setError(message);
     } finally {
       setLoading(false);
     }

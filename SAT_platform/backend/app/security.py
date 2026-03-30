@@ -1,20 +1,29 @@
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import hashlib
+import secrets
 from app.config import settings
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a plain password against a hashed password"""
-    return pwd_context.verify(plain_password, hashed_password)
+    salt = hashed_password[:32]
+    check_hash = hash_password(plain_password, salt)
+    return check_hash == hashed_password
+
+
+def hash_password(password: str, salt: str = None) -> str:
+    """Hash a password using SHA-256 with salt"""
+    if salt is None:
+        salt = secrets.token_hex(16)
+    pwd_hash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt.encode('utf-8'), 100000)
+    return salt + pwd_hash.hex()
 
 
 def get_password_hash(password: str) -> str:
     """Hash a password for storing"""
-    return pwd_context.hash(password)
+    return hash_password(password)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:

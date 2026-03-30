@@ -5,12 +5,20 @@ import api from '@/lib/api';
 
 interface Question {
   id: string;
-  type: string;
-  category: string;
-  difficulty: string;
+  section?: string;
+  type?: string;
+  domain?: string;
+  category?: string;
+  difficulty?: string;
   content: string;
   options: string[];
   explanation?: string;
+}
+
+interface AnswerResult {
+  is_correct: boolean;
+  correct_answer: number;
+  explanation: string;
 }
 
 export default function PracticePage() {
@@ -20,12 +28,13 @@ export default function PracticePage() {
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
-    type: '',
-    category: '',
+    section: '',
+    domain: '',
     difficulty: ''
   });
-  const [types, setTypes] = useState<string[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [sections, setSections] = useState<string[]>([]);
+  const [domains, setDomains] = useState<string[]>([]);
+  const [result, setResult] = useState<AnswerResult | null>(null);
 
   useEffect(() => {
     fetchFilters();
@@ -34,12 +43,12 @@ export default function PracticePage() {
 
   const fetchFilters = async () => {
     try {
-      const [typesRes, catsRes] = await Promise.all([
-        api.get('/api/questions/types'),
-        api.get('/api/questions/categories')
+      const [sectionsRes, domainsRes] = await Promise.all([
+        api.get('/api/questions/sections'),
+        api.get('/api/questions/domains')
       ]);
-      setTypes(typesRes.data.types || []);
-      setCategories(catsRes.data.categories || []);
+      setSections(sectionsRes.data.sections || []);
+      setDomains(domainsRes.data.domains || []);
     } catch (error) {
       console.error('Failed to fetch filters');
     }
@@ -49,8 +58,8 @@ export default function PracticePage() {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-      if (filters.type) params.append('type', filters.type);
-      if (filters.category) params.append('category', filters.category);
+      if (filters.section) params.append('section', filters.section);
+      if (filters.domain) params.append('domain', filters.domain);
       if (filters.difficulty) params.append('difficulty', filters.difficulty);
       params.append('limit', '10');
 
@@ -59,6 +68,7 @@ export default function PracticePage() {
       setCurrentIndex(0);
       setSelectedAnswer(null);
       setShowResult(false);
+      setResult(null);
     } catch (error) {
       console.error('Failed to fetch questions');
     } finally {
@@ -68,13 +78,16 @@ export default function PracticePage() {
 
   const handleSubmitAnswer = async () => {
     if (selectedAnswer === null) return;
+    const currentQuestion = questions[currentIndex];
+    if (!currentQuestion) return;
 
     try {
-      await api.post('/api/questions/answer', {
-        question_id: questions[currentIndex].id,
+      const response = await api.post<AnswerResult>('/api/questions/answer', {
+        question_id: currentQuestion.id,
         answer: selectedAnswer,
         time_taken: 30
       });
+      setResult(response.data);
       setShowResult(true);
     } catch (error) {
       console.error('Failed to submit answer');
@@ -86,13 +99,14 @@ export default function PracticePage() {
       setCurrentIndex(prev => prev + 1);
       setSelectedAnswer(null);
       setShowResult(false);
+      setResult(null);
     } else {
       fetchQuestions();
     }
   };
 
   const currentQuestion = questions[currentIndex];
-  const isCorrect = selectedAnswer === currentQuestion?.correct_answer;
+  const isCorrect = result?.is_correct ?? false;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -102,24 +116,24 @@ export default function PracticePage() {
       <div className="bg-white rounded-lg shadow p-4 mb-6">
         <div className="flex flex-wrap gap-4">
           <select
-            value={filters.type}
-            onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
+            value={filters.section}
+            onChange={(e) => setFilters(prev => ({ ...prev, section: e.target.value }))}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">All Types</option>
-            {types.map(type => (
-              <option key={type} value={type}>{type}</option>
+            <option value="">All Sections</option>
+            {sections.map(section => (
+              <option key={section} value={section}>{section}</option>
             ))}
           </select>
 
           <select
-            value={filters.category}
-            onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
+            value={filters.domain}
+            onChange={(e) => setFilters(prev => ({ ...prev, domain: e.target.value }))}
             className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">All Categories</option>
-            {categories.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
+            <option value="">All Domains</option>
+            {domains.map(domain => (
+              <option key={domain} value={domain}>{domain}</option>
             ))}
           </select>
 
@@ -166,17 +180,17 @@ export default function PracticePage() {
               Question {currentIndex + 1} of {questions.length}
             </span>
             <span className={`px-3 py-1 rounded-full text-sm ${
-              currentQuestion.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
-              currentQuestion.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+              currentQuestion?.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
+              currentQuestion?.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' :
               'bg-red-100 text-red-800'
             }`}>
-              {currentQuestion.difficulty}
+              {currentQuestion?.difficulty || 'mixed'}
             </span>
           </div>
 
           {/* Question Type */}
           <div className="text-sm text-blue-600 mb-2">
-            {currentQuestion.type} • {currentQuestion.category}
+            {(currentQuestion?.section || currentQuestion?.type || 'general')} • {(currentQuestion?.domain || currentQuestion?.category || 'general')}
           </div>
 
           {/* Question Content */}
@@ -186,7 +200,7 @@ export default function PracticePage() {
 
           {/* Options */}
           <div className="space-y-3 mb-6">
-            {currentQuestion.options.map((option, index) => (
+            {currentQuestion?.options?.map((option, index) => (
               <button
                 key={index}
                 disabled={showResult}
@@ -196,7 +210,7 @@ export default function PracticePage() {
                     ? 'border-blue-500 bg-blue-50'
                     : 'border-gray-200 hover:border-gray-300'
                 } ${
-                  showResult && index === currentQuestion.correct_answer
+                  showResult && result && index === result.correct_answer
                     ? 'border-green-500 bg-green-50'
                     : ''
                 } ${
@@ -214,10 +228,10 @@ export default function PracticePage() {
           </div>
 
           {/* Explanation */}
-          {showResult && currentQuestion.explanation && (
+          {showResult && (result?.explanation || currentQuestion?.explanation) && (
             <div className="mb-6 p-4 bg-gray-50 rounded-lg">
               <h4 className="font-bold text-gray-900 mb-2">Explanation</h4>
-              <p className="text-gray-700">{currentQuestion.explanation}</p>
+              <p className="text-gray-700">{result?.explanation || currentQuestion?.explanation}</p>
             </div>
           )}
 

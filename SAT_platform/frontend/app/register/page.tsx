@@ -23,7 +23,9 @@ export default function RegisterPage() {
       await register(email, password, name);
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Registration failed');
+      console.error('Registration error:', err);
+      const message = err.response?.data?.detail || err.message || 'Registration failed. Make sure backend is running on port 8000.';
+      setError(message);
     } finally {
       setLoading(false);
     }
