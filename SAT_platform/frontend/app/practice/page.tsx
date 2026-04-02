@@ -1,261 +1,257 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import api from '@/lib/api';
+import React, { useState, useEffect } from 'react';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Bookmark, 
+  Clock, 
+  MoreVertical,
+  ChevronDown,
+  LayoutGrid
+} from 'lucide-react';
 
-interface Question {
-  id: string;
-  section?: string;
-  type?: string;
-  domain?: string;
-  category?: string;
-  difficulty?: string;
-  content: string;
-  options: string[];
-  explanation?: string;
-}
+const mockQuestions = [
+  {
+    id: 'q1',
+    section: 'Reading and Writing',
+    passage: `The following text is adapted from Jane Austen's 1813 novel, Pride and Prejudice.
 
-interface AnswerResult {
-  is_correct: boolean;
-  correct_answer: number;
-  explanation: string;
-}
+It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.
 
-export default function PracticePage() {
-  const [questions, setQuestions] = useState<Question[]>([]);
+However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters.`,
+    prompt: 'Which choice best describes the function of the first sentence in the overall structure of the text?',
+    options: [
+      'It introduces a societal assumption that the narrator will go on to examine and satirize.',
+      'It presents a scientific fact that forms the basis of the characters\' actions.',
+      'It expresses a deeply personal belief held only by the protagonist.',
+      'It summarizes the main argument of a complex philosophical treatise.'
+    ]
+  },
+  {
+    id: 'q2',
+    section: 'Reading and Writing',
+    passage: `While researching the effects of urban noise on bird communication, ecologists have discovered that some species alter the pitch of their songs in noisy environments. For example, great tits (Parus major) in cities sing at higher frequencies than ____ forest counterparts, likely because higher-pitched sounds are less masked by low-frequency traffic noise.`,
+    prompt: 'Which choice completes the text so that it conforms to the conventions of Standard English?',
+    options: [
+      'there',
+      'they\'re',
+      'their',
+      'its'
+    ]
+  },
+  {
+    id: 'q3',
+    section: 'Math',
+    passage: null,
+    prompt: 'A landscaper is designing a rectangular garden. The length of the garden is to be 5 feet longer than twice its width. If the area of the garden will be 104 square feet, what will be the length, in feet, of the garden?',
+    options: [
+      '8',
+      '13',
+      '16',
+      '21'
+    ]
+  }
+];
+
+export default function PracticeSheet() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [showResult, setShowResult] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [filters, setFilters] = useState({
-    section: '',
-    domain: '',
-    difficulty: ''
-  });
-  const [sections, setSections] = useState<string[]>([]);
-  const [domains, setDomains] = useState<string[]>([]);
-  const [result, setResult] = useState<AnswerResult | null>(null);
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
+  const [markedForReview, setMarkedForReview] = useState<Set<string>>(new Set());
+  const [timerVisible, setTimerVisible] = useState(true);
+
+  // Time mock state
+  const [timeLeft, setTimeLeft] = useState(24 * 60 + 15); // 24:15
 
   useEffect(() => {
-    fetchFilters();
-    fetchQuestions();
+    const timer = setInterval(() => {
+      setTimeLeft(prev => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
   }, []);
 
-  const fetchFilters = async () => {
-    try {
-      const [sectionsRes, domainsRes] = await Promise.all([
-        api.get('/api/questions/sections'),
-        api.get('/api/questions/domains')
-      ]);
-      setSections(sectionsRes.data.sections || []);
-      setDomains(domainsRes.data.domains || []);
-    } catch (error) {
-      console.error('Failed to fetch filters');
-    }
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  const fetchQuestions = async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (filters.section) params.append('section', filters.section);
-      if (filters.domain) params.append('domain', filters.domain);
-      if (filters.difficulty) params.append('difficulty', filters.difficulty);
-      params.append('limit', '10');
-
-      const response = await api.get(`/api/questions?${params}`);
-      setQuestions(response.data);
-      setCurrentIndex(0);
-      setSelectedAnswer(null);
-      setShowResult(false);
-      setResult(null);
-    } catch (error) {
-      console.error('Failed to fetch questions');
-    } finally {
-      setLoading(false);
-    }
+  const handleSelectAnswer = (optionIndex: number) => {
+    setSelectedAnswers(prev => ({
+      ...prev,
+      [mockQuestions[currentIndex].id]: optionIndex
+    }));
   };
 
-  const handleSubmitAnswer = async () => {
-    if (selectedAnswer === null) return;
-    const currentQuestion = questions[currentIndex];
-    if (!currentQuestion) return;
-
-    try {
-      const response = await api.post<AnswerResult>('/api/questions/answer', {
-        question_id: currentQuestion.id,
-        answer: selectedAnswer,
-        time_taken: 30
-      });
-      setResult(response.data);
-      setShowResult(true);
-    } catch (error) {
-      console.error('Failed to submit answer');
-    }
+  const toggleMarkForReview = () => {
+    const currentId = mockQuestions[currentIndex].id;
+    setMarkedForReview(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(currentId)) {
+        newSet.delete(currentId);
+      } else {
+        newSet.add(currentId);
+      }
+      return newSet;
+    });
   };
 
   const handleNext = () => {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-      setSelectedAnswer(null);
-      setShowResult(false);
-      setResult(null);
-    } else {
-      fetchQuestions();
-    }
+    if (currentIndex < mockQuestions.length - 1) setCurrentIndex(prev => prev + 1);
   };
 
-  const currentQuestion = questions[currentIndex];
-  const isCorrect = result?.is_correct ?? false;
+  const handlePrev = () => {
+    if (currentIndex > 0) setCurrentIndex(prev => prev - 1);
+  };
+
+  const currentQ = mockQuestions[currentIndex];
+  const isMarked = markedForReview.has(currentQ.id);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Practice Questions</h1>
-
-      {/* Filters */}
-      <div className="bg-white rounded-lg shadow p-4 mb-6">
-        <div className="flex flex-wrap gap-4">
-          <select
-            value={filters.section}
-            onChange={(e) => setFilters(prev => ({ ...prev, section: e.target.value }))}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Sections</option>
-            {sections.map(section => (
-              <option key={section} value={section}>{section}</option>
-            ))}
-          </select>
-
-          <select
-            value={filters.domain}
-            onChange={(e) => setFilters(prev => ({ ...prev, domain: e.target.value }))}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Domains</option>
-            {domains.map(domain => (
-              <option key={domain} value={domain}>{domain}</option>
-            ))}
-          </select>
-
-          <select
-            value={filters.difficulty}
-            onChange={(e) => setFilters(prev => ({ ...prev, difficulty: e.target.value }))}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">All Difficulties</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-
-          <button
-            onClick={fetchQuestions}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Apply Filters
+    <div className="h-screen w-full flex flex-col bg-slate-50 overflow-hidden font-sans text-slate-900">
+      {/* Top Header */}
+      <header className="bg-zinc-900 text-white h-14 flex items-center justify-between px-6 shrink-0">
+        <div className="flex-1 text-lg font-semibold tracking-wide">
+          {currentQ.section}: Module 1
+        </div>
+        
+        <div className="flex-1 flex justify-center items-center gap-4">
+          <div className="flex flex-col items-center">
+            {timerVisible ? (
+              <span className="font-mono text-lg font-bold">{formatTime(timeLeft)}</span>
+            ) : (
+              <span className="font-mono text-lg font-bold invisible">00:00</span>
+            )}
+            <button 
+              onClick={() => setTimerVisible(!timerVisible)}
+              className="text-xs text-zinc-400 hover:text-white"
+            >
+              {timerVisible ? 'Hide' : 'Show'} Timer
+            </button>
+          </div>
+        </div>
+        
+        <div className="flex-1 flex justify-end items-center gap-6">
+          <button className="flex items-center gap-1 text-sm font-medium hover:text-zinc-300">
+            <span>Directions</span>
+            <ChevronDown size={16} />
+          </button>
+          <button className="text-sm font-medium hover:text-zinc-300">
+            Annotate
+          </button>
+          <button className="hover:text-zinc-300">
+            <MoreVertical size={20} />
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* Question Card */}
-      {loading ? (
-        <div className="text-center py-12">
-          <div className="text-gray-500">Loading questions...</div>
+      {/* Main Split Pane */}
+      <main className="flex-1 flex overflow-hidden">
+        {/* Left Pane - Passage */}
+        <div className="w-1/2 border-r-2 border-slate-200 bg-white p-8 md:p-12 overflow-y-auto">
+          {currentQ.passage ? (
+            <div className="font-serif text-lg leading-relaxed max-w-2xl whitespace-pre-wrap">
+              {currentQ.passage}
+            </div>
+          ) : (
+            <div className="h-full flex items-center justify-center text-slate-400 italic font-serif">
+              No passage for this question.
+            </div>
+          )}
         </div>
-      ) : questions.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg shadow">
-          <div className="text-gray-500 mb-4">No questions found</div>
-          <button
-            onClick={fetchQuestions}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Load Questions
-          </button>
-        </div>
-      ) : (
-        <div className="bg-white rounded-lg shadow p-6">
-          {/* Progress */}
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-sm text-gray-500">
-              Question {currentIndex + 1} of {questions.length}
-            </span>
-            <span className={`px-3 py-1 rounded-full text-sm ${
-              currentQuestion?.difficulty === 'easy' ? 'bg-green-100 text-green-800' :
-              currentQuestion?.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-              'bg-red-100 text-red-800'
-            }`}>
-              {currentQuestion?.difficulty || 'mixed'}
-            </span>
+
+        {/* Right Pane - Question */}
+        <div className="w-1/2 bg-slate-50 p-8 md:p-12 overflow-y-auto flex flex-col">
+          
+          {/* Question Header */}
+          <div className="flex justify-between items-start mb-6 w-full">
+            <div className="bg-slate-900 text-white w-8 h-8 flex items-center justify-center font-bold text-lg">
+              {currentIndex + 1}
+            </div>
+            
+            <button 
+              onClick={toggleMarkForReview}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded border transition-colors ${
+                isMarked 
+                  ? 'border-emerald-500 text-emerald-700 bg-emerald-50' 
+                  : 'border-slate-300 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <Bookmark size={18} className={isMarked ? 'fill-emerald-500 text-emerald-500' : ''} />
+              <span className="text-sm font-semibold">Mark for Review</span>
+            </button>
           </div>
 
-          {/* Question Type */}
-          <div className="text-sm text-blue-600 mb-2">
-            {(currentQuestion?.section || currentQuestion?.type || 'general')} • {(currentQuestion?.domain || currentQuestion?.category || 'general')}
-          </div>
-
-          {/* Question Content */}
-          <div className="text-lg text-gray-900 mb-6">
-            {currentQuestion.content}
+          {/* Question Prompt */}
+          <div className="text-lg font-medium mb-8">
+            {currentQ.prompt}
           </div>
 
           {/* Options */}
-          <div className="space-y-3 mb-6">
-            {currentQuestion?.options?.map((option, index) => (
-              <button
-                key={index}
-                disabled={showResult}
-                onClick={() => setSelectedAnswer(index)}
-                className={`w-full text-left p-4 rounded-lg border-2 transition-colors ${
-                  selectedAnswer === index
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
-                } ${
-                  showResult && result && index === result.correct_answer
-                    ? 'border-green-500 bg-green-50'
-                    : ''
-                } ${
-                  showResult && selectedAnswer === index && !isCorrect
-                    ? 'border-red-500 bg-red-50'
-                    : ''
-                }`}
-              >
-                <span className="font-medium mr-2">
-                  {String.fromCharCode(65 + index)}.
-                </span>
-                {option}
-              </button>
-            ))}
+          <div className="space-y-3 flex-1 w-full max-w-xl">
+            {currentQ.options.map((opt, idx) => {
+              const isSelected = selectedAnswers[currentQ.id] === idx;
+              const letter = String.fromCharCode(65 + idx);
+              
+              return (
+                <div 
+                  key={idx}
+                  onClick={() => handleSelectAnswer(idx)}
+                  className={`border-2 rounded-lg p-4 flex items-center gap-4 cursor-pointer transition-colors ${
+                    isSelected 
+                      ? 'border-emerald-500 bg-emerald-50' 
+                      : 'border-slate-300 hover:bg-slate-200 bg-white'
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold shrink-0 ${
+                    isSelected
+                      ? 'bg-emerald-600 border-emerald-600 text-white'
+                      : 'border-slate-400 text-slate-600'
+                  }`}>
+                    {letter}
+                  </div>
+                  <div className="text-base text-slate-800 leading-snug">
+                    {opt}
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
-          {/* Explanation */}
-          {showResult && (result?.explanation || currentQuestion?.explanation) && (
-            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-              <h4 className="font-bold text-gray-900 mb-2">Explanation</h4>
-              <p className="text-gray-700">{result?.explanation || currentQuestion?.explanation}</p>
-            </div>
-          )}
-
-          {/* Actions */}
-          <div className="flex justify-end gap-4">
-            {!showResult ? (
-              <button
-                onClick={handleSubmitAnswer}
-                disabled={selectedAnswer === null}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Submit Answer
-              </button>
-            ) : (
-              <button
-                onClick={handleNext}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-              >
-                {currentIndex < questions.length - 1 ? 'Next Question' : 'Load More'}
-              </button>
-            )}
-          </div>
         </div>
-      )}
+      </main>
+
+      {/* Footer */}
+      <footer className="h-16 border-t border-slate-300 bg-white flex items-center justify-between px-6 shrink-0 relative z-10">
+        <div className="flex-1 font-semibold text-slate-800">
+          Student Name
+        </div>
+        
+        <div className="flex-1 flex justify-center">
+          <button className="flex items-center justify-center gap-2 font-bold text-slate-700 hover:text-slate-900 px-4 py-2 rounded transition-colors hover:bg-slate-100">
+            <LayoutGrid size={20} />
+            Question {currentIndex + 1} of {mockQuestions.length}
+            <ChevronDown size={16} />
+          </button>
+        </div>
+
+        <div className="flex-1 flex justify-end gap-4">
+          <button 
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
+            className="flex items-center justify-center w-12 h-10 bg-slate-200 hover:bg-slate-300 disabled:opacity-50 disabled:cursor-not-allowed rounded-full text-slate-900 transition-colors"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <button 
+            onClick={handleNext}
+            disabled={currentIndex === mockQuestions.length - 1}
+            className="flex items-center justify-center px-6 h-10 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-full text-white font-semibold transition-colors"
+          >
+            Next
+          </button>
+        </div>
+      </footer>
     </div>
   );
 }

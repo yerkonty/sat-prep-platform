@@ -73,11 +73,11 @@ export default function PricingPage() {
             <div
               key={plan.name}
               className={`bg-white rounded-2xl shadow-lg p-8 ${
-                plan.popular ? 'ring-2 ring-blue-500 relative' : ''
+                plan.popular ? 'ring-2 ring-emerald-500 relative' : ''
               }`}
             >
               {plan.popular && (
-                <div className="absolute top-0 right-0 bg-blue-500 text-white text-sm px-3 py-1 rounded-bl-lg rounded-tr-lg">
+                <div className="absolute top-0 right-0 bg-emerald-500 text-white text-sm px-3 py-1 rounded-bl-lg rounded-tr-lg">
                   Most Popular
                 </div>
               )}
@@ -105,7 +105,7 @@ export default function PricingPage() {
                 disabled={loading !== null || user?.subscription_plan === plan.name.toLowerCase()}
                 className={`mt-8 w-full py-3 px-6 rounded-lg font-medium transition-colors ${
                   plan.popular
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                     : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
@@ -121,7 +121,7 @@ export default function PricingPage() {
           <p className="text-gray-500 mb-4">
             Need a custom plan for your school or organization?
           </p>
-          <Link href="/contact" className="text-blue-600 hover:text-blue-700 font-medium">
+          <Link href="/contact" className="text-emerald-600 hover:text-emerald-700 font-medium">
             Contact us for enterprise pricing →
           </Link>
         </div>

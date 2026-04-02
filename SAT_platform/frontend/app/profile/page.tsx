@@ -144,7 +144,7 @@ export default function ProfilePage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 required
               />
             </div>
@@ -154,11 +154,11 @@ export default function ProfilePage() {
                 Subscription Plan
               </label>
               <div className="flex items-center gap-3">
-                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full font-medium capitalize">
+                <span className="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full font-medium capitalize">
                   {profile?.subscription_plan || 'free'}
                 </span>
                 {profile?.subscription_plan === 'free' && (
-                  <a href="/pricing" className="text-sm text-blue-600 hover:text-blue-700">
+                  <a href="/pricing" className="text-sm text-emerald-600 hover:text-emerald-700">
                     Upgrade →
                   </a>
                 )}
@@ -169,7 +169,7 @@ export default function ProfilePage() {
           <button
             type="submit"
             disabled={saving}
-            className="mt-6 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="mt-6 w-full py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50"
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
@@ -188,7 +188,7 @@ export default function ProfilePage() {
           </div>
           <div className="w-32 bg-gray-200 rounded-full h-3">
             <div 
-              className="bg-blue-600 h-3 rounded-full"
+              className="bg-emerald-600 h-3 rounded-full"
               style={{ width: `${((profile?.ai_messages_used || 0) / (profile?.ai_messages_limit || 3)) * 100}%` }}
             ></div>
           </div>
@@ -213,7 +213,7 @@ export default function ProfilePage() {
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 required
               />
             </div>
@@ -226,7 +226,7 @@ export default function ProfilePage() {
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 required
                 minLength={6}
               />
@@ -240,7 +240,7 @@ export default function ProfilePage() {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 required
                 minLength={6}
               />

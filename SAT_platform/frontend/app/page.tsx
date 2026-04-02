@@ -1,108 +1,77 @@
-import Link from 'next/link';
+﻿import Link from "next/link";
+import { BrainCircuit, BookOpen, BarChart, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 py-20">
-        <div className="text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            Ace Your Digital SAT
+      <section className="flex-1 flex flex-col items-center justify-center text-center px-4 pt-20 pb-16 bg-white border-b border-slate-200">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight">
+            Master the Digital SAT with <span className="text-emerald-600">Confidence</span>
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            AI-powered SAT preparation with unlimited practice questions, 
-            personalized feedback, and expert tutoring.
+          <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Experience the most realistic practice environment, powered by AI tutoring and instant analytics to boost your score to the next level.
           </p>
-          <div className="flex justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link
-              href="/register"
-              className="px-8 py-3 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700"
+              href="/practice"
+              className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors shadow-sm"
             >
-              Get Started Free
+              Start Practicing Now
+              <ArrowRight className="ml-2 w-5 h-5" />
             </Link>
             <Link
-              href="/login"
-              className="px-8 py-3 bg-white text-blue-600 border-2 border-blue-600 text-lg font-medium rounded-lg hover:bg-blue-50"
+              href="/progress"
+              className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200"
             >
-              Sign In
+              View Progress
             </Link>
           </div>
         </div>
+      </section>
 
-        {/* Features */}
-        <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center p-6">
-            <div className="text-4xl mb-4">📝</div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Question Bank</h3>
-            <p className="text-gray-600">
-              Practice with real SAT questions from official College Board tests
-            </p>
+      {/* Advantages Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-slate-900">Why Choose Our Platform for SAT Prep?</h2>
+            <p className="mt-4 text-lg text-slate-600">Everything you need to succeed, all in one place.</p>
           </div>
-          <div className="text-center p-6">
-            <div className="text-4xl mb-4">🤖</div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">AI Tutor</h3>
-            <p className="text-gray-600">
-              Get instant explanations and study tips from our AI-powered tutor
-            </p>
-          </div>
-          <div className="text-center p-6">
-            <div className="text-4xl mb-4">📊</div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Progress Tracking</h3>
-            <p className="text-gray-600">
-              Track your performance and get personalized recommendations
-            </p>
-          </div>
-        </div>
 
-        {/* Pricing Teaser */}
-        <div className="mt-24 bg-white rounded-2xl shadow-lg p-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-            Simple, Affordable Pricing
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="border-2 border-blue-500 rounded-xl p-6 relative">
-              <div className="absolute top-0 right-0 bg-blue-500 text-white text-xs px-2 py-1 rounded-bl-lg">Current</div>
-              <h3 className="text-xl font-bold text-gray-900">Free</h3>
-              <div className="text-3xl font-bold text-gray-900 mt-2">$0</div>
-              <ul className="mt-4 space-y-2 text-gray-600">
-                <li>✓ Unlimited practice questions</li>
-                <li>✓ 1 mock exam/month</li>
-                <li>✓ 3 AI messages/day</li>
-              </ul>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6 text-emerald-600">
+                <BookOpen size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Realistic Bluebook Interface</h3>
+              <p className="text-slate-600 leading-relaxed">
+                Practice in an environment that exactly mirrors the official College Board testing app. Get comfortable with the tools and format before test day.
+              </p>
             </div>
-            <div className="border-2 border-purple-500 rounded-xl p-6 relative">
-              <div className="absolute top-0 right-0 bg-purple-500 text-white text-xs px-2 py-1 rounded-bl-lg">Upgrade</div>
-              <h3 className="text-xl font-bold text-gray-900">Basic</h3>
-              <div className="text-3xl font-bold text-gray-900 mt-2">$9.99<span className="text-sm font-normal">/mo</span></div>
-              <ul className="mt-4 space-y-2 text-gray-600">
-                <li>✓ Everything in Free</li>
-                <li>✓ 3 mock exams/month</li>
-                <li>✓ 50 AI messages/day</li>
-                <li>✓ <strong>Custom Question Sets</strong></li>
-                <li className="text-sm text-gray-500">Mix categories to create random practice sets</li>
-              </ul>
+
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6 text-emerald-600">
+                <BrainCircuit size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">AI-Powered Tutoring</h3>
+              <p className="text-slate-600 leading-relaxed">
+                Stuck on a question? Our intelligent AI tutor provides hints, step-by-step breakdowns, and personalized strategies without giving away the answer.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6 text-emerald-600">
+                <BarChart size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">Instant Analytics</h3>
+              <p className="text-slate-600 leading-relaxed">
+                Identify your weak points instantly. Detailed performance breakdowns help you focus your study time on the areas that will impact your score most.
+              </p>
             </div>
           </div>
         </div>
-
-        {/* CTA */}
-        <div className="mt-16 text-center">
-          <p className="text-gray-600 mb-4">Ready to start your SAT journey?</p>
-          <Link
-            href="/register"
-            className="inline-block px-8 py-3 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700"
-          >
-            Create Free Account
-          </Link>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-gray-400">© 2024 SAT Prep Platform. All rights reserved.</p>
-        </div>
-      </footer>
+      </section>
     </div>
   );
 }
