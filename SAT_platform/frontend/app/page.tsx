@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { 
+import {
   ArrowRight, CheckCircle2, Star, Target, Shield, Zap, Sparkles, BookOpen, Brain
 } from "lucide-react";
 
@@ -17,12 +17,12 @@ export default function Home() {
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+    show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 24 } }
   };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 overflow-hidden font-sans selection:bg-emerald-200 selection:text-emerald-900">
-      
+
       {/* Soft Animated Background Gradient */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[40%] -left-[10%] w-[70%] h-[70%] rounded-full bg-emerald-400/10 blur-[120px]" />
@@ -67,7 +67,7 @@ export default function Home() {
       <main className="relative z-10 flex flex-col items-center">
         {/* Hero Section */}
         <section className="w-full max-w-7xl mx-auto px-6 pt-32 pb-24 text-center">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -77,19 +77,19 @@ export default function Home() {
               <Zap className="w-4 h-4" />
               <span>Voted #1 Digital SAT Prep Platform</span>
             </div>
-            
+
             <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-[1.05]">
               Your dream score <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">
                 starts here.
               </span>
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium">
               Stop guessing, start acing. The most realistic Digital SAT simulator powered by AI to guarantee your score increase.
             </p>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
@@ -115,7 +115,7 @@ export default function Home() {
               <p className="text-lg text-slate-600">We mapped every question type, tested every strategy, and built the ultimate testing environment.</p>
             </div>
 
-            <motion.div 
+            <motion.div
               variants={container}
               initial="hidden"
               whileInView="show"
@@ -127,7 +127,7 @@ export default function Home() {
                 { icon: Brain, title: "AI-Powered Explanations", desc: "Get instant, personalized breakdowns for every mistake. It is like having an expert tutor 24/7." },
                 { icon: Shield, title: "Score Guarantee", desc: "If your score does not increase by at least 150 points, we will refund your entire purchase." }
               ].map((feature, i) => (
-                <motion.div 
+                <motion.div
                   key={i}
                   variants={item}
                   className="group relative bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 hover:-translate-y-2"
@@ -166,10 +166,10 @@ export default function Home() {
             </div>
           </div>
         </section>
-        
+
         {/* Footer CTA */}
         <section className="w-full max-w-5xl mx-auto px-6 pb-32">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -177,10 +177,10 @@ export default function Home() {
           >
             <div className="absolute inset-0 bg-emerald-500/10" />
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.2),transparent_50%)]" />
-            
+
             <div className="relative z-10 space-y-8">
               <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight">
-                Ready to crush <br/> the exam?
+                Ready to crush <br /> the exam?
               </h2>
               <p className="text-xl text-slate-300 max-w-xl mx-auto">
                 Join thousands of students who have already boosted their scores using our platform.
