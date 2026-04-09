@@ -16,6 +16,10 @@ def run_startup_migrations(engine: Engine) -> None:
             statements.append("ALTER TABLE questions ADD COLUMN domain VARCHAR")
         if "external_id" not in q_cols:
             statements.append("ALTER TABLE questions ADD COLUMN external_id VARCHAR")
+        if "skill" not in q_cols:
+            statements.append("ALTER TABLE questions ADD COLUMN skill VARCHAR")
+        if "subcategory" not in q_cols:
+            statements.append("ALTER TABLE questions ADD COLUMN subcategory VARCHAR")
 
     if "users" in tables:
         u_cols = {col["name"] for col in inspector.get_columns("users")}

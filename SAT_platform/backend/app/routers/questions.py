@@ -17,6 +17,7 @@ class QuestionResponse(BaseModel):
     section: Optional[str] = None
     type: Optional[str] = None
     domain: Optional[str] = None
+    skill: Optional[str] = None
     category: Optional[str] = None
     difficulty: Optional[str] = None
     content: str
@@ -43,6 +44,7 @@ class AnswerResponse(BaseModel):
 def get_questions(
     section: Optional[str] = None,
     domain: Optional[str] = None,
+    skill: Optional[str] = None,
     type: Optional[str] = None,
     category: Optional[str] = None,
     difficulty: Optional[str] = None,
@@ -56,6 +58,8 @@ def get_questions(
         query = query.filter(func.lower(Question.section) == section.lower())
     if domain:
         query = query.filter(func.lower(Question.domain) == domain.lower())
+    if skill:
+        query = query.filter(func.lower(Question.skill) == skill.lower())
     if type:
         query = query.filter(func.lower(Question.type) == type.lower())
     if category:
@@ -93,6 +97,13 @@ def get_domains(db: Session = Depends(get_db)):
     """Get all question domains"""
     domains = db.query(Question.domain).distinct().all()
     return {"domains": [d[0] for d in domains if d[0]]}
+
+
+@router.get("/skills")
+def get_skills(db: Session = Depends(get_db)):
+    """Get all question skills"""
+    skills = db.query(Question.skill).distinct().all()
+    return {"skills": [s[0] for s in skills if s[0]]}
 
 
 @router.post("/answer", response_model=AnswerResponse)

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter_Tight, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
+const interTight = Inter_Tight({ subsets: ["latin"], variable: "--font-inter-tight" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "SAT Prep Platform",
@@ -18,10 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${interTight.variable} ${inter.variable} font-sans`}>
         <AuthProvider>
           <Navbar />
-          <main className="min-h-screen bg-gray-50">{children}</main>
+          <main className="min-h-screen bg-[#FAFAF8] text-[#1A1A1A]">{children}</main>
         </AuthProvider>
       </body>
     </html>

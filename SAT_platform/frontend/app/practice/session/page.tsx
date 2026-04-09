@@ -121,11 +121,12 @@ function PracticeSession() {
             const span = document.createElement('mark');
             span.className = 'bg-yellow-300/80 text-black cursor-pointer rounded-sm px-0.5';
             span.title = 'Click to remove highlight';
-            span.onclick = function () {
-                const p = this.parentNode as HTMLElement;
-                if (p && this.firstChild) {
-                    while (this.firstChild) p.insertBefore(this.firstChild, this);
-                    p.removeChild(this);
+            span.onclick = function (e) {
+                const target = e.currentTarget as HTMLElement;
+                const p = target.parentNode as HTMLElement;
+                if (p && target.firstChild) {
+                    while (target.firstChild) p.insertBefore(target.firstChild, target);
+                    p.removeChild(target);
                     p.normalize();
                 }
             };

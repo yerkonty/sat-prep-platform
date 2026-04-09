@@ -37,6 +37,8 @@ class Question(Base):
     type = Column(String, index=True)
     category = Column(String, index=True)
     domain = Column(String, index=True)
+    skill = Column(String, index=True)  # e.g., "Inferences", "Transitions"
+    subcategory = Column(String, index=True)
     difficulty = Column(String, index=True)
     content = Column(Text, nullable=False)
     options = Column(JSON, nullable=False)
