@@ -1,19 +1,31 @@
 "use client";
 
-import { Suspense, useEffect, useState, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
-    ChevronLeft, ChevronDown, CheckCircle, XCircle,
-    Clock, EyeOff, Eye, Highlighter, Maximize2, GripVertical,
-    Sparkles, Strikethrough
+    ChevronDown,
+    ChevronLeft,
+    CheckCircle,
+    Eye,
+    EyeOff,
+    Flag,
+    GripVertical,
+    Highlighter,
+    MessageCircleQuestion,
+    Siren,
+    Strikethrough,
+    VolumeX,
+    XCircle
 } from "lucide-react";
 import api from "@/lib/api";
 
 type Question = {
     id: string;
-    section: string;
-    domain: string;
-    difficulty: string;
+    section?: string;
+    type?: string;
+    domain?: string;
+    skill?: string;
+    difficulty?: string;
     content: string;
     options: string[];
     explanation?: string;
@@ -27,146 +39,188 @@ type AnswerState = {
 
 export default function PracticeSessionPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center font-sans tracking-tight text-slate-500">Loading session...</div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center text-slate-500">Loading session...</div>}>
             <PracticeSession />
         </Suspense>
     );
 }
 
 function PracticeSession() {
-    const searchParams = useSearchParams();
     const router = useRouter();
+    const searchParams = useSearchParams();
 
-    // Config
-    const moduleId = searchParams.get("module") || "";
-    const isMath = moduleId === "math";
+    const moduleId = (searchParams.get("module") || "rw").toLowerCase();
+    const domain = searchParams.get("domain") || searchParams.get("topic") || "";
+    const skill = searchParams.get("skill") || "";
 
-    // Application state
     const [questions, setQuestions] = useState<Question[]>([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    // User progress state (allowing free navigation)
     const [answers, setAnswers] = useState<Record<number, number>>({});
     const [answerStates, setAnswerStates] = useState<Record<number, AnswerState>>({});
     const [eliminated, setEliminated] = useState<Record<number, number[]>>({});
+    const [markedForReview, setMarkedForReview] = useState<Record<number, boolean>>({});
 
-    // Presentation state
-    const [leftWidth, setLeftWidth] = useState(50);
-    const [timeElapsed, setTimeElapsed] = useState(0);
-    const [timerHidden, setTimerHidden] = useState(false);
+    const [leftWidth, setLeftWidth] = useState(47);
     const [highlightMode, setHighlightMode] = useState(false);
+    const [timerHidden, setTimerHidden] = useState(false);
+    const [timeElapsed, setTimeElapsed] = useState(0);
 
     const isResizing = useRef(false);
 
-    // Stop-watch logic
-    useEffect(() => {
-        if (loading || questions.length === 0) return;
-        const interval = setInterval(() => setTimeElapsed(prev => prev + 1), 1000);
-        return () => clearInterval(interval);
-    }, [loading, questions.length]);
+    const currentQuestion = useMemo(() => questions[currentIndex], [questions, currentIndex]);
+    const selectedOption = answers[currentIndex];
+    const answerState = answerStates[currentIndex];
 
-    // Initial Fetch
     useEffect(() => {
         const fetchQuestions = async () => {
+            setLoading(true);
             try {
-                const sectionFilter = isMath ? 'math' : 'english';
-                const response = await api.get(`/api/questions?section=${sectionFilter}&limit=10`);
-                setQuestions(response.data);
-            } catch (err) {
-                console.error("Error fetching questions:", err);
+                const params = new URLSearchParams();
+                params.set("section", moduleId || "rw");
+                params.set("limit", "1000");
+
+                if (domain) {
+                    params.set("domain", domain);
+                }
+
+                // Keep backward compatibility with old links where skill was numeric index.
+                if (skill && Number.isNaN(Number(skill))) {
+                    params.set("skill", skill);
+                }
+
+                const response = await api.get<Question[]>(`/api/questions?${params.toString()}`);
+                setQuestions(response.data || []);
+                setCurrentIndex(0);
+                setAnswers({});
+                setAnswerStates({});
+                setEliminated({});
+                setMarkedForReview({});
+                setTimeElapsed(0);
+            } catch (error) {
+                console.error("Failed to fetch questions", error);
+                setQuestions([]);
             } finally {
                 setLoading(false);
             }
         };
-        fetchQuestions();
-    }, [isMath]);
 
-    // Resizer Logic
+        fetchQuestions();
+    }, [moduleId, domain, skill]);
+
     useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (!isResizing.current) return;
-            const newWidth = (e.clientX / window.innerWidth) * 100;
-            if (newWidth > 30 && newWidth < 70) {
-                setLeftWidth(newWidth);
+        if (loading || questions.length === 0) {
+            return;
+        }
+
+        const id = setInterval(() => {
+            setTimeElapsed((prev) => prev + 1);
+        }, 1000);
+
+        return () => clearInterval(id);
+    }, [loading, questions.length]);
+
+    useEffect(() => {
+        const onMouseMove = (event: MouseEvent) => {
+            if (!isResizing.current) {
+                return;
+            }
+
+            const width = (event.clientX / window.innerWidth) * 100;
+            if (width >= 30 && width <= 70) {
+                setLeftWidth(width);
             }
         };
-        const handleMouseUp = () => {
+
+        const onMouseUp = () => {
             if (isResizing.current) {
                 isResizing.current = false;
-                document.body.style.cursor = 'default';
+                document.body.style.cursor = "default";
             }
         };
-        document.addEventListener("mousemove", handleMouseMove);
-        document.addEventListener("mouseup", handleMouseUp);
+
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
         return () => {
-            document.removeEventListener("mousemove", handleMouseMove);
-            document.removeEventListener("mouseup", handleMouseUp);
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
         };
     }, []);
 
     const formatTime = (seconds: number) => {
-        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-        const s = (seconds % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
+        const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
+        const ss = String(seconds % 60).padStart(2, "0");
+        return `${mm}:${ss}`;
     };
 
     const handleTextSelection = () => {
-        if (!highlightMode) return;
+        if (!highlightMode) {
+            return;
+        }
+
         const selection = window.getSelection();
-        if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return;
+        if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+            return;
+        }
 
         try {
             const range = selection.getRangeAt(0);
-            const span = document.createElement('mark');
-            span.className = 'bg-yellow-300/80 text-black cursor-pointer rounded-sm px-0.5';
-            span.title = 'Click to remove highlight';
-            span.onclick = function (e) {
-                const target = e.currentTarget as HTMLElement;
-                const p = target.parentNode as HTMLElement;
-                if (p && target.firstChild) {
-                    while (target.firstChild) p.insertBefore(target.firstChild, target);
-                    p.removeChild(target);
-                    p.normalize();
+            const mark = document.createElement("mark");
+            mark.className = "bg-yellow-300/70 rounded-sm px-0.5";
+            mark.title = "Click to remove highlight";
+            mark.onclick = (event) => {
+                const target = event.currentTarget as HTMLElement;
+                const parent = target.parentNode as HTMLElement;
+                if (!parent) {
+                    return;
                 }
+
+                while (target.firstChild) {
+                    parent.insertBefore(target.firstChild, target);
+                }
+                parent.removeChild(target);
+                parent.normalize();
             };
-            range.surroundContents(span);
+
+            range.surroundContents(mark);
             selection.removeAllRanges();
-        } catch (e) {
-            console.log("Could not highlight across varying elements", e);
+        } catch {
+            // Ignore complex selections spanning non-compatible nodes.
         }
     };
 
-    // Actions
-    const handleOptionSelect = (optIndex: number) => {
-        if (answerStates[currentIndex]) return; // Locked once checked
-        setAnswers(prev => ({ ...prev, [currentIndex]: optIndex }));
+    const handleSelectOption = (index: number) => {
+        if (answerState) {
+            return;
+        }
 
-        // Auto-uneliminate if selected
-        const currentElims = eliminated[currentIndex] || [];
-        if (currentElims.includes(optIndex)) {
-            setEliminated(prev => ({
+        setAnswers((prev) => ({ ...prev, [currentIndex]: index }));
+        const eliminatedInQuestion = eliminated[currentIndex] || [];
+        if (eliminatedInQuestion.includes(index)) {
+            setEliminated((prev) => ({
                 ...prev,
-                [currentIndex]: currentElims.filter(i => i !== optIndex)
+                [currentIndex]: eliminatedInQuestion.filter((item) => item !== index)
             }));
         }
     };
 
-    const toggleEliminate = (optIndex: number, e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (answerStates[currentIndex]) return;
+    const toggleEliminate = (index: number, event: React.MouseEvent) => {
+        event.stopPropagation();
+        if (answerState) {
+            return;
+        }
 
-        setEliminated(prev => {
+        setEliminated((prev) => {
             const current = prev[currentIndex] || [];
-            if (current.includes(optIndex)) {
-                return { ...prev, [currentIndex]: current.filter(i => i !== optIndex) };
-            } else {
-                return { ...prev, [currentIndex]: [...current, optIndex] };
-            }
+            return {
+                ...prev,
+                [currentIndex]: current.includes(index) ? current.filter((x) => x !== index) : [...current, index]
+            };
         });
 
-        if (answers[currentIndex] === optIndex) {
-            setAnswers(prev => {
+        if (answers[currentIndex] === index) {
+            setAnswers((prev) => {
                 const next = { ...prev };
                 delete next[currentIndex];
                 return next;
@@ -175,237 +229,244 @@ function PracticeSession() {
     };
 
     const handleCheckAnswer = async () => {
-        const selected = answers[currentIndex];
-        if (selected === undefined) return;
+        if (selectedOption === undefined || !currentQuestion) {
+            return;
+        }
 
         try {
-            const response = await api.post(`/api/questions/answer`, {
-                question_id: questions[currentIndex].id,
-                answer: selected,
+            const response = await api.post<AnswerState>("/api/questions/answer", {
+                question_id: currentQuestion.id,
+                answer: selectedOption,
                 time_taken: timeElapsed
             });
-            setAnswerStates(prev => ({ ...prev, [currentIndex]: response.data }));
-        } catch (err) {
-            console.error("Failed to check answer", err);
+            setAnswerStates((prev) => ({ ...prev, [currentIndex]: response.data }));
+        } catch (error) {
+            console.error("Failed to check answer", error);
         }
     };
 
     if (loading) {
-        return <div className="flex h-screen items-center justify-center font-sans tracking-tight text-slate-500">Loading Question Bank...</div>;
+        return <div className="flex h-screen items-center justify-center text-slate-500">Loading questions...</div>;
     }
 
-    if (questions.length === 0) {
+    if (!currentQuestion) {
         return (
-            <div className="flex h-screen flex-col items-center justify-center p-6 text-center font-sans">
-                <p className="text-xl font-medium text-slate-500 mb-4">No questions found for this module.</p>
-                <button onClick={() => router.push('/practice')} className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg">Return to Practice</button>
+            <div className="flex h-screen flex-col items-center justify-center bg-[#f7f7f7] px-6 text-center">
+                <h2 className="text-2xl font-semibold text-slate-800">No questions found</h2>
+                <p className="text-slate-500 mt-2">Try another section or topic.</p>
+                <button
+                    onClick={() => router.push("/practice")}
+                    className="mt-5 rounded-lg bg-[#00592B] px-5 py-2.5 text-white font-medium hover:bg-[#0c6a37]"
+                >
+                    Back to Question Bank
+                </button>
             </div>
         );
     }
 
-    const currentQuestion = questions[currentIndex];
-    const isChecked = !!answerStates[currentIndex];
-    const selectedOption = answers[currentIndex];
-
     return (
-        <div className={"flex flex-col h-screen overflow-hidden antialiased font-sans " + (highlightMode ? 'cursor-text' : '')}>
-
-            {/* Top Navbar */}
-            <div className="shrink-0 flex items-center justify-between border-b border-slate-200 bg-white px-2 py-2 md:px-4 md:py-3 z-10 shadow-sm">
-                <div className="flex items-center gap-2">
-                    <button onClick={() => router.push('/practice')} className="flex items-center text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg px-3 py-1.5 transition-colors font-medium text-sm">
-                        <ChevronLeft className="w-5 h-5 mr-1" /> Go back
-                    </button>
-                    <button className="hidden md:flex items-center gap-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg px-3 py-1.5 transition-colors font-medium text-sm">
-                        Directions <ChevronDown className="w-4 h-4 opacity-50" />
-                    </button>
-                </div>
-
-                {/* Stop-watch Timer */}
-                <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
-                    {!timerHidden && (
-                        <div className="flex items-center font-mono font-bold text-xl tracking-tight text-slate-800 mb-0.5">
-                            {formatTime(timeElapsed)}
+        <div className={`h-screen overflow-hidden bg-[#f3f3f3] text-[#1f1f1f] ${highlightMode ? "cursor-text" : ""}`}>
+            <div className="flex h-full flex-col">
+                <header className="h-[84px] shrink-0 border-b border-slate-300 bg-[#f6f6f6] px-3 md:px-6">
+                    <div className="relative flex h-full items-center justify-between">
+                        <div className="flex items-center gap-2 text-sm">
+                            <button
+                                onClick={() => router.push("/practice")}
+                                className="rounded-md px-2 py-1 text-slate-600 hover:bg-slate-200 hover:text-slate-900"
+                            >
+                                <ChevronLeft className="inline-block h-4 w-4" />
+                                Back
+                            </button>
+                            <button className="rounded-md px-2 py-1 text-slate-600 hover:bg-slate-200 hover:text-slate-900">
+                                Directions <ChevronDown className="inline-block h-4 w-4" />
+                            </button>
                         </div>
-                    )}
-                    <div className="flex gap-2">
-                        <button onClick={() => setTimerHidden(!timerHidden)} className="flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-full px-4 py-[3px] text-xs font-semibold uppercase tracking-wider transition-colors border border-slate-200">
-                            {timerHidden ? <><Eye className="w-3 h-3 mr-1.5" /> Show</> : <><EyeOff className="w-3 h-3 mr-1.5" /> Hide</>}
-                        </button>
-                    </div>
-                </div>
 
-                {/* Top Right Tools */}
-                <div className="flex items-center gap-1 md:gap-2">
-                    <button
-                        onClick={() => setHighlightMode(!highlightMode)}
-                        className={"flex items-center gap-2 rounded-lg px-3 md:px-4 py-2 font-medium text-sm transition-colors border " + (highlightMode ? 'bg-yellow-50 text-yellow-700 border-yellow-200 shadow-inner' : 'bg-white text-slate-500 border-transparent hover:bg-slate-100')}
+                        <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
+                            <div className="text-sm text-slate-500">Timer</div>
+                            {!timerHidden && <div className="font-mono font-semibold text-xl text-slate-800">{formatTime(timeElapsed)}</div>}
+                            <button
+                                onClick={() => setTimerHidden((prev) => !prev)}
+                                className="mt-1 rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-100"
+                            >
+                                {timerHidden ? <Eye className="inline-block h-3.5 w-3.5 mr-1" /> : <EyeOff className="inline-block h-3.5 w-3.5 mr-1" />}
+                                {timerHidden ? "Show" : "Hide"}
+                            </button>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-sm">
+                            <button
+                                onClick={() => setHighlightMode((prev) => !prev)}
+                                className={`rounded-md px-3 py-1.5 font-medium border ${highlightMode
+                                        ? "border-yellow-300 bg-yellow-100 text-yellow-800"
+                                        : "border-transparent bg-transparent text-slate-600 hover:bg-slate-200"
+                                    }`}
+                            >
+                                <Highlighter className="inline-block h-4 w-4 mr-1" />
+                                Highlight
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <main className="flex min-h-0 flex-1">
+                    <section
+                        className="h-full overflow-y-auto bg-white px-6 py-8 md:px-10"
+                        style={{ flexBasis: `${leftWidth}%` }}
+                        onMouseUp={handleTextSelection}
                     >
-                        <Highlighter className={"w-4 h-4 md:w-5 md:h-5 " + (highlightMode ? 'fill-yellow-300' : '')} />
-                        <span className="hidden md:inline">Highlight</span>
-                    </button>
-                    <button className="hidden md:flex items-center gap-2 rounded-lg px-4 py-2 font-medium text-sm text-slate-500 hover:bg-slate-100 transition-colors border border-transparent">
-                        <Maximize2 className="w-5 h-5" />
-                        <span>Fullscreen</span>
-                    </button>
-                </div>
-            </div>
-
-            {/* Split Screen Workspace */}
-            <div className="flex-1 flex min-h-0 bg-slate-50">
-
-                {/* Left Panel: Passage Text */}
-                <div
-                    className="h-full overflow-y-auto bg-white p-6 md:p-10 relative"
-                    style={{ flexBasis: `${leftWidth}%` }}
-                    onMouseUp={handleTextSelection}
-                >
-                    <div className="max-w-2xl mx-auto">
-                        <div className="mb-4 inline-flex items-center rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-500 uppercase tracking-widest border border-slate-200/60">
-                            Question {currentIndex + 1}
+                        <div className="max-w-3xl mx-auto">
+                            <div className="mb-6 border-b border-slate-300 pb-5 text-[2rem] leading-none font-serif text-slate-700">_</div>
+                            <article
+                                className="prose max-w-none font-serif text-[1.15rem] leading-[1.8] text-[#1d1d1d] whitespace-pre-wrap"
+                                dangerouslySetInnerHTML={{ __html: currentQuestion.content }}
+                            />
                         </div>
-                        <div
-                            className="prose prose-slate max-w-none font-serif text-[1.10rem] leading-[1.85] text-slate-800 whitespace-pre-wrap selection:bg-blue-200"
-                            dangerouslySetInnerHTML={{ __html: currentQuestion.content }}
-                        />
+                    </section>
+
+                    <div
+                        className="relative z-10 flex w-2 shrink-0 cursor-col-resize items-center justify-center border-x border-slate-300 bg-[#e9e9e9] hover:bg-[#dcdcdc]"
+                        onMouseDown={(event) => {
+                            event.preventDefault();
+                            isResizing.current = true;
+                            document.body.style.cursor = "col-resize";
+                        }}
+                    >
+                        <GripVertical className="h-4 w-4 text-slate-500" />
                     </div>
-                </div>
 
-                {/* Right Panel: Options & Actions */}
-                <div className="relative w-1.5 md:w-2 bg-slate-200 hover:bg-blue-400 active:bg-blue-500 cursor-col-resize shrink-0 flex items-center justify-center transition-colors shadow-sm z-20 group"
-                    onMouseDown={(e) => {
-                        e.preventDefault();
-                        isResizing.current = true;
-                        document.body.style.cursor = 'col-resize';
-                    }}>
-                    <div className="w-4 h-8 bg-white border border-slate-300 rounded shadow-sm flex items-center justify-center group-hover:border-blue-400">
-                        <GripVertical className="w-3 h-3 text-slate-400 group-hover:text-blue-500" />
-                    </div>
-                </div>
-
-                <div
-                    className="h-full overflow-y-auto bg-[#f8f9fa] p-6 md:p-10"
-                    style={{ flexBasis: `${100 - leftWidth}%` }}
-                >
-                    <div className="max-w-xl mx-auto flex flex-col h-full">
-
-                        <div className="flex-1 space-y-3">
-                            {currentQuestion.options.map((opt, i) => {
-                                const isSel = answers[currentIndex] === i;
-                                const isElim = (eliminated[currentIndex] || []).includes(i);
-                                const answerObj = answerStates[currentIndex];
-
-                                let containerProps = "bg-white border-2 border-slate-200 hover:border-slate-300 hover:shadow-sm text-slate-700";
-                                let letterProps = "border-slate-300 text-slate-500";
-
-                                if (isElim && !isChecked) {
-                                    containerProps = "bg-transparent border-2 border-slate-200 opacity-40 grayscale-[50%]";
-                                    letterProps = "border-slate-300 text-slate-400";
-                                }
-                                else if (isSel && !answerObj) {
-                                    containerProps = "bg-blue-50 border-2 border-blue-500 shadow-md ring-4 ring-blue-500/10 text-slate-900";
-                                    letterProps = "border-blue-500 bg-blue-600 text-white font-bold";
-                                }
-
-                                if (answerObj) {
-                                    if (i === answerObj.correct_answer) {
-                                        containerProps = "bg-green-50 border-2 border-green-500 shadow-md text-green-950 font-medium";
-                                        letterProps = "border-green-500 bg-green-500 text-white";
-                                    } else if (isSel && i !== answerObj.correct_answer) {
-                                        containerProps = "bg-red-50 border-2 border-red-400 text-red-950 opacity-90";
-                                        letterProps = "border-red-400 bg-red-400 text-white";
-                                    } else {
-                                        containerProps = "bg-white border-2 border-slate-200 opacity-60";
-                                        letterProps = "border-slate-200 text-slate-400";
-                                    }
-                                }
-
-                                const letter = String.fromCharCode(65 + i);
-
-                                return (
-                                    <div
-                                        key={i}
-                                        onClick={() => handleOptionSelect(i)}
-                                        className={"relative group flex min-h-[4rem] items-center rounded-xl p-4 px-5 transition-all outline-none cursor-pointer select-none " + (containerProps)}
+                    <section className="h-full overflow-y-auto bg-[#f7f7f7] px-4 py-5 md:px-6" style={{ flexBasis: `${100 - leftWidth}%` }}>
+                        <div className="mx-auto max-w-3xl">
+                            <div className="mb-4 flex items-center justify-between rounded-md border border-slate-300 bg-[#efefef] px-3 py-2.5">
+                                <div className="flex items-center gap-3">
+                                    <div className="grid h-8 w-8 place-items-center bg-black text-white font-bold">{currentIndex + 1}</div>
+                                    <button
+                                        onClick={() =>
+                                            setMarkedForReview((prev) => ({
+                                                ...prev,
+                                                [currentIndex]: !prev[currentIndex]
+                                            }))
+                                        }
+                                        className="text-sm font-semibold text-slate-800 hover:text-black"
                                     >
-                                        <div className={"flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm shrink-0 mr-4 transition-colors " + (letterProps)}>
-                                            {letter}
-                                        </div>
+                                        <Flag className="inline-block h-4 w-4 mr-1" />
+                                        {markedForReview[currentIndex] ? "Marked" : "Mark for Review"}
+                                    </button>
+                                </div>
 
-                                        <div className={"flex-1 text-[1.05rem] leading-snug break-words " + (isElim ? 'line-through decoration-2 decoration-slate-400/70' : '')} dangerouslySetInnerHTML={{ __html: opt }} />
+                                <div className="flex items-center gap-3 text-sm text-slate-500">
+                                    <button className="hover:text-slate-800"><VolumeX className="inline-block h-4 w-4 mr-1" />Mute Preppy</button>
+                                    <button className="hover:text-slate-800"><Siren className="inline-block h-4 w-4 mr-1" />Report</button>
+                                </div>
+                            </div>
 
-                                        <div className="ml-3 shrink-0 flex items-center">
-                                            {answerObj ? (
-                                                i === answerObj.correct_answer ? <CheckCircle className="w-6 h-6 text-green-500" /> :
-                                                    isSel ? <XCircle className="w-6 h-6 text-red-500" /> : null
+                            <div className="mb-5 text-[2rem] leading-none font-serif text-slate-700">_</div>
+                            <h2 className="mb-5 font-serif text-[2rem] leading-tight text-[#1d1d1d]">Which choice best completes the text?</h2>
+
+                            <div className="space-y-3">
+                                {currentQuestion.options.map((option, index) => {
+                                    const isSelected = selectedOption === index;
+                                    const isEliminated = (eliminated[currentIndex] || []).includes(index);
+                                    const letter = String.fromCharCode(65 + index);
+
+                                    let classes = "border-slate-500 bg-[#f9f9f9]";
+                                    if (!answerState && isSelected) {
+                                        classes = "border-[#00592B] bg-[#ebfff5]";
+                                    }
+                                    if (!answerState && isEliminated) {
+                                        classes = "border-slate-300 bg-[#efefef] opacity-60";
+                                    }
+                                    if (answerState && index === answerState.correct_answer) {
+                                        classes = "border-emerald-600 bg-emerald-50";
+                                    }
+                                    if (answerState && isSelected && index !== answerState.correct_answer) {
+                                        classes = "border-rose-500 bg-rose-50";
+                                    }
+
+                                    return (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleSelectOption(index)}
+                                            className={`group flex w-full items-center gap-4 rounded-2xl border px-4 py-3 text-left transition-colors ${classes}`}
+                                        >
+                                            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-slate-500 font-semibold">{letter}</span>
+                                            <span
+                                                className={`flex-1 text-2xl font-serif leading-snug ${isEliminated ? "line-through" : ""}`}
+                                                dangerouslySetInnerHTML={{ __html: option }}
+                                            />
+
+                                            {answerState ? (
+                                                index === answerState.correct_answer ? (
+                                                    <CheckCircle className="h-5 w-5 text-emerald-600" />
+                                                ) : isSelected ? (
+                                                    <XCircle className="h-5 w-5 text-rose-600" />
+                                                ) : null
                                             ) : (
-                                                <button
-                                                    tabIndex={-1}
-                                                    onClick={(e) => toggleEliminate(i, e)}
-                                                    className={"w-8 h-8 flex items-center justify-center rounded-full transition-colors border outline-none " +
-                                                        (isElim ? 'bg-slate-200 border-slate-300 text-slate-600' : 'bg-white border-slate-200 text-slate-300 hover:text-slate-600 hover:border-slate-300 hover:bg-slate-100 opacity-0 group-hover:opacity-100')
-                                                    }
+                                                <span
+                                                    onClick={(event) => toggleEliminate(index, event)}
+                                                    className="rounded-full border border-slate-300 bg-white p-1.5 text-slate-500 opacity-0 transition-opacity group-hover:opacity-100"
                                                 >
-                                                    <Strikethrough className="w-4 h-4" />
-                                                </button>
+                                                    <Strikethrough className="h-4 w-4" />
+                                                </span>
                                             )}
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            {answerState?.explanation && (
+                                <div className="mt-6 rounded-xl border border-slate-300 bg-white p-4">
+                                    <h3 className="font-semibold text-slate-800">Explanation</h3>
+                                    <p className="mt-2 text-sm text-slate-600 whitespace-pre-wrap">{answerState.explanation}</p>
+                                </div>
+                            )}
+                        </div>
+                    </section>
+                </main>
+
+                <footer className="h-[74px] shrink-0 border-t border-slate-300 bg-[#f6f6f6] px-3 md:px-6">
+                    <div className="mx-auto flex h-full max-w-[1600px] items-center justify-between gap-4">
+                        <div className="rounded-full bg-[#131313] px-4 py-2 text-sm font-semibold text-white">
+                            {Math.min(currentIndex + 1, questions.length)} of {questions.length}
                         </div>
 
-                        {isChecked && answerStates[currentIndex]?.explanation && (
-                            <div className="mt-8 p-5 bg-white border border-slate-200 rounded-xl shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <h4 className="font-bold text-slate-800 flex items-center mb-3">
-                                    Explanation
-                                </h4>
-                                <div className="text-sm text-slate-600 leading-relaxed mb-4 whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: answerStates[currentIndex].explanation }} />
+                        <div className="flex items-center gap-2">
+                            <button className="rounded-xl bg-[#6d28d9] px-4 py-2 text-sm font-semibold text-white hover:bg-[#5a20b2]">
+                                <MessageCircleQuestion className="inline-block h-4 w-4 mr-1" />
+                                Ask Preppy
+                            </button>
 
-                                <button className="w-full mt-2 flex items-center justify-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-semibold py-2.5 px-4 rounded-lg transition-colors text-sm">
-                                    <Sparkles className="w-4 h-4" /> Ask AI Tutor to clarify
+                            {!answerState && selectedOption !== undefined && (
+                                <button
+                                    onClick={handleCheckAnswer}
+                                    className="rounded-xl bg-[#6ec1ea] px-4 py-2 text-sm font-semibold text-white hover:bg-[#56b1df]"
+                                >
+                                    Check
                                 </button>
-                            </div>
-                        )}
+                            )}
+
+                            <button
+                                onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
+                                disabled={currentIndex === 0}
+                                className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 disabled:opacity-40"
+                            >
+                                Previous
+                            </button>
+                            <button
+                                onClick={() => {
+                                    if (currentIndex < questions.length - 1) {
+                                        setCurrentIndex((prev) => prev + 1);
+                                        return;
+                                    }
+                                    router.push("/practice");
+                                }}
+                                className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
+                            >
+                                {currentIndex < questions.length - 1 ? "Next" : "Finish"}
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            {/* Bottom Action Footer */}
-            <div className="shrink-0 flex items-center justify-between border-t border-slate-200 bg-white px-4 py-3 md:px-8 z-10">
-                <div className="hidden md:block text-xs font-semibold text-slate-400 uppercase tracking-widest">
-                    {currentQuestion.domain}
-                </div>
-
-                <div className="flex-1 flex items-center justify-end gap-3 w-full">
-                    {!isChecked && selectedOption !== undefined && (
-                        <button
-                            onClick={handleCheckAnswer}
-                            className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm font-semibold rounded-xl px-8 py-2.5 transition active:scale-95"
-                        >
-                            Check Answer
-                        </button>
-                    )}
-
-                    <div className="flex items-center gap-2 border-l border-slate-200 pl-4 ml-2">
-                        <button
-                            onClick={() => setCurrentIndex(p => Math.max(0, p - 1))}
-                            disabled={currentIndex === 0}
-                            className="bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-800 disabled:opacity-30 disabled:pointer-events-none font-semibold rounded-xl px-5 py-2 transition"
-                        >
-                            Previous
-                        </button>
-                        <button
-                            onClick={() => {
-                                if (currentIndex < questions.length - 1) setCurrentIndex(p => p + 1);
-                                else router.push('/practice');
-                            }}
-                            className="bg-slate-900 border-2 border-slate-900 text-white hover:bg-slate-800 hover:border-slate-800 font-semibold rounded-xl px-8 py-2 transition active:scale-95 flex items-center"
-                        >
-                            {currentIndex < questions.length - 1 ? 'Next' : 'Finish'}
-                        </button>
-                    </div>
-                </div>
+                </footer>
             </div>
         </div>
     );

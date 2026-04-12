@@ -1,7 +1,37 @@
+"use client";
+
+import { useEffect, useState } from 'react';
 import { Target, TrendingUp, Clock, BookOpen, AlertTriangle, PlayCircle, BarChart3, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import api from '@/lib/api';
+
+type AnalyticsResponse = {
+  total_questions: number;
+  correct_answers: number;
+  accuracy: number;
+};
 
 export default function ProgressPage() {
+  const [analytics, setAnalytics] = useState<AnalyticsResponse>({
+    total_questions: 0,
+    correct_answers: 0,
+    accuracy: 0,
+  });
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await api.get<AnalyticsResponse>('/api/progress/analytics');
+        setAnalytics(response.data);
+      } catch (error) {
+        console.error('Failed to fetch analytics', error);
+        setAnalytics({ total_questions: 0, correct_answers: 0, accuracy: 0 });
+      }
+    };
+
+    fetchAnalytics();
+  }, []);
+
   // Mock data reflecting latest test performance and needed improvements
   const latest_test_results = {
     title: 'Full Practice Test #2',
@@ -20,7 +50,7 @@ export default function ProgressPage() {
   return (
     <div className="min-h-screen bg-neutral-50 py-12 px-6">
       <div className="max-w-6xl mx-auto space-y-8">
-        
+
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-neutral-900">Your Progress</h1>
@@ -33,14 +63,14 @@ export default function ProgressPage() {
 
         {/* Row 1: Overview Stats & Latest Test Performance */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          
+
           {/* Questions Answered (1/4) */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100">
             <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-4">
               <BookOpen className="w-5 h-5 text-blue-600" />
             </div>
             <h3 className="text-neutral-500 text-sm font-medium">Questions Answered</h3>
-            <p className="text-3xl font-bold text-neutral-900 mt-1">342</p>
+            <p className="text-3xl font-bold text-neutral-900 mt-1">{analytics.total_questions}</p>
             <p className="text-neutral-400 text-sm mt-2">Across all sections</p>
           </div>
 
@@ -69,7 +99,7 @@ export default function ProgressPage() {
                   <span className="text-emerald-700 text-sm font-medium">Total Score</span>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4 mt-6">
                 <div className="bg-white/60 p-3 rounded-xl border border-emerald-100/50 backdrop-blur-sm">
                   <span className="text-emerald-800/70 text-xs font-bold uppercase tracking-wider">Math</span>
@@ -86,38 +116,38 @@ export default function ProgressPage() {
 
         {/* Row 2: Recent Activity & Actionable Diagnostic */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
+
           {/* Recent Activity */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100 flex flex-col">
             <h3 className="text-lg font-bold text-neutral-900 mb-6">Recent Activity</h3>
             <div className="space-y-4 flex-1">
               <div className="flex items-center justify-between p-4 rounded-xl border border-neutral-100 bg-neutral-50/50 hover:bg-neutral-50 transition-colors cursor-pointer group">
                 <div className="flex items-center gap-4">
-                   <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
                     <BookOpen className="w-5 h-5 text-emerald-600" />
-                   </div>
-                   <div>
+                  </div>
+                  <div>
                     <h4 className="font-medium text-neutral-800">Reading Practice Test</h4>
                     <p className="text-sm text-neutral-500">Today, 2:30 PM</p>
-                   </div>
+                  </div>
                 </div>
                 <span className="text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-full">95%</span>
               </div>
-              
-               <div className="flex items-center justify-between p-4 rounded-xl border border-neutral-100 bg-neutral-50/50 hover:bg-neutral-50 transition-colors cursor-pointer group">
+
+              <div className="flex items-center justify-between p-4 rounded-xl border border-neutral-100 bg-neutral-50/50 hover:bg-neutral-50 transition-colors cursor-pointer group">
                 <div className="flex items-center gap-4">
-                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
                     <Target className="w-5 h-5 text-blue-600" />
-                   </div>
-                   <div>
+                  </div>
+                  <div>
                     <h4 className="font-medium text-neutral-800">Advanced Algebra</h4>
                     <p className="text-sm text-neutral-500">Yesterday</p>
-                   </div>
+                  </div>
                 </div>
                 <span className="text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-full">88%</span>
               </div>
             </div>
-            
+
             <button className="w-full mt-6 py-3 text-sm font-medium text-neutral-600 hover:text-emerald-600 transition-colors flex items-center justify-center gap-1">
               View All History <ChevronRight className="w-4 h-4" />
             </button>
@@ -129,7 +159,7 @@ export default function ProgressPage() {
               <AlertTriangle className="w-5 h-5 text-amber-500" /> Improvement Focus
             </h3>
             <p className="text-neutral-500 text-sm mb-6">Top 3 topics dragging your score down based on your last test.</p>
-            
+
             <div className="space-y-4 flex-1">
               {actionableDiagnostics.map((item) => (
                 <div key={item.id} className="p-4 rounded-xl border border-neutral-100 hover:border-emerald-200 hover:shadow-md transition-all group">
