@@ -20,22 +20,30 @@ def run_startup_migrations(engine: Engine) -> None:
             statements.append("ALTER TABLE questions ADD COLUMN skill VARCHAR")
         if "subcategory" not in q_cols:
             statements.append("ALTER TABLE questions ADD COLUMN subcategory VARCHAR")
+        if "passage_type" not in q_cols:
+            statements.append("ALTER TABLE questions ADD COLUMN passage_type VARCHAR")
 
     if "users" in tables:
         u_cols = {col["name"] for col in inspector.get_columns("users")}
         if "email_verified" not in u_cols:
-            statements.append("ALTER TABLE users ADD COLUMN email_verified BOOLEAN DEFAULT 0")
+            statements.append(
+                "ALTER TABLE users ADD COLUMN email_verified BOOLEAN DEFAULT 0"
+            )
         if "verification_token" not in u_cols:
             statements.append("ALTER TABLE users ADD COLUMN verification_token VARCHAR")
         if "reset_token" not in u_cols:
             statements.append("ALTER TABLE users ADD COLUMN reset_token VARCHAR")
         if "reset_token_expires" not in u_cols:
-            statements.append("ALTER TABLE users ADD COLUMN reset_token_expires DATETIME")
+            statements.append(
+                "ALTER TABLE users ADD COLUMN reset_token_expires DATETIME"
+            )
 
     if "flashcard_decks" in tables:
         d_cols = {col["name"] for col in inspector.get_columns("flashcard_decks")}
         if "is_shared" not in d_cols:
-            statements.append("ALTER TABLE flashcard_decks ADD COLUMN is_shared BOOLEAN DEFAULT 0")
+            statements.append(
+                "ALTER TABLE flashcard_decks ADD COLUMN is_shared BOOLEAN DEFAULT 0"
+            )
 
     if not statements:
         return

@@ -20,6 +20,7 @@ class QuestionResponse(BaseModel):
     domain: Optional[str] = None
     skill: Optional[str] = None
     category: Optional[str] = None
+    passage_type: Optional[str] = None
     difficulty: Optional[str] = None
     content: str
     options: list

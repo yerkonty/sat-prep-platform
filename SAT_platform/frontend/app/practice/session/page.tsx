@@ -37,6 +37,54 @@ type AnswerState = {
     explanation: string;
 };
 
+type ParsedQuestionContent = {
+    passageHtml: string;
+    prompt: string;
+};
+
+const DEFAULT_PROMPT = "Choose the best answer.";
+
+function splitQuestionContent(rawContent: string): ParsedQuestionContent {
+    const raw = (rawContent || "").trim();
+    if (!raw) {
+        return { passageHtml: "", prompt: DEFAULT_PROMPT };
+    }
+
+    const paragraphs = raw
+        .split(/\n{2,}/)
+        .map((part) => part.trim())
+        .filter(Boolean);
+
+    const promptSignals = [/which choice/i, /what choice/i, /according to/i, /based on/i, /the student wants/i, /which quotation/i];
+
+    const isLikelyPrompt = (text: string) => text.endsWith("?") && promptSignals.some((regex) => regex.test(text));
+
+    if (paragraphs.length > 1 && isLikelyPrompt(paragraphs[paragraphs.length - 1])) {
+        return {
+            passageHtml: paragraphs.slice(0, -1).join("\n\n"),
+            prompt: paragraphs[paragraphs.length - 1]
+        };
+    }
+
+    const trailingPromptMatch = raw.match(
+        /(Which choice[\s\S]*?\?|What choice[\s\S]*?\?|According to[\s\S]*?\?|Based on[\s\S]*?\?|The student wants[\s\S]*?\?|Which quotation[\s\S]*?\?)\s*$/i
+    );
+
+    if (trailingPromptMatch && trailingPromptMatch.index !== undefined) {
+        const prompt = trailingPromptMatch[1].trim();
+        const passage = raw.slice(0, trailingPromptMatch.index).trim();
+        return {
+            passageHtml: passage || raw,
+            prompt: prompt || DEFAULT_PROMPT
+        };
+    }
+
+    return {
+        passageHtml: raw,
+        prompt: DEFAULT_PROMPT
+    };
+}
+
 export default function PracticeSessionPage() {
     return (
         <Suspense fallback={<div className="flex h-screen items-center justify-center text-slate-500">Loading session...</div>}>
@@ -72,6 +120,10 @@ function PracticeSession() {
     const currentQuestion = useMemo(() => questions[currentIndex], [questions, currentIndex]);
     const selectedOption = answers[currentIndex];
     const answerState = answerStates[currentIndex];
+    const parsedQuestion = useMemo(
+        () => splitQuestionContent(currentQuestion?.content || ""),
+        [currentQuestion?.content]
+    );
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -298,8 +350,8 @@ function PracticeSession() {
                             <button
                                 onClick={() => setHighlightMode((prev) => !prev)}
                                 className={`rounded-md px-3 py-1.5 font-medium border ${highlightMode
-                                        ? "border-yellow-300 bg-yellow-100 text-yellow-800"
-                                        : "border-transparent bg-transparent text-slate-600 hover:bg-slate-200"
+                                    ? "border-yellow-300 bg-yellow-100 text-yellow-800"
+                                    : "border-transparent bg-transparent text-slate-600 hover:bg-slate-200"
                                     }`}
                             >
                                 <Highlighter className="inline-block h-4 w-4 mr-1" />
@@ -318,8 +370,8 @@ function PracticeSession() {
                         <div className="max-w-3xl mx-auto">
                             <div className="mb-6 border-b border-slate-300 pb-5 text-[2rem] leading-none font-serif text-slate-700">_</div>
                             <article
-                                className="prose max-w-none font-serif text-[1.15rem] leading-[1.8] text-[#1d1d1d] whitespace-pre-wrap"
-                                dangerouslySetInnerHTML={{ __html: currentQuestion.content }}
+                                className="prose max-w-none font-serif text-[1rem] md:text-[1.06rem] leading-[1.65] text-[#1d1d1d] whitespace-pre-wrap"
+                                dangerouslySetInnerHTML={{ __html: parsedQuestion.passageHtml }}
                             />
                         </div>
                     </section>
@@ -361,7 +413,7 @@ function PracticeSession() {
                             </div>
 
                             <div className="mb-5 text-[2rem] leading-none font-serif text-slate-700">_</div>
-                            <h2 className="mb-5 font-serif text-[2rem] leading-tight text-[#1d1d1d]">Which choice best completes the text?</h2>
+                            <h2 className="mb-5 font-serif text-[1.35rem] md:text-[1.55rem] leading-tight text-[#1d1d1d]">{parsedQuestion.prompt}</h2>
 
                             <div className="space-y-3">
                                 {currentQuestion.options.map((option, index) => {
@@ -391,7 +443,7 @@ function PracticeSession() {
                                         >
                                             <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-slate-500 font-semibold">{letter}</span>
                                             <span
-                                                className={`flex-1 text-2xl font-serif leading-snug ${isEliminated ? "line-through" : ""}`}
+                                                className={`flex-1 text-[1.05rem] md:text-[1.15rem] font-serif leading-[1.45] ${isEliminated ? "line-through" : ""}`}
                                                 dangerouslySetInnerHTML={{ __html: option }}
                                             />
 

@@ -4,7 +4,7 @@
 - Main task file is mandatory: C:\Users\Asus\OneDrive\Desktop\acing\SAT_website\tasks&info\tasks.md
 - Repository-relative pointer: [tasks&info/tasks.md](../../tasks&info/tasks.md)
 - Track only pending tasks in this file.
-- When a task is completed, remove it from tasks.md.
+- Wh`en a task is completed, remove it from tasks.md.
 - When all tasks in a phase are done, delete that full phase block.
 - After deleting a completed phase, start the next phase cleanly.
 - For every new user prompt, perform smart lookup in tasks.md before planning changes.
