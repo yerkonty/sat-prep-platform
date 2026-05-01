@@ -15,6 +15,7 @@ router = APIRouter(prefix="/api/questions", tags=["Questions"])
 
 class QuestionResponse(BaseModel):
     id: str
+    external_id: Optional[str] = None
     section: Optional[str] = None
     type: Optional[str] = None
     domain: Optional[str] = None
@@ -101,6 +102,7 @@ def get_questions(
     type: Optional[str] = None,
     category: Optional[str] = None,
     difficulty: Optional[str] = None,
+    question_id: Optional[str] = None,
     limit: int = Query(50, ge=1, le=1000),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
@@ -151,7 +153,15 @@ def get_questions(
     if category:
         query = query.filter(func.lower(Question.category) == category.lower())
     if difficulty:
-        query = query.filter(func.lower(Question.difficulty) == difficulty.lower())
+        difficulties = [d.strip().lower() for d in difficulty.split(",") if d.strip()]
+        if len(difficulties) == 1:
+            query = query.filter(func.lower(Question.difficulty) == difficulties[0])
+        elif difficulties:
+            query = query.filter(func.lower(Question.difficulty).in_(difficulties))
+    if question_id:
+        query = query.filter(
+            func.lower(Question.external_id) == question_id.strip().lower()
+        )
 
     questions = query.order_by(Question.id.asc()).offset(offset).limit(limit).all()
     return questions
@@ -188,15 +198,13 @@ def get_question_stats(db: Session = Depends(get_db)):
     for section_raw, domain_raw, skill_raw, count in rows:
         section_id = normalize_section(section_raw)
         domain_name = domain_raw or "Uncategorized"
-        skill_name = skill_raw or "Unspecified"
         count_value = int(count)
 
         total_questions += count_value
         sections[section_id]["count"] += count_value
         sections[section_id]["domains"][domain_name]["count"] += count_value
-        sections[section_id]["domains"][domain_name]["skills"][
-            skill_name
-        ] += count_value
+        if skill_raw:
+            sections[section_id]["domains"][domain_name]["skills"][skill_raw] += count_value
 
     section_order = ["rw", "math", "other"]
     response_sections: List[SectionStatsResponse] = []

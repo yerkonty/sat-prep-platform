@@ -160,5 +160,53 @@ def process_all_answer_pdfs(
     return counts
 
 
+def discover_skill_bank_pdfs(root_dir: Path) -> List[Path]:
+    """Find all PDFs in a skill-bank directory (no filename filter)."""
+    if not root_dir.exists():
+        return []
+    pdfs = [path for path in root_dir.rglob("*.pdf") if path.is_file()]
+    pdfs.sort(key=lambda p: str(p).lower())
+    return pdfs
+
+
+def import_skill_bank(source_root: Path, purge_stale: bool = False) -> Dict[str, int]:
+    """Import all PDFs from a skill-bank directory (e.g. Verbal or Math)."""
+    pdf_paths = discover_skill_bank_pdfs(source_root)
+    if not pdf_paths:
+        raise FileNotFoundError(f"No PDFs found under: {source_root}")
+
+    print(f"Discovered {len(pdf_paths)} PDFs under {source_root}")
+    for path in pdf_paths:
+        print(f"  - {path}")
+
+    counts = import_from_pdfs(pdf_paths, purge_stale=purge_stale)
+    print("\n=== Import Summary ===")
+    print(json.dumps(counts, indent=2))
+    return counts
+
+
 if __name__ == "__main__":
-    process_all_answer_pdfs()
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Import SAT questions from College Board PDFs."
+    )
+    parser.add_argument(
+        "directory",
+        nargs="?",
+        default=None,
+        help="Path to a skill-bank directory (e.g. .../Verbal). "
+             "If omitted, uses SAT_SOURCE_ROOT with the legacy 'answer' filename filter.",
+    )
+    parser.add_argument(
+        "--purge",
+        action="store_true",
+        default=False,
+        help="Delete stale College Board records not present in this import.",
+    )
+    args = parser.parse_args()
+
+    if args.directory:
+        import_skill_bank(Path(args.directory), purge_stale=args.purge)
+    else:
+        process_all_answer_pdfs(purge_stale=args.purge)

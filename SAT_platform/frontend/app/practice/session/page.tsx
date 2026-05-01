@@ -3,24 +3,23 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-    ChevronDown,
     ChevronLeft,
+    ChevronRight,
     CheckCircle,
-    Eye,
-    EyeOff,
+    Clock,
     Flag,
     GripVertical,
     Highlighter,
-    MessageCircleQuestion,
-    Siren,
+    Share2,
     Strikethrough,
-    VolumeX,
     XCircle
 } from "lucide-react";
 import api from "@/lib/api";
+import { renderMath } from "@/lib/renderMath";
 
 type Question = {
     id: string;
+    external_id?: string;
     section?: string;
     type?: string;
     domain?: string;
@@ -100,6 +99,8 @@ function PracticeSession() {
     const moduleId = (searchParams.get("module") || "rw").toLowerCase();
     const domain = searchParams.get("domain") || searchParams.get("topic") || "";
     const skill = searchParams.get("skill") || "";
+    const difficulty = searchParams.get("difficulty") || "";
+    const questionId = searchParams.get("question_id") || "";
 
     const [questions, setQuestions] = useState<Question[]>([]);
     const [loading, setLoading] = useState(true);
@@ -114,6 +115,14 @@ function PracticeSession() {
     const [highlightMode, setHighlightMode] = useState(false);
     const [timerHidden, setTimerHidden] = useState(false);
     const [timeElapsed, setTimeElapsed] = useState(0);
+    const [calcOpen, setCalcOpen] = useState(false);
+    const [calcPos, setCalcPos] = useState({ x: 0, y: 0 });
+    const [calcSize, setCalcSize] = useState({ w: 560, h: 440 });
+    const [calcInteracting, setCalcInteracting] = useState(false);
+    const isDraggingCalc = useRef(false);
+    const isResizingCalc = useRef(false);
+    const calcDragOffset = useRef({ x: 0, y: 0 });
+    const calcResizeStart = useRef({ x: 0, y: 0, w: 0, h: 0 });
 
     const isResizing = useRef(false);
 
@@ -124,6 +133,7 @@ function PracticeSession() {
         () => splitQuestionContent(currentQuestion?.content || ""),
         [currentQuestion?.content]
     );
+    const isMath = moduleId === "math" || currentQuestion?.section === "math";
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -140,6 +150,14 @@ function PracticeSession() {
                 // Keep backward compatibility with old links where skill was numeric index.
                 if (skill && Number.isNaN(Number(skill))) {
                     params.set("skill", skill);
+                }
+
+                if (difficulty) {
+                    params.set("difficulty", difficulty);
+                }
+
+                if (questionId) {
+                    params.set("question_id", questionId);
                 }
 
                 const response = await api.get<Question[]>(`/api/questions?${params.toString()}`);
@@ -159,7 +177,7 @@ function PracticeSession() {
         };
 
         fetchQuestions();
-    }, [moduleId, domain, skill]);
+    }, [moduleId, domain, skill, difficulty, questionId]);
 
     useEffect(() => {
         if (loading || questions.length === 0) {
@@ -200,10 +218,56 @@ function PracticeSession() {
         };
     }, []);
 
+    // Set calculator position to bottom-right when first opened
+    useEffect(() => {
+        if (calcOpen) {
+            setCalcPos({
+                x: Math.max(0, window.innerWidth - calcSize.w - 24),
+                y: Math.max(0, window.innerHeight - calcSize.h - 88),
+            });
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [calcOpen]);
+
+    // Calculator drag + resize via mouse events
+    useEffect(() => {
+        const onMouseMove = (e: MouseEvent) => {
+            if (isDraggingCalc.current) {
+                setCalcPos({
+                    x: Math.max(0, e.clientX - calcDragOffset.current.x),
+                    y: Math.max(0, e.clientY - calcDragOffset.current.y),
+                });
+            }
+            if (isResizingCalc.current) {
+                const dx = e.clientX - calcResizeStart.current.x;
+                const dy = e.clientY - calcResizeStart.current.y;
+                setCalcSize({
+                    w: Math.max(320, calcResizeStart.current.w + dx),
+                    h: Math.max(240, calcResizeStart.current.h + dy),
+                });
+            }
+        };
+        const onMouseUp = () => {
+            if (isDraggingCalc.current || isResizingCalc.current) {
+                isDraggingCalc.current = false;
+                isResizingCalc.current = false;
+                setCalcInteracting(false);
+                document.body.style.cursor = "default";
+            }
+        };
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+        return () => {
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+        };
+    }, []);
+
     const formatTime = (seconds: number) => {
-        const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
+        const hh = String(Math.floor(seconds / 3600)).padStart(2, "0");
+        const mm = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
         const ss = String(seconds % 60).padStart(2, "0");
-        return `${mm}:${ss}`;
+        return `${hh}:${mm}:${ss}`;
     };
 
     const handleTextSelection = () => {
@@ -317,148 +381,208 @@ function PracticeSession() {
     }
 
     return (
-        <div className={`h-screen overflow-hidden bg-[#f3f3f3] text-[#1f1f1f] ${highlightMode ? "cursor-text" : ""}`}>
+        <div className={`h-screen overflow-hidden bg-white text-[#1a1a1a] ${highlightMode ? "cursor-text" : ""}`}>
             <div className="flex h-full flex-col">
-                <header className="h-[84px] shrink-0 border-b border-slate-300 bg-[#f6f6f6] px-3 md:px-6">
-                    <div className="relative flex h-full items-center justify-between">
-                        <div className="flex items-center gap-2 text-sm">
+
+                {/* ── Header ── */}
+                <header className="h-14 shrink-0 border-b border-slate-200 bg-white px-4">
+                    <div className="flex h-full items-center justify-between">
+                        {/* Left */}
+                        <div className="flex items-center gap-2">
                             <button
                                 onClick={() => router.push("/practice")}
-                                className="rounded-md px-2 py-1 text-slate-600 hover:bg-slate-200 hover:text-slate-900"
+                                className="flex items-center gap-1 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
                             >
-                                <ChevronLeft className="inline-block h-4 w-4" />
+                                <ChevronLeft className="h-3.5 w-3.5" />
                                 Back
                             </button>
-                            <button className="rounded-md px-2 py-1 text-slate-600 hover:bg-slate-200 hover:text-slate-900">
-                                Directions <ChevronDown className="inline-block h-4 w-4" />
+                            <button className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
+                                Explanation
+                            </button>
+                            <button className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
+                                Metadata
                             </button>
                         </div>
 
-                        <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center">
-                            <div className="text-sm text-slate-500">Timer</div>
-                            {!timerHidden && <div className="font-mono font-semibold text-xl text-slate-800">{formatTime(timeElapsed)}</div>}
-                            <button
-                                onClick={() => setTimerHidden((prev) => !prev)}
-                                className="mt-1 rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-100"
-                            >
-                                {timerHidden ? <Eye className="inline-block h-3.5 w-3.5 mr-1" /> : <EyeOff className="inline-block h-3.5 w-3.5 mr-1" />}
-                                {timerHidden ? "Show" : "Hide"}
-                            </button>
-                        </div>
+                        {/* Center — Timer */}
+                        <button
+                            onClick={() => setTimerHidden((prev) => !prev)}
+                            className="flex items-center gap-2 rounded-full border border-slate-200 px-4 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors font-mono"
+                        >
+                            <Clock className="h-4 w-4 text-slate-400 shrink-0" />
+                            {timerHidden ? "--:--:--" : formatTime(timeElapsed)}
+                        </button>
 
-                        <div className="flex items-center gap-2 text-sm">
+                        {/* Right */}
+                        <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setHighlightMode((prev) => !prev)}
-                                className={`rounded-md px-3 py-1.5 font-medium border ${highlightMode
-                                    ? "border-yellow-300 bg-yellow-100 text-yellow-800"
-                                    : "border-transparent bg-transparent text-slate-600 hover:bg-slate-200"
-                                    }`}
+                                className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                                    highlightMode
+                                        ? "border-yellow-300 bg-yellow-50 text-yellow-800"
+                                        : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                                }`}
                             >
-                                <Highlighter className="inline-block h-4 w-4 mr-1" />
-                                Highlight
+                                <Highlighter className="h-3.5 w-3.5" />
+                                Annotate
                             </button>
+                            <button className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
+                                <Share2 className="h-3.5 w-3.5" />
+                                Share
+                            </button>
+                            {isMath && (
+                                <button
+                                    onClick={() => setCalcOpen((prev) => !prev)}
+                                    className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                                        calcOpen
+                                            ? "border-[#00592B] bg-[#00592B] text-white"
+                                            : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                                    }`}
+                                >
+                                    Calculator
+                                </button>
+                            )}
                         </div>
                     </div>
                 </header>
 
+                {/* ── Main ── */}
                 <main className="flex min-h-0 flex-1">
+
+                    {/* Left — Passage (RW only) */}
+                    {!isMath && (
+                        <>
+                            <section
+                                className="h-full overflow-y-auto bg-white px-8 py-8 md:px-12"
+                                style={{ flexBasis: `${leftWidth}%` }}
+                                onMouseUp={handleTextSelection}
+                            >
+                                <div className="max-w-2xl mx-auto">
+                                    <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">Passage</p>
+                                    <article className="prose max-w-none font-serif text-[1rem] md:text-[1.06rem] leading-[1.75] text-[#1d1d1d]">
+                                        {parsedQuestion.passageHtml.split(/\n\n+/).filter(Boolean).map((para, i) => (
+                                            <p key={i} dangerouslySetInnerHTML={{ __html: renderMath(para.replace(/\n/g, "<br />")) }} />
+                                        ))}
+                                    </article>
+                                </div>
+                            </section>
+                            <div
+                                className="relative z-10 flex w-[3px] shrink-0 cursor-col-resize items-center justify-center bg-slate-200 hover:bg-slate-300 transition-colors"
+                                onMouseDown={(event) => {
+                                    event.preventDefault();
+                                    isResizing.current = true;
+                                    document.body.style.cursor = "col-resize";
+                                }}
+                            >
+                                <GripVertical className="h-4 w-4 text-slate-400" />
+                            </div>
+                        </>
+                    )}
+
+                    {/* Right — Question (or full-width for math) */}
                     <section
-                        className="h-full overflow-y-auto bg-white px-6 py-8 md:px-10"
-                        style={{ flexBasis: `${leftWidth}%` }}
-                        onMouseUp={handleTextSelection}
+                        className="h-full overflow-y-auto bg-white px-6 py-6 md:px-8"
+                        style={{ flexBasis: isMath ? "100%" : `${100 - leftWidth}%` }}
                     >
-                        <div className="max-w-3xl mx-auto">
-                            <div className="mb-6 border-b border-slate-300 pb-5 text-[2rem] leading-none font-serif text-slate-700">_</div>
-                            <article
-                                className="prose max-w-none font-serif text-[1rem] md:text-[1.06rem] leading-[1.65] text-[#1d1d1d] whitespace-pre-wrap"
-                                dangerouslySetInnerHTML={{ __html: parsedQuestion.passageHtml }}
-                            />
-                        </div>
-                    </section>
+                        <div className="mx-auto max-w-2xl">
 
-                    <div
-                        className="relative z-10 flex w-2 shrink-0 cursor-col-resize items-center justify-center border-x border-slate-300 bg-[#e9e9e9] hover:bg-[#dcdcdc]"
-                        onMouseDown={(event) => {
-                            event.preventDefault();
-                            isResizing.current = true;
-                            document.body.style.cursor = "col-resize";
-                        }}
-                    >
-                        <GripVertical className="h-4 w-4 text-slate-500" />
-                    </div>
-
-                    <section className="h-full overflow-y-auto bg-[#f7f7f7] px-4 py-5 md:px-6" style={{ flexBasis: `${100 - leftWidth}%` }}>
-                        <div className="mx-auto max-w-3xl">
-                            <div className="mb-4 flex items-center justify-between rounded-md border border-slate-300 bg-[#efefef] px-3 py-2.5">
-                                <div className="flex items-center gap-3">
-                                    <div className="grid h-8 w-8 place-items-center bg-black text-white font-bold">{currentIndex + 1}</div>
-                                    <button
-                                        onClick={() =>
-                                            setMarkedForReview((prev) => ({
-                                                ...prev,
-                                                [currentIndex]: !prev[currentIndex]
-                                            }))
-                                        }
-                                        className="text-sm font-semibold text-slate-800 hover:text-black"
-                                    >
-                                        <Flag className="inline-block h-4 w-4 mr-1" />
-                                        {markedForReview[currentIndex] ? "Marked" : "Mark for Review"}
-                                    </button>
+                            {/* Question toolbar */}
+                            <div className="mb-5 flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2">
+                                <div className="grid h-8 w-8 shrink-0 place-items-center rounded bg-[#1a1a1a] text-sm font-bold text-white">
+                                    {currentIndex + 1}
                                 </div>
-
-                                <div className="flex items-center gap-3 text-sm text-slate-500">
-                                    <button className="hover:text-slate-800"><VolumeX className="inline-block h-4 w-4 mr-1" />Mute Preppy</button>
-                                    <button className="hover:text-slate-800"><Siren className="inline-block h-4 w-4 mr-1" />Report</button>
-                                </div>
+                                <button
+                                    onClick={() =>
+                                        setMarkedForReview((prev) => ({
+                                            ...prev,
+                                            [currentIndex]: !prev[currentIndex]
+                                        }))
+                                    }
+                                    className={`flex items-center gap-1.5 text-xs font-semibold transition-colors ${
+                                        markedForReview[currentIndex] ? "text-amber-600" : "text-slate-600 hover:text-slate-900"
+                                    }`}
+                                >
+                                    <Flag className="h-3.5 w-3.5" />
+                                    {markedForReview[currentIndex] ? "Marked" : "Mark for Review"}
+                                </button>
+                                <span className="text-slate-200">|</span>
+                                <span className="text-xs font-semibold text-slate-500">Eliminate</span>
+                                {currentQuestion.external_id && (
+                                    <>
+                                        <span className="ml-auto font-mono text-[10px] text-slate-300">
+                                            ID: {currentQuestion.external_id}
+                                        </span>
+                                    </>
+                                )}
                             </div>
 
-                            <div className="mb-5 text-[2rem] leading-none font-serif text-slate-700">_</div>
-                            <h2 className="mb-5 font-serif text-[1.35rem] md:text-[1.55rem] leading-tight text-[#1d1d1d]">{parsedQuestion.prompt}</h2>
+                            {/* Math: show full question content above options */}
+                            {isMath && (
+                                <div className="mb-6 space-y-3 text-[1rem] leading-[1.7] text-[#1a1a1a]">
+                                    {currentQuestion.content.split(/\n\n+/).filter(Boolean).map((para, i) => (
+                                        <p key={i} dangerouslySetInnerHTML={{ __html: renderMath(para.replace(/\n/g, " ")) }} />
+                                    ))}
+                                </div>
+                            )}
 
-                            <div className="space-y-3">
+                            {/* RW: show question prompt only */}
+                            {!isMath && (
+                                <p className="mb-6 text-[1.05rem] font-medium leading-[1.65] text-[#1a1a1a]"
+                                    dangerouslySetInnerHTML={{ __html: renderMath(parsedQuestion.prompt) }}
+                                />
+                            )}
+
+                            {/* Answer options */}
+                            <div className="space-y-2.5">
                                 {currentQuestion.options.map((option, index) => {
                                     const isSelected = selectedOption === index;
                                     const isEliminated = (eliminated[currentIndex] || []).includes(index);
                                     const letter = String.fromCharCode(65 + index);
 
-                                    let classes = "border-slate-500 bg-[#f9f9f9]";
+                                    let cardClass = "border-slate-200 bg-white hover:border-slate-400";
+                                    let circleClass = "border-slate-300 text-slate-600 bg-white";
+
                                     if (!answerState && isSelected) {
-                                        classes = "border-[#00592B] bg-[#ebfff5]";
+                                        cardClass = "border-slate-800 bg-white";
+                                        circleClass = "border-slate-800 bg-slate-800 text-white";
                                     }
                                     if (!answerState && isEliminated) {
-                                        classes = "border-slate-300 bg-[#efefef] opacity-60";
+                                        cardClass = "border-slate-200 bg-slate-50 opacity-50";
                                     }
                                     if (answerState && index === answerState.correct_answer) {
-                                        classes = "border-emerald-600 bg-emerald-50";
+                                        cardClass = "border-emerald-400 bg-emerald-50";
+                                        circleClass = "border-emerald-500 bg-emerald-500 text-white";
                                     }
                                     if (answerState && isSelected && index !== answerState.correct_answer) {
-                                        classes = "border-rose-500 bg-rose-50";
+                                        cardClass = "border-rose-400 bg-rose-50";
+                                        circleClass = "border-rose-400 bg-rose-400 text-white";
                                     }
 
                                     return (
                                         <button
                                             key={index}
                                             onClick={() => handleSelectOption(index)}
-                                            className={`group flex w-full items-center gap-4 rounded-2xl border px-4 py-3 text-left transition-colors ${classes}`}
+                                            className={`group flex w-full items-center gap-4 rounded-xl border px-4 py-3.5 text-left transition-all ${cardClass}`}
                                         >
-                                            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-slate-500 font-semibold">{letter}</span>
+                                            <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border text-sm font-semibold transition-colors ${circleClass}`}>
+                                                {letter}
+                                            </span>
                                             <span
-                                                className={`flex-1 text-[1.05rem] md:text-[1.15rem] font-serif leading-[1.45] ${isEliminated ? "line-through" : ""}`}
-                                                dangerouslySetInnerHTML={{ __html: option }}
+                                                className={`flex-1 text-[0.95rem] leading-[1.55] text-slate-800 ${isEliminated ? "line-through text-slate-400" : ""}`}
+                                                dangerouslySetInnerHTML={{ __html: renderMath(option) }}
                                             />
-
                                             {answerState ? (
                                                 index === answerState.correct_answer ? (
-                                                    <CheckCircle className="h-5 w-5 text-emerald-600" />
+                                                    <CheckCircle className="h-4 w-4 shrink-0 text-emerald-500" />
                                                 ) : isSelected ? (
-                                                    <XCircle className="h-5 w-5 text-rose-600" />
+                                                    <XCircle className="h-4 w-4 shrink-0 text-rose-400" />
                                                 ) : null
                                             ) : (
                                                 <span
                                                     onClick={(event) => toggleEliminate(index, event)}
-                                                    className="rounded-full border border-slate-300 bg-white p-1.5 text-slate-500 opacity-0 transition-opacity group-hover:opacity-100"
+                                                    className="shrink-0 rounded-full border border-slate-200 p-1 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 hover:border-slate-400"
                                                 >
-                                                    <Strikethrough className="h-4 w-4" />
+                                                    <Strikethrough className="h-3.5 w-3.5" />
                                                 </span>
                                             )}
                                         </button>
@@ -466,44 +590,59 @@ function PracticeSession() {
                                 })}
                             </div>
 
+                            {/* Explanation */}
                             {answerState?.explanation && (
-                                <div className="mt-6 rounded-xl border border-slate-300 bg-white p-4">
-                                    <h3 className="font-semibold text-slate-800">Explanation</h3>
-                                    <p className="mt-2 text-sm text-slate-600 whitespace-pre-wrap">{answerState.explanation}</p>
+                                <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+                                    <h3 className="mb-2 text-sm font-bold text-emerald-800">Explanation</h3>
+                                    <div className="space-y-2">
+                                        {answerState.explanation.split(/\n\n+/).filter(Boolean).map((para, i) => (
+                                            <p key={i} className="text-sm leading-[1.7] text-slate-700"
+                                                dangerouslySetInnerHTML={{ __html: renderMath(para.replace(/\n/g, " ")) }}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
                             )}
                         </div>
                     </section>
                 </main>
 
-                <footer className="h-[74px] shrink-0 border-t border-slate-300 bg-[#f6f6f6] px-3 md:px-6">
-                    <div className="mx-auto flex h-full max-w-[1600px] items-center justify-between gap-4">
-                        <div className="rounded-full bg-[#131313] px-4 py-2 text-sm font-semibold text-white">
-                            {Math.min(currentIndex + 1, questions.length)} of {questions.length}
+                {/* ── Footer ── */}
+                <footer className="h-[68px] shrink-0 border-t border-slate-200 bg-white px-6">
+                    <div className="flex h-full items-center justify-between">
+
+                        {/* Left — Previous */}
+                        <button
+                            onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
+                            disabled={currentIndex === 0}
+                            className="flex items-center gap-1.5 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-30 transition-colors"
+                        >
+                            <ChevronLeft className="h-4 w-4" />
+                            Previous
+                        </button>
+
+                        {/* Center — Progress + Question counter */}
+                        <div className="flex flex-col items-center gap-1">
+                            <p className="flex items-center gap-1.5 text-[11px] text-slate-400">
+                                <CheckCircle className="h-3 w-3 text-[#00592B]" />
+                                Progress: {Object.keys(answerStates).length} of {questions.length} questions checked
+                            </p>
+                            <div className="rounded-full bg-[#1a1a1a] px-5 py-1.5 text-sm font-bold text-white">
+                                Question {currentIndex + 1} of {questions.length}
+                            </div>
                         </div>
 
+                        {/* Right — Check + Next */}
                         <div className="flex items-center gap-2">
-                            <button className="rounded-xl bg-[#6d28d9] px-4 py-2 text-sm font-semibold text-white hover:bg-[#5a20b2]">
-                                <MessageCircleQuestion className="inline-block h-4 w-4 mr-1" />
-                                Ask Preppy
-                            </button>
-
                             {!answerState && selectedOption !== undefined && (
                                 <button
                                     onClick={handleCheckAnswer}
-                                    className="rounded-xl bg-[#6ec1ea] px-4 py-2 text-sm font-semibold text-white hover:bg-[#56b1df]"
+                                    className="flex items-center gap-1.5 rounded-full bg-[#1a1a1a] px-5 py-2 text-sm font-semibold text-white hover:bg-black transition-colors"
                                 >
+                                    <CheckCircle className="h-4 w-4" />
                                     Check
                                 </button>
                             )}
-
-                            <button
-                                onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
-                                disabled={currentIndex === 0}
-                                className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 disabled:opacity-40"
-                            >
-                                Previous
-                            </button>
                             <button
                                 onClick={() => {
                                     if (currentIndex < questions.length - 1) {
@@ -512,14 +651,100 @@ function PracticeSession() {
                                     }
                                     router.push("/practice");
                                 }}
-                                className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
+                                className="flex items-center gap-1.5 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
                             >
                                 {currentIndex < questions.length - 1 ? "Next" : "Finish"}
+                                <ChevronRight className="h-4 w-4" />
                             </button>
                         </div>
                     </div>
                 </footer>
+
             </div>
+
+            {/* ── Desmos Calculator (math only) ── */}
+            {isMath && calcOpen && (
+                <div
+                    style={{
+                        position: "fixed",
+                        left: `${calcPos.x}px`,
+                        top: `${calcPos.y}px`,
+                        width: `${calcSize.w}px`,
+                        height: `${calcSize.h}px`,
+                        zIndex: 200,
+                        borderRadius: "12px",
+                        border: "1px solid #e2e8f0",
+                        boxShadow: "0 8px 40px rgba(0,0,0,0.18)",
+                        display: "flex",
+                        flexDirection: "column",
+                        overflow: "hidden",
+                    }}
+                >
+                    {/* Drag handle — title bar */}
+                    <div
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            isDraggingCalc.current = true;
+                            calcDragOffset.current = { x: e.clientX - calcPos.x, y: e.clientY - calcPos.y };
+                            setCalcInteracting(true);
+                            document.body.style.cursor = "grabbing";
+                        }}
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            padding: "8px 14px",
+                            background: "#1a1a1a",
+                            borderRadius: "11px 11px 0 0",
+                            flexShrink: 0,
+                            cursor: "grab",
+                            userSelect: "none",
+                        }}
+                    >
+                        <span style={{ color: "white", fontSize: "12px", fontWeight: 600, letterSpacing: "0.02em" }}>
+                            Desmos Graphing Calculator
+                        </span>
+                        <button
+                            onMouseDown={(e) => e.stopPropagation()}
+                            onClick={() => setCalcOpen(false)}
+                            style={{ color: "#9ca3af", background: "none", border: "none", cursor: "pointer", fontSize: "18px", lineHeight: 1, padding: "0 2px" }}
+                        >
+                            ×
+                        </button>
+                    </div>
+                    <iframe
+                        src="https://www.desmos.com/calculator"
+                        style={{
+                            flex: 1,
+                            border: "none",
+                            display: "block",
+                            pointerEvents: calcInteracting ? "none" : "auto",
+                        }}
+                        title="Desmos Graphing Calculator"
+                        allow="fullscreen"
+                    />
+                    {/* Resize handle — bottom-right corner */}
+                    <div
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                            isResizingCalc.current = true;
+                            calcResizeStart.current = { x: e.clientX, y: e.clientY, w: calcSize.w, h: calcSize.h };
+                            setCalcInteracting(true);
+                            document.body.style.cursor = "se-resize";
+                        }}
+                        style={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0,
+                            width: "20px",
+                            height: "20px",
+                            cursor: "se-resize",
+                            background: "linear-gradient(135deg, transparent 50%, #cbd5e1 50%)",
+                            borderBottomRightRadius: "11px",
+                        }}
+                    />
+                </div>
+            )}
         </div>
     );
 }

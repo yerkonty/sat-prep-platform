@@ -78,9 +78,17 @@ FILENAME_SKILL_HINTS = {
     "transition": "Transitions",
     "notes": "Rhetorical Synthesis",
     "boundary": "Boundaries",
+    "boundaries": "Boundaries",
+    "centralideas": "Central Ideas and Details",
+    "commandofevidence": "Command of Evidence (Textual)",
+    "crosstextconnection": "Cross-Text Connections",
+    "rhetoricalsynthesis": "Rhetorical Synthesis",
+    "textandstructure": "Text Structure and Purpose",
     "formstructuresense": "Form, Structure, and Sense",
     "areaandvolume": "Area and volume",
     "circle": "Circles",
+    # Math — Algebra
+    "linearfunction": "Linear functions",
 }
 
 
@@ -114,7 +122,7 @@ def _join_lines(lines: List[str]) -> str:
 
 
 def _extract_question_id(text: str) -> str:
-    match = re.search(r"Question ID\s+([a-z0-9]+)", text, re.IGNORECASE)
+    match = re.search(r"Question\s+ID\s*:?\s*([a-z0-9]+)", text, re.IGNORECASE)
     if match:
         return match.group(1).lower()
     return str(uuid.uuid4())
@@ -272,6 +280,89 @@ def _parse_content_and_options(question_block: str) -> Tuple[str, List[str]]:
     return content, options
 
 
+def _parse_per_page_question(text: str, file_path: Path) -> Optional[Dict]:
+    """Parse a CB question-bank PDF page with one question per page.
+
+    Expected layout (each section delimited by a standalone header line):
+      Question ID: {hex}
+      Assessment Test  Domain  Skill  Difficulty
+      SAT Reading and Writing  {domain}  {skill}  {difficulty}
+      Question
+      {question content}
+      Answer
+      A. ...  B. ...  C. ...  D. ...
+      Correct Answer: {letter}
+      Rationale
+      {explanation}
+    """
+    id_match = re.search(r"Question\s+ID\s*:?\s*([a-z0-9]+)", text, re.IGNORECASE)
+    if not id_match:
+        return None
+    question_id = id_match.group(1).lower()
+
+    # Extract the content block between the "Question" and "Answer" section headers.
+    content_match = re.search(
+        r"\bQuestion\b[ \t]*\n(.*?)\n[ \t]*\bAnswer\b[ \t]*\n",
+        text, re.IGNORECASE | re.DOTALL
+    )
+    if not content_match:
+        return None
+    raw_content = content_match.group(1).strip()
+
+    # Extract the options block between "Answer" and "Correct Answer:".
+    opts_match = re.search(
+        r"\bAnswer\b[ \t]*\n(.*?)(?=\n[ \t]*Correct Answer\b)",
+        text, re.IGNORECASE | re.DOTALL
+    )
+    if not opts_match:
+        return None
+    opts_block = opts_match.group(1)
+
+    _, options = _parse_content_and_options(opts_block)
+    if any(not opt for opt in options):
+        return None
+
+    correct_answer = _extract_correct_answer_index(text)
+    if correct_answer is None:
+        return None
+
+    # Difficulty: last word of the metadata row (Easy / Medium / Hard).
+    diff_match = re.search(
+        r"SAT\s+(?:Reading|Math).+?\b(Easy|Medium|Hard)\b", text, re.IGNORECASE | re.DOTALL
+    )
+    difficulty = diff_match.group(1).lower() if diff_match else "medium"
+
+    # Explanation: everything after "Rationale\n".
+    rationale_match = re.search(r"\bRationale\b[ \t]*\n(.+)$", text, re.IGNORECASE | re.DOTALL)
+    explanation = _clean_text(rationale_match.group(1)) if rationale_match else ""
+
+    # Header blob: text before the "Question\n" section header (contains skill/domain).
+    pre_question = text[:content_match.start()].strip()
+    header_blob = _clean_text(pre_question).replace("\n", " ")
+
+    section = _infer_section(header_blob, file_path)
+    skill = _infer_skill(header_blob, raw_content, file_path)
+    if not skill:
+        return None
+    domain = SKILL_TO_DOMAIN.get(skill, "")
+    if not domain:
+        return None
+
+    content = _join_lines([_clean_text(line) for line in raw_content.splitlines()])
+    return {
+        "question_id": question_id,
+        "passage_type": _passage_type(content),
+        "section": section,
+        "domain": domain,
+        "skill": skill,
+        "difficulty": difficulty,
+        "content": content,
+        "options": options,
+        "correct_answer": correct_answer,
+        "explanation": explanation,
+    }
+
+
 def _extract_correct_answer_index(text: str) -> Optional[int]:
     match = re.search(r"Correct Answer:\s*([A-D]|\d[\d,\.]*)", text, re.IGNORECASE)
     if not match:
@@ -308,7 +399,8 @@ def parse_page(text: str, file_path: Path) -> Optional[Dict]:
     question_id = _extract_question_id(text)
     question_block = _extract_question_block(text, question_id)
     if not question_block:
-        return None
+        # Try the per-page format (one question per page with "Question" / "Answer" headers).
+        return _parse_per_page_question(text, file_path)
 
     content, options = _parse_content_and_options(question_block)
     if not content:

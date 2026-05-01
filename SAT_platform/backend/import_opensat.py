@@ -1,5 +1,8 @@
 """Importer for the OpenSAT public dataset into the local database."""
+import json
+import sys
 import uuid
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import requests
@@ -19,7 +22,7 @@ def _build_content(question_block: Dict[str, Any]) -> str:
     paragraph = question_block.get("paragraph")
     stem = question_block.get("question") or question_block.get("prompt")
     parts: List[str] = []
-    if paragraph:
+    if paragraph and str(paragraph).strip().lower() not in ("null", "none", ""):
         parts.append(str(paragraph).strip())
     if stem:
         parts.append(str(stem).strip())
@@ -53,8 +56,9 @@ def _normalize_question(raw: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         "external_id": raw.get("id") or str(uuid.uuid4()),
         "section": str(section or "english").lower(),
         "type": str(section or "english").lower(),  # backwards compatibility with existing field
-        "category": str(domain or "general").lower(),
-        "domain": str(domain or "general").lower(),
+        "category": str(domain or "General"),
+        "domain": str(domain or "General"),
+        "skill": None,
         "difficulty": str(raw.get("difficulty") or question_block.get("difficulty") or "mixed").lower(),
         "content": content,
         "options": options,
@@ -64,10 +68,20 @@ def _normalize_question(raw: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     }
 
 
-def import_opensat(url: str = OPEN_SAT_URL) -> Dict[str, int]:
-    response = requests.get(url, timeout=30)
-    response.raise_for_status()
-    data = response.json()
+def import_opensat(url: str = OPEN_SAT_URL, local_file: Optional[Path] = None, section: Optional[str] = None) -> Dict[str, int]:
+    if local_file:
+        data = json.loads(Path(local_file).read_text(encoding="utf-8"))
+    else:
+        params = {}
+        if section:
+            params["section"] = section
+        response = requests.get(url, params=params, timeout=60)
+        response.raise_for_status()
+        data = response.json()
+    if section:
+        for item in data:
+            if not item.get("section"):
+                item["section"] = section
     if not isinstance(data, list):
         raise ValueError("Unexpected response shape from OpenSAT API")
 
@@ -75,6 +89,7 @@ def import_opensat(url: str = OPEN_SAT_URL) -> Dict[str, int]:
     Base.metadata.create_all(bind=engine)
 
     counts = {"inserted": 0, "updated": 0, "skipped": 0}
+    seen_ids: set = set()
     session: Session = SessionLocal()
     try:
         for raw in data:
@@ -83,7 +98,13 @@ def import_opensat(url: str = OPEN_SAT_URL) -> Dict[str, int]:
                 counts["skipped"] += 1
                 continue
 
-            existing = session.query(Question).filter_by(external_id=normalized["external_id"]).first()
+            ext_id = normalized["external_id"]
+            if ext_id in seen_ids:
+                counts["skipped"] += 1
+                continue
+            seen_ids.add(ext_id)
+
+            existing = session.query(Question).filter_by(external_id=ext_id).first()
             if existing:
                 for key, value in normalized.items():
                     setattr(existing, key, value)
@@ -98,5 +119,11 @@ def import_opensat(url: str = OPEN_SAT_URL) -> Dict[str, int]:
 
 
 if __name__ == "__main__":
-    results = import_opensat()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("local_file", nargs="?", default=None)
+    parser.add_argument("--section", default=None, help="e.g. math or english")
+    args = parser.parse_args()
+    local = Path(args.local_file) if args.local_file else None
+    results = import_opensat(local_file=local, section=args.section)
     print(f"Imported OpenSAT questions: {results}")

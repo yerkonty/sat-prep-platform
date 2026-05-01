@@ -6,6 +6,7 @@ load_dotenv()
 
 from app.database import engine, Base
 from app.migrations import run_startup_migrations
+from app.config import settings
 from app.routers import auth, questions, progress, ai_tutor, flashcards
 
 run_startup_migrations(engine)
@@ -17,9 +18,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
+_origins = ["http://localhost:3000", "http://127.0.0.1:3000"]
+if settings.FRONTEND_URL and settings.FRONTEND_URL not in _origins:
+    _origins.append(settings.FRONTEND_URL)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

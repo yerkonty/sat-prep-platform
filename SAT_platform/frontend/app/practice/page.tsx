@@ -36,6 +36,8 @@ const EMPTY_SECTION: Record<string, SectionStats> = {
 export default function QuestionBankPage() {
     const [stats, setStats] = useState<QuestionStatsResponse | null>(null);
     const [loading, setLoading] = useState(true);
+    const [selectedDifficulties, setSelectedDifficulties] = useState<string[]>([]);
+    const [questionIdSearch, setQuestionIdSearch] = useState("");
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -65,6 +67,16 @@ export default function QuestionBankPage() {
         ];
     }, [stats]);
 
+    function buildSessionUrl(params: { module: string; domain?: string; skill?: string }) {
+        const url = new URLSearchParams();
+        url.set("module", params.module);
+        if (params.domain) url.set("domain", params.domain);
+        if (params.skill) url.set("skill", params.skill);
+        if (selectedDifficulties.length > 0) url.set("difficulty", selectedDifficulties.join(","));
+        if (questionIdSearch.trim()) url.set("question_id", questionIdSearch.trim());
+        return `/practice/session?${url.toString()}`;
+    }
+
     if (loading) {
         return (
             <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center text-[#1A1A1A]/60">
@@ -89,6 +101,64 @@ export default function QuestionBankPage() {
                     </div>
                 </div>
 
+                {/* Filter Panel */}
+                <div className="mb-6 flex flex-wrap items-center gap-4">
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-[#1A1A1A]/60">Difficulty:</span>
+                        {(["Easy", "Medium", "Hard"] as const).map((level) => {
+                            const isSelected = selectedDifficulties.includes(level);
+                            const colorMap: Record<string, string> = {
+                                Easy:   isSelected ? "bg-emerald-600 text-white border-emerald-600"   : "bg-white text-emerald-700 border-emerald-300 hover:border-emerald-500",
+                                Medium: isSelected ? "bg-amber-500 text-white border-amber-500"       : "bg-white text-amber-700 border-amber-300 hover:border-amber-500",
+                                Hard:   isSelected ? "bg-rose-600 text-white border-rose-600"         : "bg-white text-rose-700 border-rose-300 hover:border-rose-500",
+                            };
+                            return (
+                                <button
+                                    key={level}
+                                    onClick={() =>
+                                        setSelectedDifficulties((prev) =>
+                                            prev.includes(level) ? prev.filter((d) => d !== level) : [...prev, level]
+                                        )
+                                    }
+                                    className={`rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${colorMap[level]}`}
+                                >
+                                    {level}
+                                </button>
+                            );
+                        })}
+                        {selectedDifficulties.length > 0 && (
+                            <button
+                                onClick={() => setSelectedDifficulties([])}
+                                className="text-xs text-slate-400 hover:text-slate-700 underline ml-1"
+                            >
+                                Clear
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <label htmlFor="qid-search" className="text-sm font-semibold text-[#1A1A1A]/60 whitespace-nowrap">
+                            Question ID:
+                        </label>
+                        <input
+                            id="qid-search"
+                            type="text"
+                            value={questionIdSearch}
+                            onChange={(e) => setQuestionIdSearch(e.target.value)}
+                            placeholder="e.g. a1b2c3d4"
+                            className="w-36 rounded-xl border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#00592B] focus:border-[#00592B]"
+                        />
+                        {questionIdSearch.trim() && (
+                            <Link
+                                href={buildSessionUrl({ module: "rw" })}
+                                className="inline-flex items-center gap-1 rounded-xl bg-[#00592B] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#0c6a37] transition-colors"
+                            >
+                                Go
+                            </Link>
+                        )}
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {sections.map((section) => {
                         const isMath = section.id === "math";
@@ -109,7 +179,7 @@ export default function QuestionBankPage() {
                                             </div>
                                         </div>
                                         <Link
-                                            href={`/practice/session?module=${section.id}`}
+                                            href={buildSessionUrl({ module: section.id })}
                                             className="inline-flex items-center gap-1 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-[#1A1A1A] hover:bg-slate-50 transition-colors"
                                         >
                                             Solve
@@ -129,7 +199,7 @@ export default function QuestionBankPage() {
                                         <div key={domain.name} className="rounded-2xl border border-slate-200 p-4">
                                             <div className="flex items-center justify-between gap-2 mb-3">
                                                 <Link
-                                                    href={`/practice/session?module=${section.id}&domain=${encodeURIComponent(domain.name)}`}
+                                                    href={buildSessionUrl({ module: section.id, domain: domain.name })}
                                                     className="font-bold text-lg text-slate-900 hover:text-[#00592B] transition-colors"
                                                 >
                                                     {domain.name}
@@ -145,7 +215,7 @@ export default function QuestionBankPage() {
                                                 {domain.skills.map((skill) => (
                                                     <Link
                                                         key={`${domain.name}-${skill.name}`}
-                                                        href={`/practice/session?module=${section.id}&domain=${encodeURIComponent(domain.name)}&skill=${encodeURIComponent(skill.name)}`}
+                                                        href={buildSessionUrl({ module: section.id, domain: domain.name, skill: skill.name })}
                                                         className="flex items-center justify-between rounded-lg px-3 py-2 hover:bg-slate-50 transition-colors"
                                                     >
                                                         <span className="text-sm text-slate-700">{skill.name}</span>
