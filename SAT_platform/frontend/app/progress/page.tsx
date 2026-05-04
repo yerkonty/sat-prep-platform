@@ -1,188 +1,319 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from 'react';
-import { Target, TrendingUp, Clock, BookOpen, AlertTriangle, PlayCircle, BarChart3, ChevronRight } from 'lucide-react';
+import {
+  Target,
+  TrendingUp,
+  Clock,
+  BookOpen,
+  AlertTriangle,
+  PlayCircle,
+  BarChart3,
+  CheckCircle2,
+  XCircle,
+  Loader2,
+} from 'lucide-react';
 import Link from 'next/link';
 import api from '@/lib/api';
 
-type AnalyticsResponse = {
+interface SkillBreakdown {
+  skill: string;
+  domain: string | null;
+  section: string;
+  total: number;
+  correct: number;
+  accuracy: number;
+}
+
+interface SectionBreakdown {
+  section: string;
+  total: number;
+  correct: number;
+  accuracy: number;
+}
+
+interface RecentActivityItem {
+  question_id: string;
+  is_correct: boolean;
+  section: string;
+  skill: string | null;
+  domain: string | null;
+  difficulty: string | null;
+  snippet: string;
+  answered_at: string | null;
+}
+
+interface AnalyticsResponse {
   total_questions: number;
   correct_answers: number;
   accuracy: number;
+  time_spent_seconds: number;
+  by_section: SectionBreakdown[];
+  weak_skills: SkillBreakdown[];
+  recent_activity: RecentActivityItem[];
+}
+
+const SECTION_LABEL: Record<string, string> = {
+  rw: 'Reading & Writing',
+  math: 'Math',
+  other: 'Other',
 };
 
+function formatTime(seconds: number): string {
+  if (!seconds) return '0m';
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  if (h === 0) return `${m}m`;
+  return `${h}h ${m}m`;
+}
+
+function formatRelative(iso: string | null): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const diffMs = Date.now() - d.getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+  if (diffMin < 1) return 'just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr}h ago`;
+  const diffDay = Math.floor(diffHr / 24);
+  if (diffDay < 7) return `${diffDay}d ago`;
+  return d.toLocaleDateString();
+}
+
 export default function ProgressPage() {
-  const [analytics, setAnalytics] = useState<AnalyticsResponse>({
-    total_questions: 0,
-    correct_answers: 0,
-    accuracy: 0,
-  });
+  const [analytics, setAnalytics] = useState<AnalyticsResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
+    (async () => {
       try {
-        const response = await api.get<AnalyticsResponse>('/api/progress/analytics');
-        setAnalytics(response.data);
-      } catch (error) {
-        console.error('Failed to fetch analytics', error);
-        setAnalytics({ total_questions: 0, correct_answers: 0, accuracy: 0 });
+        const { data } = await api.get<AnalyticsResponse>('/api/progress/analytics');
+        setAnalytics(data);
+      } catch {
+        setError('Could not load analytics. Are you signed in?');
+      } finally {
+        setLoading(false);
       }
-    };
-
-    fetchAnalytics();
+    })();
   }, []);
 
-  // Mock data reflecting latest test performance and needed improvements
-  const latest_test_results = {
-    title: 'Full Practice Test #2',
-    dateCompleted: 'Oct 24, 2023',
-    totalScore: 1350,
-    mathScore: 680,
-    ebrwScore: 670,
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-emerald-600" />
+      </div>
+    );
+  }
 
-  const actionableDiagnostics = [
-    { id: 1, topic: 'Quadratic Equations', accuracy: '40%', section: 'Math' },
-    { id: 2, topic: 'Command of Evidence', accuracy: '55%', section: 'Reading & Writing' },
-    { id: 3, topic: 'Advanced Grammar', accuracy: '60%', section: 'Reading & Writing' },
-  ];
+  if (error || !analytics) {
+    return (
+      <div className="min-h-screen bg-neutral-50 py-12 px-6">
+        <div className="max-w-3xl mx-auto p-6 bg-red-50 border border-red-100 rounded-xl text-red-700">
+          {error || 'No analytics available.'}
+        </div>
+      </div>
+    );
+  }
+
+  const hasProgress = analytics.total_questions > 0;
+  const mathSection = analytics.by_section.find((s) => s.section === 'math');
+  const rwSection = analytics.by_section.find((s) => s.section === 'rw');
 
   return (
     <div className="min-h-screen bg-neutral-50 py-12 px-6">
       <div className="max-w-6xl mx-auto space-y-8">
-
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-neutral-900">Your Progress</h1>
-            <p className="text-neutral-500 mt-1">Track your performance and focus on high-yield improvements.</p>
-          </div>
-          <button className="flex items-center gap-2 bg-white border border-neutral-200 text-neutral-700 px-4 py-2 rounded-lg hover:bg-neutral-50 transition-colors shadow-sm font-medium">
-            <BarChart3 className="w-4 h-4" /> Export Report
-          </button>
-        </div>
-
-        {/* Row 1: Overview Stats & Latest Test Performance */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-          {/* Questions Answered (1/4) */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100">
-            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-              <BookOpen className="w-5 h-5 text-blue-600" />
-            </div>
-            <h3 className="text-neutral-500 text-sm font-medium">Questions Answered</h3>
-            <p className="text-3xl font-bold text-neutral-900 mt-1">{analytics.total_questions}</p>
-            <p className="text-neutral-400 text-sm mt-2">Across all sections</p>
-          </div>
-
-          {/* Time Spent (1/4) */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100">
-            <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-              <Clock className="w-5 h-5 text-purple-600" />
-            </div>
-            <h3 className="text-neutral-500 text-sm font-medium">Time Spent</h3>
-            <p className="text-3xl font-bold text-neutral-900 mt-1">12h 45m</p>
-            <p className="text-neutral-400 text-sm mt-2">~1.5 hrs / day</p>
-          </div>
-
-          {/* Latest Test Performance (2/4) */}
-          <div className="md:col-span-2 bg-gradient-to-br from-emerald-50 to-teal-50/30 p-6 rounded-2xl shadow-sm border border-emerald-100 relative overflow-hidden">
-            <div className="relative z-10">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-emerald-800 font-bold flex items-center gap-2">
-                    <Target className="w-5 h-5" /> Latest Test Performance
-                  </h3>
-                  <p className="text-emerald-600/80 text-sm mt-1">{latest_test_results.title}  {latest_test_results.dateCompleted}</p>
-                </div>
-                <div className="text-right">
-                  <span className="block text-4xl font-black text-emerald-900">{latest_test_results.totalScore}</span>
-                  <span className="text-emerald-700 text-sm font-medium">Total Score</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 mt-6">
-                <div className="bg-white/60 p-3 rounded-xl border border-emerald-100/50 backdrop-blur-sm">
-                  <span className="text-emerald-800/70 text-xs font-bold uppercase tracking-wider">Math</span>
-                  <p className="text-2xl font-bold text-emerald-900">{latest_test_results.mathScore}</p>
-                </div>
-                <div className="bg-white/60 p-3 rounded-xl border border-emerald-100/50 backdrop-blur-sm">
-                  <span className="text-emerald-800/70 text-xs font-bold uppercase tracking-wider">EBRW</span>
-                  <p className="text-2xl font-bold text-emerald-900">{latest_test_results.ebrwScore}</p>
-                </div>
-              </div>
-            </div>
+            <p className="text-neutral-500 mt-1">
+              Track your performance and focus on high-yield improvements.
+            </p>
           </div>
         </div>
 
-        {/* Row 2: Recent Activity & Actionable Diagnostic */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-          {/* Recent Activity */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100 flex flex-col">
-            <h3 className="text-lg font-bold text-neutral-900 mb-6">Recent Activity</h3>
-            <div className="space-y-4 flex-1">
-              <div className="flex items-center justify-between p-4 rounded-xl border border-neutral-100 bg-neutral-50/50 hover:bg-neutral-50 transition-colors cursor-pointer group">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
-                    <BookOpen className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-neutral-800">Reading Practice Test</h4>
-                    <p className="text-sm text-neutral-500">Today, 2:30 PM</p>
-                  </div>
-                </div>
-                <span className="text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-full">95%</span>
-              </div>
-
-              <div className="flex items-center justify-between p-4 rounded-xl border border-neutral-100 bg-neutral-50/50 hover:bg-neutral-50 transition-colors cursor-pointer group">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <Target className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-neutral-800">Advanced Algebra</h4>
-                    <p className="text-sm text-neutral-500">Yesterday</p>
-                  </div>
-                </div>
-                <span className="text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-full">88%</span>
-              </div>
+        {!hasProgress ? (
+          <div className="bg-white p-12 rounded-2xl shadow-sm border border-neutral-100 text-center">
+            <Target className="w-12 h-12 mx-auto text-neutral-300 mb-4" />
+            <h2 className="text-xl font-semibold text-neutral-900 mb-2">
+              No practice data yet
+            </h2>
+            <p className="text-neutral-500 mb-6">
+              Answer a few practice questions to start seeing analytics here.
+            </p>
+            <Link
+              href="/practice"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors font-medium"
+            >
+              <PlayCircle className="w-5 h-5" /> Start Practicing
+            </Link>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <StatCard
+                icon={<BookOpen className="w-5 h-5 text-blue-600" />}
+                iconBg="bg-blue-100"
+                label="Questions Answered"
+                value={String(analytics.total_questions)}
+                hint="Across all sections"
+              />
+              <StatCard
+                icon={<Target className="w-5 h-5 text-emerald-600" />}
+                iconBg="bg-emerald-100"
+                label="Overall Accuracy"
+                value={`${analytics.accuracy}%`}
+                hint={`${analytics.correct_answers} correct`}
+              />
+              <StatCard
+                icon={<Clock className="w-5 h-5 text-purple-600" />}
+                iconBg="bg-purple-100"
+                label="Time Spent"
+                value={formatTime(analytics.time_spent_seconds)}
+                hint="Total practice time"
+              />
+              <StatCard
+                icon={<BarChart3 className="w-5 h-5 text-amber-600" />}
+                iconBg="bg-amber-100"
+                label="Sections Studied"
+                value={String(analytics.by_section.length)}
+                hint={analytics.by_section.map((s) => SECTION_LABEL[s.section] || s.section).join(', ') || '—'}
+              />
             </div>
 
-            <button className="w-full mt-6 py-3 text-sm font-medium text-neutral-600 hover:text-emerald-600 transition-colors flex items-center justify-center gap-1">
-              View All History <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
+            {(mathSection || rwSection) && (
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100">
+                <h3 className="text-lg font-bold text-neutral-900 mb-6">Section Performance</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {rwSection && <SectionBar label="Reading & Writing" data={rwSection} barClass="bg-purple-500" />}
+                  {mathSection && <SectionBar label="Math" data={mathSection} barClass="bg-blue-500" />}
+                </div>
+              </div>
+            )}
 
-          {/* Actionable Diagnostic */}
-          <div className="bg-white border-2 border-emerald-100 p-6 rounded-2xl shadow-sm relative flex flex-col">
-            <h3 className="text-lg font-bold text-neutral-900 mb-2 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-amber-500" /> Improvement Focus
-            </h3>
-            <p className="text-neutral-500 text-sm mb-6">Top 3 topics dragging your score down based on your last test.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100 flex flex-col">
+                <h3 className="text-lg font-bold text-neutral-900 mb-6">Recent Activity</h3>
+                {analytics.recent_activity.length === 0 ? (
+                  <p className="text-neutral-500 text-sm">Nothing yet.</p>
+                ) : (
+                  <div className="space-y-3 flex-1">
+                    {analytics.recent_activity.slice(0, 6).map((item) => (
+                      <div
+                        key={`${item.question_id}-${item.answered_at}`}
+                        className="flex items-start gap-3 p-3 rounded-xl border border-neutral-100 bg-neutral-50/50"
+                      >
+                        <div
+                          className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center ${
+                            item.is_correct ? 'bg-emerald-100' : 'bg-rose-100'
+                          }`}
+                        >
+                          {item.is_correct ? (
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          ) : (
+                            <XCircle className="w-4 h-4 text-rose-600" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-neutral-800 truncate">{item.snippet || '(no preview)'}</p>
+                          <p className="text-xs text-neutral-500 mt-1">
+                            {SECTION_LABEL[item.section] || item.section}
+                            {item.skill ? ` · ${item.skill}` : ''} · {formatRelative(item.answered_at)}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-            <div className="space-y-4 flex-1">
-              {actionableDiagnostics.map((item) => (
-                <div key={item.id} className="p-4 rounded-xl border border-neutral-100 hover:border-emerald-200 hover:shadow-md transition-all group">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h4 className="font-bold text-neutral-800">{item.topic}</h4>
-                      <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wide font-medium">{item.section}</p>
+              <div className="bg-white border-2 border-emerald-100 p-6 rounded-2xl shadow-sm flex flex-col">
+                <h3 className="text-lg font-bold text-neutral-900 mb-2 flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-amber-500" /> Improvement Focus
+                </h3>
+                <p className="text-neutral-500 text-sm mb-6">
+                  {analytics.weak_skills.length === 0
+                    ? 'Answer at least 3 questions in a skill to see weakest areas.'
+                    : 'Skills with the lowest accuracy across your practice (min 3 attempts).'}
+                </p>
+
+                <div className="space-y-4 flex-1">
+                  {analytics.weak_skills.map((item) => (
+                    <div
+                      key={item.skill}
+                      className="p-4 rounded-xl border border-neutral-100 hover:border-emerald-200 hover:shadow-md transition-all group"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <h4 className="font-bold text-neutral-800">{item.skill}</h4>
+                          <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wide font-medium">
+                            {SECTION_LABEL[item.section] || item.section}
+                            {item.domain ? ` · ${item.domain}` : ''}
+                          </p>
+                        </div>
+                        <div className="bg-rose-50 px-2 py-1 rounded text-rose-600 font-bold text-sm">
+                          {item.accuracy}% ({item.correct}/{item.total})
+                        </div>
+                      </div>
+                      <Link
+                        href={`/practice?skill=${encodeURIComponent(item.skill)}`}
+                        className="flex items-center justify-between w-full bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg font-medium transition-colors group-hover:bg-emerald-600 group-hover:text-white"
+                      >
+                        <span className="flex items-center gap-2">
+                          <PlayCircle className="w-4 h-4" /> Practice this skill
+                        </span>
+                        <TrendingUp className="w-4 h-4 opacity-50" />
+                      </Link>
                     </div>
-                    <div className="bg-rose-50 px-2 py-1 rounded text-rose-600 font-bold text-sm">
-                      {item.accuracy} accuracy
-                    </div>
-                  </div>
-                  <Link href="/practice" className="flex items-center justify-between w-full bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg font-medium transition-colors group-hover:bg-emerald-600 group-hover:text-white">
-                    <span className="flex items-center gap-2"><PlayCircle className="w-4 h-4" /> Start Practice</span>
-                    <TrendingUp className="w-4 h-4 opacity-50" />
-                  </Link>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
 
-        </div>
+function StatCard({
+  icon,
+  iconBg,
+  label,
+  value,
+  hint,
+}: {
+  icon: React.ReactNode;
+  iconBg: string;
+  label: string;
+  value: string;
+  hint: string;
+}) {
+  return (
+    <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100">
+      <div className={`w-10 h-10 rounded-full ${iconBg} flex items-center justify-center mb-4`}>{icon}</div>
+      <h3 className="text-neutral-500 text-sm font-medium">{label}</h3>
+      <p className="text-3xl font-bold text-neutral-900 mt-1">{value}</p>
+      <p className="text-neutral-400 text-sm mt-2 truncate">{hint}</p>
+    </div>
+  );
+}
 
+function SectionBar({ label, data, barClass }: { label: string; data: SectionBreakdown; barClass: string }) {
+  return (
+    <div>
+      <div className="flex justify-between text-sm mb-2">
+        <span className="font-semibold text-neutral-700">{label}</span>
+        <span className="text-neutral-500">
+          <span className="font-bold text-neutral-900">{data.accuracy}%</span> · {data.correct}/{data.total}
+        </span>
+      </div>
+      <div className="w-full bg-neutral-100 rounded-full h-2.5">
+        <div
+          className={`${barClass} h-2.5 rounded-full transition-all duration-500`}
+          style={{ width: `${Math.min(100, data.accuracy)}%` }}
+        />
       </div>
     </div>
   );
