@@ -47,6 +47,13 @@ def run_startup_migrations(engine: Engine) -> None:
                 "ALTER TABLE flashcard_decks ADD COLUMN is_shared BOOLEAN DEFAULT 0"
             )
 
+    if "flashcards" in tables:
+        c_cols = {col["name"] for col in inspector.get_columns("flashcards")}
+        if "interval_days" not in c_cols:
+            statements.append(
+                "ALTER TABLE flashcards ADD COLUMN interval_days INTEGER DEFAULT 0"
+            )
+
     if not statements:
         return
 

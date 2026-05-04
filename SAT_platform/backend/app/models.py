@@ -96,6 +96,7 @@ class Flashcard(Base):
     front = Column(Text, nullable=False)
     back = Column(Text, nullable=False)
     next_review = Column(DateTime, server_default=func.now())
+    interval_days = Column(Integer, default=0)
 
     deck = relationship("FlashcardDeck", back_populates="cards")
 

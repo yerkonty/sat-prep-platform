@@ -6,11 +6,13 @@ load_dotenv()
 
 from app.database import engine, Base
 from app.migrations import run_startup_migrations
+from app.seed_flashcards import seed_shared_decks
 from app.config import settings
 from app.routers import auth, questions, progress, ai_tutor, flashcards
 
 run_startup_migrations(engine)
 Base.metadata.create_all(bind=engine)
+seed_shared_decks(engine)
 
 app = FastAPI(
     title="SAT Prep Platform API",

@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Literal
+from datetime import datetime, timedelta
 import uuid
 
 from app.database import get_db
@@ -10,6 +11,9 @@ from app.models import FlashcardDeck, Flashcard
 from app.dependencies import get_current_user
 
 router = APIRouter(prefix="/api/flashcards", tags=["Flashcards"])
+
+MAX_INTERVAL_DAYS = 30
+RELEARN_MINUTES = 10
 
 
 class FlashcardDeckResponse(BaseModel):
@@ -26,9 +30,28 @@ class FlashcardResponse(BaseModel):
     id: str
     front: str
     back: str
-    
+
     class Config:
         from_attributes = True
+
+
+class StudyCardResponse(BaseModel):
+    id: str
+    front: str
+    back: str
+    deck_id: str
+    deck_name: str
+    interval_days: int
+
+
+class ReviewRequest(BaseModel):
+    quality: Literal["got_it", "needs_review"]
+
+
+class ReviewResponse(BaseModel):
+    id: str
+    next_review: datetime
+    interval_days: int
 
 
 class CreateDeckRequest(BaseModel):
@@ -165,3 +188,84 @@ def share_deck(
         card_count=card_count,
         is_shared=bool(deck.is_shared)
     )
+
+
+def _accessible_deck_ids(db: Session, user_id: str, deck_id: Optional[str]) -> List[str]:
+    """Return deck IDs the user can study from. If deck_id is given, restrict to that one."""
+    q = db.query(FlashcardDeck).filter(
+        or_(
+            FlashcardDeck.user_id == user_id,
+            FlashcardDeck.user_id == None,
+            FlashcardDeck.is_shared == True,
+        )
+    )
+    if deck_id:
+        q = q.filter(FlashcardDeck.id == deck_id)
+    return [d.id for d in q.all()]
+
+
+@router.get("/study", response_model=List[StudyCardResponse])
+def get_due_cards(
+    deck_id: Optional[str] = None,
+    limit: int = 50,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Return cards whose next_review is due now, oldest first."""
+    deck_ids = _accessible_deck_ids(db, current_user.id, deck_id)
+    if not deck_ids:
+        return []
+
+    now = datetime.utcnow()
+    rows = (
+        db.query(Flashcard, FlashcardDeck.name)
+        .join(FlashcardDeck, Flashcard.deck_id == FlashcardDeck.id)
+        .filter(Flashcard.deck_id.in_(deck_ids))
+        .filter(Flashcard.next_review <= now)
+        .order_by(Flashcard.next_review.asc())
+        .limit(max(1, min(limit, 200)))
+        .all()
+    )
+
+    return [
+        StudyCardResponse(
+            id=card.id,
+            front=card.front,
+            back=card.back,
+            deck_id=card.deck_id,
+            deck_name=deck_name,
+            interval_days=card.interval_days or 0,
+        )
+        for card, deck_name in rows
+    ]
+
+
+@router.post("/cards/{card_id}/review", response_model=ReviewResponse)
+def review_card(
+    card_id: str,
+    request: ReviewRequest,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Record a review and reschedule the card via simple SRS."""
+    card = db.query(Flashcard).filter(Flashcard.id == card_id).first()
+    if not card:
+        raise HTTPException(status_code=404, detail="Card not found")
+
+    deck = db.query(FlashcardDeck).filter(FlashcardDeck.id == card.deck_id).first()
+    if not deck or not (deck.user_id == current_user.id or deck.is_shared or deck.user_id is None):
+        raise HTTPException(status_code=404, detail="Card not accessible")
+
+    now = datetime.utcnow()
+    if request.quality == "needs_review":
+        card.interval_days = 0
+        card.next_review = now + timedelta(minutes=RELEARN_MINUTES)
+    else:
+        prev = card.interval_days or 0
+        new_interval = 1 if prev == 0 else min(prev * 2, MAX_INTERVAL_DAYS)
+        card.interval_days = new_interval
+        card.next_review = now + timedelta(days=new_interval)
+
+    db.commit()
+    db.refresh(card)
+    return ReviewResponse(id=card.id, next_review=card.next_review, interval_days=card.interval_days or 0)
