@@ -10,13 +10,17 @@ export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
 
   const handleUpgrade = async (plan: string) => {
+    if (plan === 'free') return;
     setLoading(plan);
     try {
-      const response = await api.post('/api/subscriptions/upgrade', { plan });
-      alert(`Successfully upgraded to ${plan}!`);
-    } catch (error) {
-      alert('Upgrade failed. This is a demo - Stripe integration needed.');
-    } finally {
+      const response = await api.post<{ checkout_url: string }>(
+        '/api/subscriptions/create-checkout-session',
+        { plan }
+      );
+      window.location.assign(response.data.checkout_url);
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { detail?: string } } };
+      alert(err?.response?.data?.detail || 'Could not start checkout. Please try again.');
       setLoading(null);
     }
   };

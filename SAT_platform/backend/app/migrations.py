@@ -61,7 +61,7 @@ def run_startup_migrations(engine: Engine) -> None:
                 "ALTER TABLE exam_attempts ADD COLUMN status VARCHAR DEFAULT 'in_progress'"
             )
         if "started_at" not in ea_cols:
-            statements.append("ALTER TABLE exam_attempts ADD COLUMN started_at DATETIME")
+            statements.append("ALTER TABLE exam_attempts ADD COLUMN started_at TIMESTAMP")
 
     if not statements:
         return
