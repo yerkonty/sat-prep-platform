@@ -15,6 +15,7 @@ LETTER_TO_INDEX = {"A": 0, "B": 1, "C": 2, "D": 3}
 
 
 SKILL_TO_DOMAIN = {
+    # Reading & Writing
     "Central Ideas and Details": "Information and Ideas",
     "Command of Evidence (Textual)": "Information and Ideas",
     "Command of Evidence (Quantitative)": "Information and Ideas",
@@ -26,20 +27,38 @@ SKILL_TO_DOMAIN = {
     "Rhetorical Synthesis": "Expression of Ideas",
     "Boundaries": "Standard English Conventions",
     "Form, Structure, and Sense": "Standard English Conventions",
+    # Math — Algebra
     "Linear equations (one variable, two variables)": "Algebra",
     "Linear functions": "Algebra",
+    "Linear inequalities in one or two variables": "Algebra",
     "Systems of equations": "Algebra",
+    # Math — Advanced Math
     "Equivalent expressions": "Advanced Math",
     "Nonlinear equations": "Advanced Math",
+    "Nonlinear functions": "Advanced Math",
+    # Math — Problem-Solving and Data Analysis
+    "Ratios, rates, proportional relationships, and units": "Problem-Solving and Data Analysis",
+    "Percentages": "Problem-Solving and Data Analysis",
+    "One-variable data: Distributions and measures of center and spread": "Problem-Solving and Data Analysis",
+    "Two-variable data: Models and scatterplots": "Problem-Solving and Data Analysis",
+    "Probability and conditional probability": "Problem-Solving and Data Analysis",
+    "Inference from sample statistics and margin of error": "Problem-Solving and Data Analysis",
+    "Evaluating statistical claims: Observational studies and experiments": "Problem-Solving and Data Analysis",
+    # Legacy aliases kept for backward compatibility
     "Ratios, rates, percentages": "Problem-Solving and Data Analysis",
     "Data distributions": "Problem-Solving and Data Analysis",
-    "Area and volume": "Geometry and Trigonometry",
-    "Lines, angles, triangles": "Geometry and Trigonometry",
+    # Math — Geometry and Trigonometry
+    "Lines, angles, and triangles": "Geometry and Trigonometry",
+    "Right triangles and trigonometry": "Geometry and Trigonometry",
     "Circles": "Geometry and Trigonometry",
+    "Area and volume": "Geometry and Trigonometry",
+    # Legacy alias
+    "Lines, angles, triangles": "Geometry and Trigonometry",
 }
 
 
 SKILL_ALIASES = {
+    # Reading & Writing
     "central ideas and details": "Central Ideas and Details",
     "command of evidence (textual)": "Command of Evidence (Textual)",
     "command of evidence textual": "Command of Evidence (Textual)",
@@ -57,21 +76,47 @@ SKILL_ALIASES = {
     "form, structure and sense": "Form, Structure, and Sense",
     "form structure and sense": "Form, Structure, and Sense",
     "form, structure, conventions and sense": "Form, Structure, and Sense",
+    # Math — Algebra (longer aliases first to prevent partial matches)
+    "linear inequalities in one or two variables": "Linear inequalities in one or two variables",
+    "linear inequalities": "Linear inequalities in one or two variables",
+    "systems of two linear equations in two variables": "Systems of equations",
+    "systems of equations": "Systems of equations",
+    "linear equations in one variable": "Linear equations (one variable, two variables)",
+    "linear equations in two variables": "Linear equations (one variable, two variables)",
     "linear equations": "Linear equations (one variable, two variables)",
     "linear functions": "Linear functions",
-    "systems of equations": "Systems of equations",
-    "equivalent expressions": "Equivalent expressions",
+    # Math — Advanced Math (nonlinear must come before linear to avoid substring match)
+    "nonlinear equations in one variable and systems of equations in two variables": "Nonlinear equations",
     "nonlinear equations": "Nonlinear equations",
+    "nonlinear functions": "Nonlinear functions",
+    "equivalent expressions": "Equivalent expressions",
+    # Math — Problem-Solving and Data Analysis
+    "evaluating statistical claims: observational studies and experiments": "Evaluating statistical claims: Observational studies and experiments",
+    "evaluating statistical claims": "Evaluating statistical claims: Observational studies and experiments",
+    "one-variable data: distributions and measures of center and spread": "One-variable data: Distributions and measures of center and spread",
+    "one-variable data": "One-variable data: Distributions and measures of center and spread",
+    "two-variable data: models and scatterplots": "Two-variable data: Models and scatterplots",
+    "two-variable data": "Two-variable data: Models and scatterplots",
+    "inference from sample statistics and margin of error": "Inference from sample statistics and margin of error",
+    "ratios, rates, proportional relationships, and units": "Ratios, rates, proportional relationships, and units",
+    "ratios, rates, proportional relationships": "Ratios, rates, proportional relationships, and units",
+    "probability and conditional probability": "Probability and conditional probability",
+    "probability": "Probability and conditional probability",
+    "percentages": "Percentages",
+    # Legacy R&W aliases
     "ratios, rates, percentages": "Ratios, rates, percentages",
     "data distributions": "Data distributions",
-    "area and volume": "Area and volume",
-    "lines, angles, triangles": "Lines, angles, triangles",
+    # Math — Geometry and Trigonometry
+    "right triangles and trigonometry": "Right triangles and trigonometry",
+    "lines, angles, and triangles": "Lines, angles, and triangles",
+    "lines, angles, triangles": "Lines, angles, and triangles",
     "circles": "Circles",
+    "area and volume": "Area and volume",
 }
 
 
 FILENAME_SKILL_HINTS = {
-    "inference": "Inferences",
+    # Reading & Writing
     "wordsincontext": "Words in Context",
     "textstructureandpurpose": "Text Structure and Purpose",
     "craftandstructure": "Text Structure and Purpose",
@@ -85,10 +130,30 @@ FILENAME_SKILL_HINTS = {
     "rhetoricalsynthesis": "Rhetorical Synthesis",
     "textandstructure": "Text Structure and Purpose",
     "formstructuresense": "Form, Structure, and Sense",
+    # Math — Algebra (longer keys first)
+    "linearinequalities": "Linear inequalities in one or two variables",
+    "linearinequality": "Linear inequalities in one or two variables",
+    "systemoftwolin": "Systems of equations",
+    "systemoftwolinear": "Systems of equations",
+    "linearfunction": "Linear functions",
+    "linearequation": "Linear equations (one variable, two variables)",
+    # Math — Advanced Math (nonlinear before linear to avoid substring match)
+    "nonlinearfunction": "Nonlinear functions",
+    "nonlinearequation": "Nonlinear equations",
+    "equivalentexpression": "Equivalent expressions",
+    # Math — Problem-Solving and Data Analysis
+    "evaluatingstatistical": "Evaluating statistical claims: Observational studies and experiments",
+    "inferencefromsample": "Inference from sample statistics and margin of error",
+    "onevariabledata": "One-variable data: Distributions and measures of center and spread",
+    "twovariabledata": "Two-variable data: Models and scatterplots",
+    "probability": "Probability and conditional probability",
+    "percentages": "Percentages",
+    "ratiosrates": "Ratios, rates, proportional relationships, and units",
+    # Math — Geometry and Trigonometry
+    "righttriangl": "Right triangles and trigonometry",
+    "linesangles": "Lines, angles, and triangles",
     "areaandvolume": "Area and volume",
     "circle": "Circles",
-    # Math — Algebra
-    "linearfunction": "Linear functions",
 }
 
 
@@ -337,8 +402,16 @@ def _parse_per_page_question(text: str, file_path: Path) -> Optional[Dict]:
     explanation = _clean_text(rationale_match.group(1)) if rationale_match else ""
 
     # Header blob: text before the "Question\n" section header (contains skill/domain).
+    # The PDF column layout interleaves the domain name and difficulty word with the skill
+    # text across multiple lines. Strip them so aliases can match the skill name cleanly.
     pre_question = text[:content_match.start()].strip()
     header_blob = _clean_text(pre_question).replace("\n", " ")
+    header_blob = re.sub(r"\b(easy|medium|hard)\b", " ", header_blob, flags=re.IGNORECASE)
+    # Strip known domain-name fragments that get interspersed with the skill text
+    header_blob = re.sub(r"\bproblem-solving\s+and\b", " ", header_blob, flags=re.IGNORECASE)
+    header_blob = re.sub(r"\bdata\s+analysis\b", " ", header_blob, flags=re.IGNORECASE)
+    header_blob = re.sub(r"\bgeometry\s+and\b", " ", header_blob, flags=re.IGNORECASE)
+    header_blob = re.sub(r"\s{2,}", " ", header_blob).strip()
 
     section = _infer_section(header_blob, file_path)
     skill = _infer_skill(header_blob, raw_content, file_path)

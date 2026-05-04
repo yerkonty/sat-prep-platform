@@ -26,6 +26,7 @@ class QuestionResponse(BaseModel):
     content: str
     options: list
     explanation: Optional[str] = None
+    image: Optional[str] = None
 
     class Config:
         from_attributes = True

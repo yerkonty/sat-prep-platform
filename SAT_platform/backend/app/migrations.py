@@ -22,6 +22,8 @@ def run_startup_migrations(engine: Engine) -> None:
             statements.append("ALTER TABLE questions ADD COLUMN subcategory VARCHAR")
         if "passage_type" not in q_cols:
             statements.append("ALTER TABLE questions ADD COLUMN passage_type VARCHAR")
+        if "image" not in q_cols:
+            statements.append("ALTER TABLE questions ADD COLUMN image TEXT")
 
     if "users" in tables:
         u_cols = {col["name"] for col in inspector.get_columns("users")}

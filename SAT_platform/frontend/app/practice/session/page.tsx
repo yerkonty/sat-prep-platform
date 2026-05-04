@@ -28,6 +28,7 @@ type Question = {
     content: string;
     options: string[];
     explanation?: string;
+    image?: string | null;
 };
 
 type AnswerState = {
@@ -516,12 +517,23 @@ function PracticeSession() {
                                 )}
                             </div>
 
-                            {/* Math: show full question content above options */}
+                            {/* Math: image (graph/diagram) + question content */}
                             {isMath && (
-                                <div className="mb-6 space-y-3 text-[1rem] leading-[1.7] text-[#1a1a1a]">
-                                    {currentQuestion.content.split(/\n\n+/).filter(Boolean).map((para, i) => (
-                                        <p key={i} dangerouslySetInnerHTML={{ __html: renderMath(para.replace(/\n/g, " ")) }} />
-                                    ))}
+                                <div className="mb-6 space-y-4">
+                                    {currentQuestion.image && (
+                                        <div className="flex justify-center rounded-lg bg-white p-2">
+                                            <img
+                                                src={`data:image/png;base64,${currentQuestion.image}`}
+                                                alt="Question diagram"
+                                                className="max-h-72 w-auto object-contain"
+                                            />
+                                        </div>
+                                    )}
+                                    <div className="space-y-3 text-[1rem] leading-[1.7] text-[#1a1a1a]">
+                                        {currentQuestion.content.split(/\n\n+/).filter(Boolean).map((para, i) => (
+                                            <p key={i} dangerouslySetInnerHTML={{ __html: renderMath(para.replace(/\n/g, " ")) }} />
+                                        ))}
+                                    </div>
                                 </div>
                             )}
 

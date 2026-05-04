@@ -54,6 +54,7 @@ class Question(Base):
     options = Column(JSON, nullable=False)
     correct_answer = Column(Integer, nullable=False)
     explanation = Column(Text)
+    image = Column(Text, nullable=True)  # base64 PNG of graph/figure
     source = Column(String)
     external_id = Column(String, unique=True, index=True)
 

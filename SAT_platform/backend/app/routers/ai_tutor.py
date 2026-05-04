@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
-from typing import Optional, List
-import uuid
+from pydantic import BaseModel, Field
+from typing import Optional, List, Literal
 
 from app.database import get_db
 from app.models import User
@@ -11,10 +10,19 @@ from app.config import settings
 
 router = APIRouter(prefix="/api/ai", tags=["AI Tutor"])
 
+GROQ_BASE_URL = "https://api.groq.com/openai/v1"
+MAX_HISTORY_MESSAGES = 20
+
+
+class ChatMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str
+
 
 class ChatRequest(BaseModel):
     message: str
     context: Optional[str] = None
+    history: List[ChatMessage] = Field(default_factory=list)
 
 
 class ChatResponse(BaseModel):
@@ -31,6 +39,17 @@ SYSTEM_PROMPT = """You are an expert SAT tutor. Help students understand:
 Always encourage students and adapt to their learning level."""
 
 
+def _build_client():
+    """Pick a provider based on which key is configured. Groq preferred."""
+    from openai import OpenAI
+
+    if settings.GROQ_API_KEY:
+        return OpenAI(api_key=settings.GROQ_API_KEY, base_url=GROQ_BASE_URL), settings.GROQ_MODEL
+    if settings.OPENAI_API_KEY:
+        return OpenAI(api_key=settings.OPENAI_API_KEY), "gpt-4o-mini"
+    return None, None
+
+
 @router.post("/chat", response_model=ChatResponse)
 def chat_with_tutor(
     request: ChatRequest,
@@ -43,41 +62,39 @@ def chat_with_tutor(
             status_code=429,
             detail="AI message limit reached. Upgrade your plan for more messages."
         )
-    
-    if not settings.OPENAI_API_KEY:
+
+    client, model = _build_client()
+    if client is None:
         return ChatResponse(
-            response="AI tutor is not configured. Please add OPENAI_API_KEY to .env file.",
+            response="AI tutor is not configured. Please add GROQ_API_KEY to .env file.",
             messages_remaining=current_user.ai_messages_limit - current_user.ai_messages_used
         )
-    
-    from openai import OpenAI
-    client = OpenAI(api_key=settings.OPENAI_API_KEY)
-    
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT}
-    ]
-    
+
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
     if request.context:
-        messages.append({"role": "user", "content": f"Context: {request.context}"})
-    
+        messages.append({"role": "system", "content": f"Context: {request.context}"})
+    for m in request.history[-MAX_HISTORY_MESSAGES:]:
+        messages.append({"role": m.role, "content": m.content})
     messages.append({"role": "user", "content": request.message})
-    
+
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=model,
             messages=messages,
-            max_tokens=500
+            max_tokens=600,
+            temperature=0.7,
         )
-        
-        ai_response = response.choices[0].message.content
-        
+        ai_response = response.choices[0].message.content or ""
+
         current_user.ai_messages_used += 1
         db.commit()
-        
+
         return ChatResponse(
             response=ai_response,
             messages_remaining=current_user.ai_messages_limit - current_user.ai_messages_used
         )
-        
+
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"AI service error: {str(e)}")
+        raise HTTPException(status_code=502, detail=f"AI service error: {str(e)}")
