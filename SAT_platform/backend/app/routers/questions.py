@@ -104,6 +104,7 @@ def get_questions(
     category: Optional[str] = None,
     difficulty: Optional[str] = None,
     question_id: Optional[str] = None,
+    has_image: Optional[bool] = None,
     limit: int = Query(50, ge=1, le=1000),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
@@ -163,6 +164,10 @@ def get_questions(
         query = query.filter(
             func.lower(Question.external_id) == question_id.strip().lower()
         )
+    if has_image is False:
+        query = query.filter(Question.image.is_(None))
+    elif has_image is True:
+        query = query.filter(Question.image.isnot(None))
 
     questions = query.order_by(Question.id.asc()).offset(offset).limit(limit).all()
     return questions

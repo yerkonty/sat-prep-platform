@@ -110,6 +110,8 @@ class ExamAttempt(Base):
     breakdown = Column(JSON)
     time_taken = Column(Integer)
     completed_at = Column(DateTime, server_default=func.now())
+    status = Column(String, default="in_progress")
+    started_at = Column(DateTime, server_default=func.now())
 
     user = relationship("User", back_populates="exam_attempts")
 

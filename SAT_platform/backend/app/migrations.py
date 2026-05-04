@@ -54,6 +54,15 @@ def run_startup_migrations(engine: Engine) -> None:
                 "ALTER TABLE flashcards ADD COLUMN interval_days INTEGER DEFAULT 0"
             )
 
+    if "exam_attempts" in tables:
+        ea_cols = {col["name"] for col in inspector.get_columns("exam_attempts")}
+        if "status" not in ea_cols:
+            statements.append(
+                "ALTER TABLE exam_attempts ADD COLUMN status VARCHAR DEFAULT 'in_progress'"
+            )
+        if "started_at" not in ea_cols:
+            statements.append("ALTER TABLE exam_attempts ADD COLUMN started_at DATETIME")
+
     if not statements:
         return
 

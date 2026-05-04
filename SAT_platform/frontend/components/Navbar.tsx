@@ -24,6 +24,7 @@ export default function Navbar() {
     const navLinks = [
         { href: "/dashboard", label: "Dashboard" },
         { href: "/practice", label: "Practice" },
+        { href: "/test", label: "Practice Test" },
         { href: "/ai-tutor", label: "AI Tutor" },
         { href: "/flashcards", label: "Flashcards" },
         { href: "/progress", label: "Progress" },
