@@ -138,7 +138,7 @@ export default function PricingPage() {
             <div>
               <h3 className="font-medium text-gray-900">Can I cancel anytime?</h3>
               <p className="text-gray-600 mt-2">
-                Yes, you can cancel your subscription at any time. You'll continue to have access until the end of your billing period.
+                Yes, you can cancel your subscription at any time. You&apos;ll continue to have access until the end of your billing period.
               </p>
             </div>
             <div>
@@ -150,7 +150,7 @@ export default function PricingPage() {
             <div>
               <h3 className="font-medium text-gray-900">Is there a refund policy?</h3>
               <p className="text-gray-600 mt-2">
-                We offer a 7-day money-back guarantee. If you're not satisfied, contact us within 7 days of purchase for a full refund.
+                We offer a 7-day money-back guarantee. If you&apos;re not satisfied, contact us within 7 days of purchase for a full refund.
               </p>
             </div>
           </div>

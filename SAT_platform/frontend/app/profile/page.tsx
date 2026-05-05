@@ -37,7 +37,7 @@ export default function ProfilePage() {
       const response = await api.get('/api/auth/profile');
       setProfile(response.data);
       setName(response.data.name);
-    } catch (error) {
+    } catch {
       console.error('Failed to fetch profile');
     } finally {
       setLoading(false);
@@ -50,13 +50,14 @@ export default function ProfilePage() {
     setMessage('');
     
     try {
-      const response = await api.put('/api/auth/profile', { name });
+      await api.put('/api/auth/profile', { name });
       setMessage('Profile updated successfully!');
       if (user) {
         user.name = name;
       }
-    } catch (error: any) {
-      setMessage(error.response?.data?.detail || 'Failed to update profile');
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { detail?: string } } };
+      setMessage(err.response?.data?.detail || 'Failed to update profile');
     } finally {
       setSaving(false);
     }
@@ -88,8 +89,9 @@ export default function ProfilePage() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-    } catch (error: any) {
-      setMessage(error.response?.data?.detail || 'Failed to change password');
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { detail?: string } } };
+      setMessage(err.response?.data?.detail || 'Failed to change password');
     } finally {
       setSaving(false);
     }

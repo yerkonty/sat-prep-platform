@@ -20,17 +20,16 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroTextRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
-  const [coins, setCoins] = useState<{ id: number; left: number; delay: number }[]>([]);
-
-  useEffect(() => {
-    // Generate some "money rain" conceptual elements
-    const newCoins = Array.from({ length: 8 }).map((_, i) => ({
+  const [coins] = useState(() =>
+    Array.from({ length: 8 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       delay: Math.random() * 2,
-    }));
-    setCoins(newCoins);
+      duration: 5 + Math.random() * 2,
+    }))
+  );
 
+  useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
@@ -106,7 +105,7 @@ export default function Home() {
             initial={{ y: -50, opacity: 0, rotate: 0 }}
             animate={{ y: "110vh", opacity: [0, 1, 0], rotate: 360 }}
             transition={{
-              duration: 5 + Math.random() * 2,
+              duration: coin.duration,
               repeat: Infinity,
               delay: coin.delay,
               ease: "linear",
