@@ -1,0 +1,9 @@
+project-includes = ["app"]
+project-excludes = ["venv", "**/__pycache__"]
+search-path = ["."]
+python-version = "3.13"
+
+[errors]
+bad-argument-type = false
+bad-assignment = false
+missing-attribute = false

@@ -21,13 +21,16 @@ from app.migrations import run_startup_migrations
 from app.models import Question
 
 SKILL_TO_DOMAIN = {
+    # Math — Algebra
     "Linear equations (one variable, two variables)": "Algebra",
     "Linear functions": "Algebra",
     "Linear inequalities in one or two variables": "Algebra",
     "Systems of equations": "Algebra",
+    # Math — Advanced Math
     "Equivalent expressions": "Advanced Math",
     "Nonlinear equations": "Advanced Math",
     "Nonlinear functions": "Advanced Math",
+    # Math — Problem-Solving and Data Analysis
     "Ratios, rates, proportional relationships, and units": "Problem-Solving and Data Analysis",
     "Percentages": "Problem-Solving and Data Analysis",
     "One-variable data: Distributions and measures of center and spread": "Problem-Solving and Data Analysis",
@@ -35,10 +38,27 @@ SKILL_TO_DOMAIN = {
     "Probability and conditional probability": "Problem-Solving and Data Analysis",
     "Inference from sample statistics and margin of error": "Problem-Solving and Data Analysis",
     "Evaluating statistical claims: Observational studies and experiments": "Problem-Solving and Data Analysis",
+    # Math — Geometry and Trigonometry
     "Lines, angles, and triangles": "Geometry and Trigonometry",
     "Right triangles and trigonometry": "Geometry and Trigonometry",
     "Circles": "Geometry and Trigonometry",
     "Area and volume": "Geometry and Trigonometry",
+    # Reading & Writing — Information and Ideas
+    "Central Ideas and Details": "Information and Ideas",
+    "Command of Evidence (Textual)": "Information and Ideas",
+    "Command of Evidence (Quantitative)": "Information and Ideas",
+    "Command of Evidence": "Information and Ideas",
+    "Inferences": "Information and Ideas",
+    # Reading & Writing — Craft and Structure
+    "Words in Context": "Craft and Structure",
+    "Text Structure and Purpose": "Craft and Structure",
+    "Cross-Text Connections": "Craft and Structure",
+    # Reading & Writing — Expression of Ideas
+    "Transitions": "Expression of Ideas",
+    "Rhetorical Synthesis": "Expression of Ideas",
+    # Reading & Writing — Standard English Conventions
+    "Boundaries": "Standard English Conventions",
+    "Form, Structure, and Sense": "Standard English Conventions",
 }
 
 
@@ -47,15 +67,20 @@ def _upsert(session: Session, q: dict) -> str:
     skill  = q.get("skill", "")
     domain = q.get("domain") or SKILL_TO_DOMAIN.get(skill, "")
 
+    raw_section = q.get("section", "math")
+    section = "rw" if raw_section in ("reading_writing", "rw") else raw_section
+
+    passage_type = q.get("passage_type", "single") or "single"
+
     payload = {
         "external_id":  external_id,
-        "section":      q.get("section", "math"),
-        "type":         q.get("section", "math"),
+        "section":      section,
+        "type":         section,
         "domain":       domain,
         "skill":        skill,
         "category":     domain,
-        "subcategory":  "single",
-        "passage_type": "single",
+        "subcategory":  passage_type,
+        "passage_type": passage_type,
         "difficulty":   str(q.get("difficulty", "medium")).lower(),
         "content":      q["content"],
         "options":      q["options"],

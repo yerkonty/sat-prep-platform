@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
-from typing import Optional, List, Literal
+from typing import Any, Optional, List, Literal
 
 from app.database import get_db
 from app.models import User
@@ -64,13 +64,14 @@ def chat_with_tutor(
         )
 
     client, model = _build_client()
-    if client is None:
+    if client is None or model is None:
+        # pyrefly: ignore[bad-argument-type]
         return ChatResponse(
             response="AI tutor is not configured. Please add GROQ_API_KEY to .env file.",
             messages_remaining=current_user.ai_messages_limit - current_user.ai_messages_used
         )
 
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    messages: list[Any] = [{"role": "system", "content": SYSTEM_PROMPT}]
     if request.context:
         messages.append({"role": "system", "content": f"Context: {request.context}"})
     for m in request.history[-MAX_HISTORY_MESSAGES:]:
@@ -83,12 +84,15 @@ def chat_with_tutor(
             messages=messages,
             max_tokens=600,
             temperature=0.7,
+            stream=False,
         )
+        # pyrefly: ignore[missing-attribute]
         ai_response = response.choices[0].message.content or ""
 
         current_user.ai_messages_used += 1
         db.commit()
 
+        # pyrefly: ignore[bad-argument-type]
         return ChatResponse(
             response=ai_response,
             messages_remaining=current_user.ai_messages_limit - current_user.ai_messages_used

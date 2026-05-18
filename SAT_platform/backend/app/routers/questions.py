@@ -34,14 +34,68 @@ class QuestionResponse(BaseModel):
 
 class AnswerRequest(BaseModel):
     question_id: str
-    answer: int
+    answer: Optional[int] = None
+    answer_text: Optional[str] = None
     time_taken: int
 
 
 class AnswerResponse(BaseModel):
     is_correct: bool
     correct_answer: int
+    correct_answer_text: Optional[str] = None
     explanation: str
+
+
+def _normalize_spr_value(value: str) -> str:
+    import re
+
+    text = (value or "").strip()
+    # Strip LaTeX delimiters and common formatting.
+    text = text.replace("$", "").replace("\\$", "").replace(",", "").replace(" ", "")
+    text = text.replace("\\%", "").replace("%", "")
+    text = text.strip()
+    # Strip outer parentheses.
+    if text.startswith("(") and text.endswith(")"):
+        text = text[1:-1].strip()
+    return text
+
+
+def _spr_answer_matches(user_input: str, correct_value: str) -> bool:
+    from fractions import Fraction
+
+    user_norm = _normalize_spr_value(user_input)
+    if not user_norm:
+        return False
+
+    # College Board often lists multiple acceptable forms separated by ", "
+    # (e.g. "24.5, 49/2" or "135/8, 16.87, 16.88"). Treat each as a valid answer.
+    if ", " in (correct_value or ""):
+        accepted = [p.strip() for p in correct_value.split(",") if p.strip()]
+    else:
+        accepted = [correct_value or ""]
+
+    def to_number(text: str):
+        try:
+            if "/" in text:
+                return float(Fraction(text))
+            return float(text)
+        except (ValueError, ZeroDivisionError):
+            return None
+
+    user_num = to_number(user_norm)
+
+    for form in accepted:
+        correct_norm = _normalize_spr_value(form)
+        if user_norm.lower() == correct_norm.lower():
+            return True
+        correct_num = to_number(correct_norm)
+        if user_num is not None and correct_num is not None:
+            if abs(user_num - correct_num) < 1e-4:
+                return True
+            if correct_num != 0 and abs((user_num - correct_num) / correct_num) < 1e-3:
+                return True
+
+    return False
 
 
 class SkillStatsResponse(BaseModel):
@@ -296,10 +350,19 @@ def answer_question(
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
 
-    if request.answer < 0 or request.answer >= len(question.options):
-        raise HTTPException(status_code=400, detail="Invalid answer index")
+    correct_answer_text: Optional[str] = None
+    options = question.options or []
+    if 0 <= (question.correct_answer or 0) < len(options):
+        correct_answer_text = str(options[question.correct_answer])
 
-    is_correct = request.answer == question.correct_answer
+    if request.answer_text is not None:
+        if correct_answer_text is None:
+            raise HTTPException(status_code=400, detail="Question has no answer")
+        is_correct = _spr_answer_matches(request.answer_text, correct_answer_text)
+    else:
+        if request.answer is None or request.answer < 0 or request.answer >= len(options):
+            raise HTTPException(status_code=400, detail="Invalid answer index")
+        is_correct = request.answer == question.correct_answer
 
     progress = Progress(
         id=str(uuid.uuid4()),
@@ -314,5 +377,6 @@ def answer_question(
     return AnswerResponse(
         is_correct=is_correct,
         correct_answer=question.correct_answer,
+        correct_answer_text=correct_answer_text,
         explanation=question.explanation or "No explanation available.",
     )

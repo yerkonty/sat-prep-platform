@@ -1,0 +1,6 @@
+{
+  "python.analysis.extraPaths": [
+    "/home/yerkonty/Desktop/sat-prep-platform/SAT_platform/backend",
+    "/home/yerkonty/Desktop/sat-prep-platform/SAT_platform/backend/venv/lib/python3.13/site-packages"
+  ]
+}

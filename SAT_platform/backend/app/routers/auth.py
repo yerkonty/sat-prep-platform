@@ -1,6 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
+
+
+def _utcnow_naive() -> datetime:
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 from pydantic import BaseModel
 import uuid
 
@@ -128,6 +132,7 @@ def get_profile(
     db: Session = Depends(get_db)
 ):
     """Get current user profile"""
+    # pyrefly: ignore[bad-argument-type]
     return ProfileResponse(
         id=current_user.id,
         email=current_user.email,
@@ -166,6 +171,7 @@ def change_password(
     db: Session = Depends(get_db)
 ):
     """Change user password"""
+    # pyrefly: ignore[bad-argument-type]
     if not verify_password(request.current_password, current_user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -197,7 +203,7 @@ def request_password_reset(payload: PasswordResetRequest, db: Session = Depends(
     user = db.query(User).filter(User.email == payload.email).first()
     if user:
         user.reset_token = str(uuid.uuid4())
-        user.reset_token_expires = datetime.utcnow() + timedelta(hours=1)
+        user.reset_token_expires = _utcnow_naive() + timedelta(hours=1)
         db.commit()
     # Respond generically to avoid email enumeration; include token for dev/testing
     return {"message": "If the email exists, a reset link was issued.", "reset_token": user.reset_token if user else None}
@@ -207,7 +213,7 @@ def request_password_reset(payload: PasswordResetRequest, db: Session = Depends(
 def reset_password(payload: PasswordResetConfirm, db: Session = Depends(get_db)):
     """Reset password using a valid token."""
     user = db.query(User).filter(User.reset_token == payload.token).first()
-    if not user or not user.reset_token_expires or user.reset_token_expires < datetime.utcnow():
+    if not user or not user.reset_token_expires or user.reset_token_expires < _utcnow_naive():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid or expired token")
 
     user.password_hash = get_password_hash(payload.new_password)
