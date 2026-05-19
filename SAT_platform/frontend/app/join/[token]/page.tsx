@@ -1,51 +1,43 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect, use } from 'react';
+import { useRouter } from 'next/navigation';
 import { BookOpen, User, Mail, Lock } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
 
-export default function RegisterPage() {
+export default function JoinPage({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = use(params);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [inviteValid, setInviteValid] = useState<boolean | null>(null);
+  const [inviteReason, setInviteReason] = useState('');
   const { register } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const inviteToken = searchParams.get('token') || '';
-
-  const isValid = inviteToken ? null : false;
-  const [validationResult, setValidationResult] = useState<{ valid: boolean; reason: string } | null>(null);
-
-  const isValid = validationResult?.valid ?? isValid;
-  const inviteReason = validationResult?.valid === false
-    ? validationResult.reason
-    : !inviteToken
-      ? 'An invite link is required to register.'
-      : '';
 
   useEffect(() => {
-    if (!inviteToken) return;
-    api.get(`/api/auth/join/${inviteToken}`)
+    api.get(`/api/auth/join/${token}`)
       .then((res) => {
-        setValidationResult({
-          valid: !!res.data.valid,
-          reason: res.data.reason || 'Invalid invite link.',
-        });
+        if (res.data.valid) {
+          setInviteValid(true);
+        } else {
+          setInviteValid(false);
+          setInviteReason(res.data.reason || 'Invalid invite link.');
+        }
       })
       .catch(() => {
-        setValidationResult({ valid: false, reason: 'Could not validate invite link.' });
+        setInviteValid(false);
+        setInviteReason('Could not validate invite link.');
       });
-  }, [inviteToken]);
+  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setError('');
-      await register(email, password, name, inviteToken);
+      await register(email, password, name, token);
       router.push('/dashboard');
     } catch (err: unknown) {
       const message =
@@ -54,6 +46,26 @@ export default function RegisterPage() {
       setError(message);
     }
   };
+
+  if (inviteValid === null) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="text-neutral-500 text-lg">Validating invite...</div>
+      </div>
+    );
+  }
+
+  if (inviteValid === false) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-neutral-100 max-w-md w-full text-center">
+          <div className="text-red-500 text-5xl mb-4">!</div>
+          <h2 className="text-xl font-bold text-neutral-900 mb-2">Invalid Invite</h2>
+          <p className="text-neutral-600">{inviteReason}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -65,21 +77,12 @@ export default function RegisterPage() {
           Join MaxSAT Academy
         </h2>
         <p className="mt-2 text-center text-sm text-neutral-600">
-          Already have an account?{' '}
-          <Link href="/login" className="font-medium text-emerald-600 hover:text-emerald-500">
-            Sign in
-          </Link>
+          Create your account to get started
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-sm border border-neutral-100 sm:rounded-2xl sm:px-10">
-          {isValid === false && (
-            <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-medium mb-6">
-              {inviteReason}
-            </div>
-          )}
-
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
               <div className="bg-red-50 text-red-500 p-3 rounded-md text-sm">
@@ -99,10 +102,9 @@ export default function RegisterPage() {
                   name="name"
                   type="text"
                   required
-                  disabled={!isValid}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="block w-full pl-10 px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-neutral-900 bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="block w-full pl-10 px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-neutral-900 bg-white"
                   placeholder="Jane Doe"
                 />
               </div>
@@ -122,10 +124,9 @@ export default function RegisterPage() {
                   type="email"
                   autoComplete="email"
                   required
-                  disabled={!isValid}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-neutral-900 bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="block w-full pl-10 px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-neutral-900 bg-white"
                   placeholder="you@example.com"
                 />
               </div>
@@ -144,10 +145,9 @@ export default function RegisterPage() {
                   name="password"
                   type="password"
                   required
-                  disabled={!isValid}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-neutral-900 bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="block w-full pl-10 px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-neutral-900 bg-white"
                   placeholder=""
                 />
               </div>
@@ -156,8 +156,7 @@ export default function RegisterPage() {
             <div>
               <button
                 type="submit"
-                disabled={!isValid}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors"
               >
                 Create Account
               </button>

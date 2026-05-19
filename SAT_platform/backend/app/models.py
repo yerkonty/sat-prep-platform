@@ -36,9 +36,15 @@ class User(Base):
     ai_messages_used: Mapped[int] = mapped_column(Integer, default=0)
     ai_messages_limit: Mapped[int] = mapped_column(Integer, default=5)
 
+    role: Mapped[str] = mapped_column(String, default="student")
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    last_active: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+
     progress: Mapped[List["Progress"]] = relationship(back_populates="user")
     flashcard_decks: Mapped[List["FlashcardDeck"]] = relationship(back_populates="user")
     exam_attempts: Mapped[List["ExamAttempt"]] = relationship(back_populates="user")
+    invite_links_created: Mapped[List["InviteLink"]] = relationship(back_populates="created_by_user")
+    refresh_tokens: Mapped[List["RefreshToken"]] = relationship(back_populates="user")
 
 
 class Question(Base):
@@ -127,3 +133,31 @@ class Lesson(Base):
     title: Mapped[str] = mapped_column(String, nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     order: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class InviteLink(Base):
+    __tablename__ = "invite_links"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True, index=True)
+    token: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
+    created_by: Mapped[str] = mapped_column(String, ForeignKey("users.id"), nullable=False)
+    max_uses: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    uses_count: Mapped[int] = mapped_column(Integer, default=0)
+    expires_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+    created_by_user: Mapped["User"] = relationship(back_populates="invite_links_created")
+
+
+class RefreshToken(Base):
+    __tablename__ = "refresh_tokens"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True, index=True)
+    user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"), nullable=False)
+    token: Mapped[str] = mapped_column(String, unique=True, index=True, nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    is_revoked: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+    user: Mapped["User"] = relationship(back_populates="refresh_tokens")

@@ -8,14 +8,16 @@ interface User {
   email: string;
   name: string;
   subscription_plan: string;
+  role: 'student' | 'admin';
+  is_active: boolean;
 }
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, name: string) => Promise<void>;
-  logout: () => void;
+  register: (email: string, password: string, name: string, inviteToken: string) => Promise<void>;
+  logout: () => Promise<void>;
   isLoading: boolean;
 }
 
@@ -34,11 +36,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         try {
           const response = await api.get('/api/auth/profile');
           setUser(response.data);
-        } catch (error) {
-          console.error("Failed to fetch user profile", error);
-          localStorage.removeItem('token');
-          setToken(null);
-          setUser(null);
+        } catch {
+          try {
+            const refreshRes = await api.post('/api/auth/refresh');
+            const newToken = refreshRes.data.access_token;
+            localStorage.setItem('token', newToken);
+            setToken(newToken);
+            const profileRes = await api.get('/api/auth/profile');
+            setUser(profileRes.data);
+          } catch {
+            localStorage.removeItem('token');
+            setToken(null);
+            setUser(null);
+          }
         }
       }
       setIsLoading(false);
@@ -55,15 +65,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(user);
   };
 
-  const register = async (email: string, password: string, name: string) => {
-    const response = await api.post('/api/auth/register', { email, password, name });
+  const register = async (email: string, password: string, name: string, inviteToken: string) => {
+    const response = await api.post('/api/auth/register', {
+      email,
+      password,
+      name,
+      invite_token: inviteToken,
+    });
     const { access_token, user } = response.data;
     localStorage.setItem('token', access_token);
     setToken(access_token);
     setUser(user);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await api.post('/api/auth/logout');
+    } catch {
+      // continue logout even if API call fails
+    }
     localStorage.removeItem('token');
     setToken(null);
     setUser(null);

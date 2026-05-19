@@ -39,6 +39,16 @@ def run_startup_migrations(engine: Engine) -> None:
             statements.append(
                 "ALTER TABLE users ADD COLUMN reset_token_expires DATETIME"
             )
+        if "role" not in u_cols:
+            statements.append(
+                "ALTER TABLE users ADD COLUMN role VARCHAR DEFAULT 'student'"
+            )
+        if "is_active" not in u_cols:
+            statements.append(
+                "ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT 1"
+            )
+        if "last_active" not in u_cols:
+            statements.append("ALTER TABLE users ADD COLUMN last_active DATETIME")
 
     if "flashcard_decks" in tables:
         d_cols = {col["name"] for col in inspector.get_columns("flashcard_decks")}

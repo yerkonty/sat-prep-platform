@@ -72,16 +72,7 @@ def _snippet(text: Optional[str], length: int = 90) -> str:
     return s if len(s) <= length else s[: length - 1].rstrip() + "…"
 
 
-@router.get("/analytics", response_model=AnalyticsResponse)
-def get_analytics(
-    current_user=Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    """Aggregate the user's practice progress.
-
-    Single join query plus in-memory grouping. Returns per-skill, per-domain,
-    per-section breakdowns and the user's three weakest skills (min 3 attempts).
-    """
+def get_analytics_for_user(user_id: str, db: Session) -> AnalyticsResponse:
     rows = (
         db.query(
             Progress.is_correct,
@@ -96,7 +87,7 @@ def get_analytics(
             Question.content,
         )
         .join(Question, Progress.question_id == Question.id)
-        .filter(Progress.user_id == current_user.id)
+        .filter(Progress.user_id == user_id)
         .order_by(Progress.answered_at.desc())
         .all()
     )
@@ -221,3 +212,11 @@ def get_analytics(
         weak_skills=weak_skills,
         recent_activity=recent_activity,
     )
+
+
+@router.get("/analytics", response_model=AnalyticsResponse)
+def get_analytics(
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    return get_analytics_for_user(current_user.id, db)

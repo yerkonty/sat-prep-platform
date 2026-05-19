@@ -5,6 +5,7 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
@@ -15,13 +16,50 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+let isRefreshing = false;
+let pendingRequests: Array<(token: string) => void> = [];
+
+function onRefreshed(token: string) {
+  pendingRequests.forEach((cb) => cb(token));
+  pendingRequests = [];
+}
+
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      if (isRefreshing) {
+        return new Promise((resolve) => {
+          pendingRequests.push((token: string) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            resolve(api(originalRequest));
+          });
+        });
+      }
+
+      isRefreshing = true;
+
+      try {
+        const res = await api.post('/api/auth/refresh');
+        const newToken = res.data.access_token;
+        localStorage.setItem('token', newToken);
+        isRefreshing = false;
+        onRefreshed(newToken);
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return api(originalRequest);
+      } catch {
+        isRefreshing = false;
+        pendingRequests = [];
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return Promise.reject(error);
+      }
     }
+
     return Promise.reject(error);
   }
 );

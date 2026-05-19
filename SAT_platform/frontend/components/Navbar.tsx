@@ -28,6 +28,8 @@ export default function Navbar() {
         { href: "/ai-tutor", label: "AI Tutor" },
         { href: "/flashcards", label: "Flashcards" },
         { href: "/progress", label: "Progress" },
+        { href: "/leaderboard", label: "Leaderboard" },
+        ...(user?.role === "admin" ? [{ href: "/admin", label: "Admin" }] : []),
     ];
 
     return (
@@ -78,18 +80,9 @@ export default function Navbar() {
                                 </button>
                             </>
                         ) : (
-                            <>
-                                <Link href="/login" className="text-sm font-bold text-[#1A1A1A]/80 hover:text-[#00592B] transition-colors relative group">
-                                    Log in
-                                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#00592B] transition-all group-hover:w-full"></span>
-                                </Link>
-                                <Link
-                                    href="/register"
-                                    className="inline-flex items-center px-6 py-2.5 rounded-full shadow-lg shadow-[#10B981]/20 text-sm font-bold text-[#FAFAF8] bg-[#00592B] hover:bg-[#10B981] hover:-translate-y-0.5 transition-all duration-300 active:scale-95"
-                                >
-                                    Sign up
-                                </Link>
-                            </>
+                            <Link href="/login" className="inline-flex items-center px-6 py-2.5 rounded-full shadow-lg shadow-[#10B981]/20 text-sm font-bold text-[#FAFAF8] bg-[#00592B] hover:bg-[#10B981] hover:-translate-y-0.5 transition-all duration-300 active:scale-95">
+                                Log in
+                            </Link>
                         )}
                     </div>
                 </div>

@@ -43,6 +43,10 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return encoded_jwt
 
 
+def create_refresh_token_value() -> str:
+    return secrets.token_urlsafe(64)
+
+
 def decode_token(token: str) -> Optional[dict]:
     """Decode and verify a JWT token"""
     try:
