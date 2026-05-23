@@ -1,8 +1,9 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
+    Bookmark,
     ChevronLeft,
     ChevronRight,
     CheckCircle,
@@ -114,6 +115,7 @@ function PracticeSession() {
     const [answerStates, setAnswerStates] = useState<Record<number, AnswerState>>({});
     const [eliminated, setEliminated] = useState<Record<number, number[]>>({});
     const [markedForReview, setMarkedForReview] = useState<Record<number, boolean>>({});
+    const [savedQuestionIds, setSavedQuestionIds] = useState<Set<string>>(new Set());
     const [navigatorOpen, setNavigatorOpen] = useState(false);
     const [shuffleMode, setShuffleMode] = useState(false);
 
@@ -144,6 +146,40 @@ function PracticeSession() {
     // Stored in the DB with a single option holding the correct answer string.
     const isFreeResponse = !!currentQuestion && (currentQuestion.options?.length ?? 0) <= 1;
     const textAnswer = textAnswers[currentIndex] ?? "";
+    const isCurrentSaved = !!(currentQuestion && savedQuestionIds.has(currentQuestion.id));
+
+    useEffect(() => {
+        api.get<string[]>("/api/questions/saved")
+            .then((res) => setSavedQuestionIds(new Set(res.data)))
+            .catch(() => {});
+    }, []);
+
+    const savedRef = useRef(savedQuestionIds);
+    savedRef.current = savedQuestionIds;
+
+    const toggleSaveQuestion = useCallback(async (questionId: string) => {
+        const wasSaved = savedRef.current.has(questionId);
+        setSavedQuestionIds((prev) => {
+            const next = new Set(prev);
+            if (wasSaved) next.delete(questionId);
+            else next.add(questionId);
+            return next;
+        });
+        try {
+            if (wasSaved) {
+                await api.delete(`/api/questions/${questionId}/save`);
+            } else {
+                await api.post(`/api/questions/${questionId}/save`);
+            }
+        } catch {
+            setSavedQuestionIds((prev) => {
+                const next = new Set(prev);
+                if (wasSaved) next.add(questionId);
+                else next.delete(questionId);
+                return next;
+            });
+        }
+    }, []);
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -601,6 +637,18 @@ function PracticeSession() {
                                     {markedForReview[currentIndex] ? "Marked" : "Mark for Review"}
                                 </button>
                                 <span className="text-slate-200">|</span>
+                                <button
+                                    onClick={() => currentQuestion && toggleSaveQuestion(currentQuestion.id)}
+                                    className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                                        isCurrentSaved
+                                            ? "border-blue-400 bg-blue-50 text-blue-700"
+                                            : "border-transparent text-slate-600 hover:text-slate-900"
+                                    }`}
+                                >
+                                    <Bookmark className={`h-3.5 w-3.5 ${isCurrentSaved ? "fill-blue-500 text-blue-500" : ""}`} />
+                                    {isCurrentSaved ? "Saved" : "Save"}
+                                </button>
+                                <span className="text-slate-200">|</span>
                                 <span className="text-xs font-semibold text-slate-500">Eliminate</span>
                                 {currentQuestion.external_id && (
                                     <>
@@ -918,6 +966,7 @@ function PracticeSession() {
                                     const state = answerStates[i];
                                     const isCurrent = i === currentIndex;
                                     const isMarked = !!markedForReview[i];
+                                    const isSaved = savedQuestionIds.has(q.id);
                                     const isAnsweredUnchecked =
                                         !state && (answers[i] !== undefined || (textAnswers[i] || "").trim().length > 0);
 
@@ -944,6 +993,9 @@ function PracticeSession() {
                                             {isMarked && (
                                                 <Flag className="absolute -top-1 -right-1 h-3 w-3 fill-amber-500 text-amber-500" />
                                             )}
+                                            {isSaved && (
+                                                <Bookmark className="absolute -bottom-1 -right-1 h-3 w-3 fill-blue-500 text-blue-500" />
+                                            )}
                                         </button>
                                     );
                                 })}
@@ -955,6 +1007,7 @@ function PracticeSession() {
                             <span className="flex items-center gap-1.5"><span className="inline-block h-3 w-3 rounded border border-rose-400 bg-rose-50" /> Incorrect</span>
                             <span className="flex items-center gap-1.5"><span className="inline-block h-3 w-3 rounded border border-slate-400 bg-slate-100" /> Selected, unchecked</span>
                             <span className="flex items-center gap-1.5"><Flag className="h-3 w-3 fill-amber-500 text-amber-500" /> Marked</span>
+                            <span className="flex items-center gap-1.5"><Bookmark className="h-3 w-3 fill-blue-500 text-blue-500" /> Saved</span>
                         </div>
                     </div>
                 </div>

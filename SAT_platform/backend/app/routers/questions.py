@@ -7,8 +7,8 @@ from typing import Optional, List, Dict
 import uuid
 
 from app.database import get_db
-from app.models import Question, Progress
-from app.dependencies import get_current_user
+from app.models import Question, Progress, SavedQuestion
+from app.dependencies import get_current_user, get_current_user_optional
 
 router = APIRouter(prefix="/api/questions", tags=["Questions"])
 
@@ -380,3 +380,62 @@ def answer_question(
         correct_answer_text=correct_answer_text,
         explanation=question.explanation or "No explanation available.",
     )
+
+
+@router.get("/saved", response_model=List[str])
+def get_saved_questions(
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    rows = (
+        db.query(SavedQuestion.question_id)
+        .filter(SavedQuestion.user_id == current_user.id)
+        .all()
+    )
+    return [r[0] for r in rows]
+
+
+@router.post("/{question_id}/save", status_code=201)
+def save_question(
+    question_id: str,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    existing = (
+        db.query(SavedQuestion)
+        .filter(
+            SavedQuestion.user_id == current_user.id,
+            SavedQuestion.question_id == question_id,
+        )
+        .first()
+    )
+    if existing:
+        return {"status": "already_saved"}
+
+    db.add(SavedQuestion(
+        id=str(uuid.uuid4()),
+        user_id=current_user.id,
+        question_id=question_id,
+    ))
+    db.commit()
+    return {"status": "saved"}
+
+
+@router.delete("/{question_id}/save")
+def unsave_question(
+    question_id: str,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    row = (
+        db.query(SavedQuestion)
+        .filter(
+            SavedQuestion.user_id == current_user.id,
+            SavedQuestion.question_id == question_id,
+        )
+        .first()
+    )
+    if row:
+        db.delete(row)
+        db.commit()
+    return {"status": "removed"}

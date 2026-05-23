@@ -54,6 +54,7 @@ class User(Base):
         back_populates="created_by_user", foreign_keys="[InviteLink.created_by]"
     )
     refresh_tokens: Mapped[List["RefreshToken"]] = relationship(back_populates="user")
+    saved_questions: Mapped[List["SavedQuestion"]] = relationship(back_populates="user")
 
 
 class Question(Base):
@@ -157,6 +158,18 @@ class InviteLink(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     created_by_user: Mapped["User"] = relationship(back_populates="invite_links_created", foreign_keys=[created_by])
+
+
+class SavedQuestion(Base):
+    __tablename__ = "saved_questions"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True, index=True)
+    user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"), nullable=False)
+    question_id: Mapped[str] = mapped_column(String, ForeignKey("questions.id"), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+    user: Mapped["User"] = relationship(back_populates="saved_questions")
+    question: Mapped["Question"] = relationship()
 
 
 class RefreshToken(Base):
