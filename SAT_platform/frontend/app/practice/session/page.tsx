@@ -10,7 +10,6 @@ import {
     Flag,
     GripVertical,
     Highlighter,
-    Share2,
     Shuffle,
     Strikethrough,
     X,
@@ -491,12 +490,6 @@ function PracticeSession() {
                                 <ChevronLeft className="h-3.5 w-3.5" />
                                 Back
                             </button>
-                            <button className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
-                                Explanation
-                            </button>
-                            <button className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
-                                Metadata
-                            </button>
                         </div>
 
                         {/* Center — Timer */}
@@ -520,10 +513,6 @@ function PracticeSession() {
                             >
                                 <Highlighter className="h-3.5 w-3.5" />
                                 Annotate
-                            </button>
-                            <button className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
-                                <Share2 className="h-3.5 w-3.5" />
-                                Share
                             </button>
                             {isMath && (
                                 <button
@@ -602,11 +591,13 @@ function PracticeSession() {
                                             [currentIndex]: !prev[currentIndex]
                                         }))
                                     }
-                                    className={`flex items-center gap-1.5 text-xs font-semibold transition-colors ${
-                                        markedForReview[currentIndex] ? "text-amber-600" : "text-slate-600 hover:text-slate-900"
+                                    className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                                        markedForReview[currentIndex]
+                                            ? "border-amber-400 bg-amber-50 text-amber-700"
+                                            : "border-transparent text-slate-600 hover:text-slate-900"
                                     }`}
                                 >
-                                    <Flag className="h-3.5 w-3.5" />
+                                    <Flag className={`h-3.5 w-3.5 ${markedForReview[currentIndex] ? "fill-amber-500 text-amber-500" : ""}`} />
                                     {markedForReview[currentIndex] ? "Marked" : "Mark for Review"}
                                 </button>
                                 <span className="text-slate-200">|</span>

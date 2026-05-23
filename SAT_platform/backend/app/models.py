@@ -39,11 +39,20 @@ class User(Base):
     role: Mapped[str] = mapped_column(String, default="student")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     last_active: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    google_id: Mapped[Optional[str]] = mapped_column(String, unique=True, nullable=True)
+    invited_by_link_id: Mapped[Optional[str]] = mapped_column(
+        String, ForeignKey("invite_links.id"), nullable=True
+    )
 
     progress: Mapped[List["Progress"]] = relationship(back_populates="user")
+    invited_by_link: Mapped[Optional["InviteLink"]] = relationship(
+        foreign_keys=[invited_by_link_id]
+    )
     flashcard_decks: Mapped[List["FlashcardDeck"]] = relationship(back_populates="user")
     exam_attempts: Mapped[List["ExamAttempt"]] = relationship(back_populates="user")
-    invite_links_created: Mapped[List["InviteLink"]] = relationship(back_populates="created_by_user")
+    invite_links_created: Mapped[List["InviteLink"]] = relationship(
+        back_populates="created_by_user", foreign_keys="[InviteLink.created_by]"
+    )
     refresh_tokens: Mapped[List["RefreshToken"]] = relationship(back_populates="user")
 
 
@@ -147,7 +156,7 @@ class InviteLink(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
-    created_by_user: Mapped["User"] = relationship(back_populates="invite_links_created")
+    created_by_user: Mapped["User"] = relationship(back_populates="invite_links_created", foreign_keys=[created_by])
 
 
 class RefreshToken(Base):

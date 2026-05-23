@@ -38,6 +38,12 @@ def list_students(
         .all()
     )
 
+    invite_map = {}
+    invite_ids = {s.invited_by_link_id for s, _, _ in rows if s.invited_by_link_id}
+    if invite_ids:
+        invites = db.query(InviteLink).filter(InviteLink.id.in_(invite_ids)).all()
+        invite_map = {inv.id: inv for inv in invites}
+
     return [
         {
             "id": s.id,
@@ -48,6 +54,11 @@ def list_students(
             "accuracy": round(int(correct or 0) / total * 100, 1) if total else 0.0,
             "last_active": s.last_active.isoformat() if s.last_active else None,
             "created_at": s.created_at.isoformat() if s.created_at else None,
+            "invite_token_preview": (
+                invite_map[s.invited_by_link_id].token[:12] + "..."
+                if s.invited_by_link_id and s.invited_by_link_id in invite_map
+                else None
+            ),
         }
         for s, total, correct in rows
     ]
@@ -64,6 +75,16 @@ def get_student_detail(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
 
     analytics = get_analytics_for_user(student_id, db)
+
+    invite_info = None
+    if student.invited_by_link_id:
+        inv = db.query(InviteLink).filter(InviteLink.id == student.invited_by_link_id).first()
+        if inv:
+            invite_info = {
+                "token_preview": inv.token[:12] + "...",
+                "created_at": inv.created_at.isoformat() if inv.created_at else None,
+            }
+
     return {
         "id": student.id,
         "name": student.name,
@@ -71,6 +92,7 @@ def get_student_detail(
         "is_active": student.is_active,
         "last_active": student.last_active.isoformat() if student.last_active else None,
         "created_at": student.created_at.isoformat() if student.created_at else None,
+        "invite": invite_info,
         "analytics": analytics.model_dump(),
     }
 

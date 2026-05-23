@@ -101,15 +101,15 @@ export default function ProgressPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loader2 className="w-6 h-6 animate-spin text-emerald-600" />
+      <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-[#10B981]" />
       </div>
     );
   }
 
   if (error || !analytics) {
     return (
-      <div className="min-h-screen bg-neutral-50 py-12 px-6">
+      <div className="min-h-screen bg-[#FAFAF8] py-12 px-6">
         <div className="max-w-3xl mx-auto p-6 bg-red-50 border border-red-100 rounded-xl text-red-700">
           {error || 'No analytics available.'}
         </div>
@@ -122,29 +122,29 @@ export default function ProgressPage() {
   const rwSection = analytics.by_section.find((s) => s.section === 'rw');
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-12 px-6">
+    <div className="min-h-screen bg-[#FAFAF8] py-12 px-6">
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-neutral-900">Your Progress</h1>
-            <p className="text-neutral-500 mt-1">
+            <h1 className="text-3xl font-bold text-[#1A1A1A]">Your Progress</h1>
+            <p className="text-[#1A1A1A]/50 mt-1">
               Track your performance and focus on high-yield improvements.
             </p>
           </div>
         </div>
 
         {!hasProgress ? (
-          <div className="bg-white p-12 rounded-2xl shadow-sm border border-neutral-100 text-center">
-            <Target className="w-12 h-12 mx-auto text-neutral-300 mb-4" />
-            <h2 className="text-xl font-semibold text-neutral-900 mb-2">
+          <div className="bg-white p-12 rounded-2xl shadow-sm border border-[#00592B]/10 text-center">
+            <Target className="w-12 h-12 mx-auto text-[#1A1A1A]/20 mb-4" />
+            <h2 className="text-xl font-semibold text-[#1A1A1A] mb-2">
               No practice data yet
             </h2>
-            <p className="text-neutral-500 mb-6">
+            <p className="text-[#1A1A1A]/50 mb-6">
               Answer a few practice questions to start seeing analytics here.
             </p>
             <Link
               href="/practice"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors font-medium"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#00592B] text-white rounded-xl hover:bg-[#10B981] transition-colors font-medium"
             >
               <PlayCircle className="w-5 h-5" /> Start Practicing
             </Link>
@@ -153,22 +153,22 @@ export default function ProgressPage() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <StatCard
-                icon={<BookOpen className="w-5 h-5 text-blue-600" />}
-                iconBg="bg-blue-100"
+                icon={<BookOpen className="w-5 h-5 text-[#00592B]" />}
+                iconBg="bg-[#00592B]/10"
                 label="Questions Answered"
                 value={String(analytics.total_questions)}
                 hint="Across all sections"
               />
               <StatCard
-                icon={<Target className="w-5 h-5 text-emerald-600" />}
-                iconBg="bg-emerald-100"
+                icon={<Target className="w-5 h-5 text-[#10B981]" />}
+                iconBg="bg-[#10B981]/10"
                 label="Overall Accuracy"
                 value={`${analytics.accuracy}%`}
                 hint={`${analytics.correct_answers} correct`}
               />
               <StatCard
-                icon={<Clock className="w-5 h-5 text-purple-600" />}
-                iconBg="bg-purple-100"
+                icon={<Clock className="w-5 h-5 text-[#00592B]" />}
+                iconBg="bg-[#00592B]/10"
                 label="Time Spent"
                 value={formatTime(analytics.time_spent_seconds)}
                 hint="Total practice time"
@@ -183,41 +183,41 @@ export default function ProgressPage() {
             </div>
 
             {(mathSection || rwSection) && (
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100">
-                <h3 className="text-lg font-bold text-neutral-900 mb-6">Section Performance</h3>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#00592B]/10">
+                <h3 className="text-lg font-bold text-[#1A1A1A] mb-6">Section Performance</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {rwSection && <SectionBar label="Reading & Writing" data={rwSection} barClass="bg-purple-500" />}
-                  {mathSection && <SectionBar label="Math" data={mathSection} barClass="bg-blue-500" />}
+                  {rwSection && <SectionBar label="Reading & Writing" data={rwSection} barClass="bg-[#10B981]" />}
+                  {mathSection && <SectionBar label="Math" data={mathSection} barClass="bg-[#00592B]" />}
                 </div>
               </div>
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100 flex flex-col">
-                <h3 className="text-lg font-bold text-neutral-900 mb-6">Recent Activity</h3>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#00592B]/10 flex flex-col">
+                <h3 className="text-lg font-bold text-[#1A1A1A] mb-6">Recent Activity</h3>
                 {analytics.recent_activity.length === 0 ? (
-                  <p className="text-neutral-500 text-sm">Nothing yet.</p>
+                  <p className="text-[#1A1A1A]/50 text-sm">Nothing yet.</p>
                 ) : (
                   <div className="space-y-3 flex-1">
                     {analytics.recent_activity.slice(0, 6).map((item) => (
                       <div
                         key={`${item.question_id}-${item.answered_at}`}
-                        className="flex items-start gap-3 p-3 rounded-xl border border-neutral-100 bg-neutral-50/50"
+                        className="flex items-start gap-3 p-3 rounded-xl border border-[#00592B]/5 bg-[#FAFAF8]/50"
                       >
                         <div
                           className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center ${
-                            item.is_correct ? 'bg-emerald-100' : 'bg-rose-100'
+                            item.is_correct ? 'bg-[#10B981]/10' : 'bg-rose-100'
                           }`}
                         >
                           {item.is_correct ? (
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                            <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
                           ) : (
                             <XCircle className="w-4 h-4 text-rose-600" />
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-neutral-800 truncate">{item.snippet || '(no preview)'}</p>
-                          <p className="text-xs text-neutral-500 mt-1">
+                          <p className="text-sm text-[#1A1A1A] truncate">{item.snippet || '(no preview)'}</p>
+                          <p className="text-xs text-[#1A1A1A]/50 mt-1">
                             {SECTION_LABEL[item.section] || item.section}
                             {item.skill ? ` · ${item.skill}` : ''} · {formatRelative(item.answered_at)}
                           </p>
@@ -228,11 +228,11 @@ export default function ProgressPage() {
                 )}
               </div>
 
-              <div className="bg-white border-2 border-emerald-100 p-6 rounded-2xl shadow-sm flex flex-col">
-                <h3 className="text-lg font-bold text-neutral-900 mb-2 flex items-center gap-2">
+              <div className="bg-white border-2 border-[#10B981]/20 p-6 rounded-2xl shadow-sm flex flex-col">
+                <h3 className="text-lg font-bold text-[#1A1A1A] mb-2 flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5 text-amber-500" /> Improvement Focus
                 </h3>
-                <p className="text-neutral-500 text-sm mb-6">
+                <p className="text-[#1A1A1A]/50 text-sm mb-6">
                   {analytics.weak_skills.length === 0
                     ? 'Answer at least 3 questions in a skill to see weakest areas.'
                     : 'Skills with the lowest accuracy across your practice (min 3 attempts).'}
@@ -242,12 +242,12 @@ export default function ProgressPage() {
                   {analytics.weak_skills.map((item) => (
                     <div
                       key={item.skill}
-                      className="p-4 rounded-xl border border-neutral-100 hover:border-emerald-200 hover:shadow-md transition-all group"
+                      className="p-4 rounded-xl border border-[#00592B]/10 hover:border-[#10B981]/30 hover:shadow-md transition-all group"
                     >
                       <div className="flex justify-between items-start mb-3">
                         <div>
-                          <h4 className="font-bold text-neutral-800">{item.skill}</h4>
-                          <p className="text-xs text-neutral-400 mt-1 uppercase tracking-wide font-medium">
+                          <h4 className="font-bold text-[#1A1A1A]">{item.skill}</h4>
+                          <p className="text-xs text-[#1A1A1A]/40 mt-1 uppercase tracking-wide font-medium">
                             {SECTION_LABEL[item.section] || item.section}
                             {item.domain ? ` · ${item.domain}` : ''}
                           </p>
@@ -258,7 +258,7 @@ export default function ProgressPage() {
                       </div>
                       <Link
                         href={`/practice?skill=${encodeURIComponent(item.skill)}`}
-                        className="flex items-center justify-between w-full bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg font-medium transition-colors group-hover:bg-emerald-600 group-hover:text-white"
+                        className="flex items-center justify-between w-full bg-[#10B981]/10 text-[#00592B] px-4 py-2 rounded-lg font-medium transition-colors group-hover:bg-[#00592B] group-hover:text-white"
                       >
                         <span className="flex items-center gap-2">
                           <PlayCircle className="w-4 h-4" /> Practice this skill
@@ -291,11 +291,11 @@ function StatCard({
   hint: string;
 }) {
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-neutral-100">
+    <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#00592B]/10">
       <div className={`w-10 h-10 rounded-full ${iconBg} flex items-center justify-center mb-4`}>{icon}</div>
-      <h3 className="text-neutral-500 text-sm font-medium">{label}</h3>
-      <p className="text-3xl font-bold text-neutral-900 mt-1">{value}</p>
-      <p className="text-neutral-400 text-sm mt-2 truncate">{hint}</p>
+      <h3 className="text-[#1A1A1A]/50 text-sm font-medium">{label}</h3>
+      <p className="text-3xl font-bold text-[#1A1A1A] mt-1">{value}</p>
+      <p className="text-[#1A1A1A]/40 text-sm mt-2 truncate">{hint}</p>
     </div>
   );
 }
@@ -304,12 +304,12 @@ function SectionBar({ label, data, barClass }: { label: string; data: SectionBre
   return (
     <div>
       <div className="flex justify-between text-sm mb-2">
-        <span className="font-semibold text-neutral-700">{label}</span>
-        <span className="text-neutral-500">
-          <span className="font-bold text-neutral-900">{data.accuracy}%</span> · {data.correct}/{data.total}
+        <span className="font-semibold text-[#1A1A1A]/70">{label}</span>
+        <span className="text-[#1A1A1A]/50">
+          <span className="font-bold text-[#1A1A1A]">{data.accuracy}%</span> · {data.correct}/{data.total}
         </span>
       </div>
-      <div className="w-full bg-neutral-100 rounded-full h-2.5">
+      <div className="w-full bg-[#1A1A1A]/10 rounded-full h-2.5">
         <div
           className={`${barClass} h-2.5 rounded-full transition-all duration-500`}
           style={{ width: `${Math.min(100, data.accuracy)}%` }}

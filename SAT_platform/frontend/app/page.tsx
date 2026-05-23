@@ -8,11 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   Brain,
-  Shield,
   Star,
   Target,
-  Zap,
-  Sparkles,
   BookOpen,
 } from "lucide-react";
 
@@ -225,10 +222,10 @@ export default function Home() {
                 Join thousands of students who have already boosted their scores using MaxSAT.
               </p>
               <Link
-                href="/register"
+                href="/login"
                 className="group inline-flex items-center justify-center px-12 py-6 text-xl font-bold text-[#00592B] bg-[#1CE585] rounded-full hover:bg-white transition-all shadow-xl hover:shadow-[#1CE585]/30 hover:scale-105 active:scale-95"
               >
-                Create Free Account
+                Get Started
                 <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
 import api from '@/lib/api';
 
 interface LeaderboardEntry {
@@ -32,7 +33,7 @@ export default function LeaderboardPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
-        <div className="text-[#1A1A1A]/40 text-lg">Loading leaderboard...</div>
+        <Loader2 className="w-8 h-8 animate-spin text-[#10B981]" />
       </div>
     );
   }

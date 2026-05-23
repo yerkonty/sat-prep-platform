@@ -1,168 +1,82 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { BookOpen, User, Mail, Lock } from 'lucide-react';
+import Link from 'next/link';
+import { BookOpen } from 'lucide-react';
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
 import { useAuth } from '@/context/AuthContext';
-import api from '@/lib/api';
 
 export default function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const { register } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const inviteToken = searchParams.get('token') || '';
-
-  const isValid = inviteToken ? null : false;
-  const [validationResult, setValidationResult] = useState<{ valid: boolean; reason: string } | null>(null);
-
-  const isValid = validationResult?.valid ?? isValid;
-  const inviteReason = validationResult?.valid === false
-    ? validationResult.reason
-    : !inviteToken
-      ? 'An invite link is required to register.'
-      : '';
+  const token = searchParams.get('token');
+  const { loginWithGoogle } = useAuth();
 
   useEffect(() => {
-    if (!inviteToken) return;
-    api.get(`/api/auth/join/${inviteToken}`)
-      .then((res) => {
-        setValidationResult({
-          valid: !!res.data.valid,
-          reason: res.data.reason || 'Invalid invite link.',
-        });
-      })
-      .catch(() => {
-        setValidationResult({ valid: false, reason: 'Could not validate invite link.' });
-      });
-  }, [inviteToken]);
+    if (token) {
+      router.replace(`/join/${token}`);
+    }
+  }, [token, router]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleGoogleSuccess = async (response: CredentialResponse) => {
+    if (!response.credential) return;
     try {
-      setError('');
-      await register(email, password, name, inviteToken);
+      await loginWithGoogle(response.credential);
       router.push('/dashboard');
-    } catch (err: unknown) {
-      const message =
-        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ||
-        'Registration failed. Please try again.';
-      setError(message);
+    } catch {
+      // error handled silently — user sees Google's own error UI
     }
   };
 
+  if (token) return null;
+
   return (
-    <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAFAF8] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center text-emerald-600 mb-6">
+        <div className="flex justify-center text-[#00592B] mb-6">
           <BookOpen className="w-12 h-12" />
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-neutral-900">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-[#1A1A1A]">
           Join MaxSAT Academy
         </h2>
-        <p className="mt-2 text-center text-sm text-neutral-600">
-          Already have an account?{' '}
-          <Link href="/login" className="font-medium text-emerald-600 hover:text-emerald-500">
-            Sign in
-          </Link>
+        <p className="mt-2 text-center text-sm text-[#1A1A1A]/60">
+          Create your account to get started
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-sm border border-neutral-100 sm:rounded-2xl sm:px-10">
-          {isValid === false && (
-            <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-medium mb-6">
-              {inviteReason}
-            </div>
-          )}
+        <div className="bg-white py-8 px-6 shadow-sm border border-[#00592B]/10 sm:rounded-2xl">
+          <div className="flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => {}}
+              size="large"
+              width="100%"
+              text="signup_with"
+              shape="pill"
+            />
+          </div>
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && (
-              <div className="bg-red-50 text-red-500 p-3 rounded-md text-sm">
-                {error}
-              </div>
-            )}
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-neutral-700">
-                Full Name
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-neutral-400" />
-                </div>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  disabled={!isValid}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="block w-full pl-10 px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-neutral-900 bg-white disabled:opacity-50 disabled:cursor-not-allowed"
-                  placeholder="Jane Doe"
-                />
-              </div>
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[#1A1A1A]/10" />
             </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white text-[#1A1A1A]/40">or</span>
+            </div>
+          </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-700">
-                Email address
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-neutral-400" />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  disabled={!isValid}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-neutral-900 bg-white disabled:opacity-50 disabled:cursor-not-allowed"
-                  placeholder="you@example.com"
-                />
-              </div>
-            </div>
+          <p className="text-center text-[#1A1A1A]/60 text-sm">
+            To register with email and password, you need an invite link from your instructor.
+          </p>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-neutral-700">
-                Password
-              </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-neutral-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  disabled={!isValid}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 px-3 py-2 border border-neutral-300 rounded-xl focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm text-neutral-900 bg-white disabled:opacity-50 disabled:cursor-not-allowed"
-                  placeholder=""
-                />
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                disabled={!isValid}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Create Account
-              </button>
-            </div>
-          </form>
+          <p className="mt-6 text-center text-sm text-[#1A1A1A]/50">
+            Already have an account?{' '}
+            <Link href="/login" className="font-medium text-[#00592B] hover:text-[#10B981]">
+              Sign in
+            </Link>
+          </p>
         </div>
       </div>
     </div>

@@ -49,6 +49,14 @@ def run_startup_migrations(engine: Engine) -> None:
             )
         if "last_active" not in u_cols:
             statements.append("ALTER TABLE users ADD COLUMN last_active DATETIME")
+        if "invited_by_link_id" not in u_cols:
+            statements.append(
+                "ALTER TABLE users ADD COLUMN invited_by_link_id VARCHAR REFERENCES invite_links(id)"
+            )
+        if "google_id" not in u_cols:
+            statements.append(
+                "ALTER TABLE users ADD COLUMN google_id VARCHAR"
+            )
 
     if "flashcard_decks" in tables:
         d_cols = {col["name"] for col in inspector.get_columns("flashcard_decks")}

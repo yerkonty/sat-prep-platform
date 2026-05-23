@@ -8,7 +8,7 @@ from app.database import engine, Base
 from app.migrations import run_startup_migrations
 from app.seed_flashcards import seed_shared_decks
 from app.config import settings
-from app.routers import auth, questions, progress, ai_tutor, flashcards, exam, subscriptions, admin, leaderboard
+from app.routers import auth, questions, progress, ai_tutor, flashcards, exam, admin, leaderboard
 
 run_startup_migrations(engine)
 Base.metadata.create_all(bind=engine)
@@ -38,7 +38,6 @@ app.include_router(progress.router)
 app.include_router(ai_tutor.router)
 app.include_router(flashcards.router)
 app.include_router(exam.router)
-app.include_router(subscriptions.router)
 app.include_router(admin.router)
 app.include_router(leaderboard.router)
 

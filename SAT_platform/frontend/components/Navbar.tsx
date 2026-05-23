@@ -3,13 +3,16 @@
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X } from "lucide-react";
 import gsap from "gsap";
 
 export default function Navbar() {
     const { user, logout } = useAuth();
     const pathname = usePathname();
     const navRef = useRef<HTMLElement>(null);
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const closeMobile = () => setMobileOpen(false);
 
     useEffect(() => {
         if (navRef.current) {
@@ -69,14 +72,21 @@ export default function Navbar() {
                                 <span className="text-sm font-bold text-[#1A1A1A]/80 hidden sm:block bg-[#00592B]/5 px-3 py-1.5 rounded-full">
                                     {user.name || "Student"}
                                 </span>
-                                <Link href="/profile" className="text-sm font-bold text-[#1A1A1A]/70 hover:text-[#00592B] transition-colors hover:-translate-y-0.5 inline-block">
+                                <Link href="/profile" className="hidden sm:inline-block text-sm font-bold text-[#1A1A1A]/70 hover:text-[#00592B] transition-colors hover:-translate-y-0.5">
                                     Profile
                                 </Link>
                                 <button
                                     onClick={logout}
-                                    className="text-sm font-bold text-[#1A1A1A]/70 hover:text-[#10B981] transition-colors hover:-translate-y-0.5"
+                                    className="hidden sm:inline-block text-sm font-bold text-[#1A1A1A]/70 hover:text-[#10B981] transition-colors hover:-translate-y-0.5"
                                 >
                                     Logout
+                                </button>
+                                <button
+                                    onClick={() => setMobileOpen((v) => !v)}
+                                    className="md:hidden p-2 rounded-lg text-[#1A1A1A]/70 hover:bg-[#00592B]/5 transition-colors"
+                                    aria-label="Toggle menu"
+                                >
+                                    {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                                 </button>
                             </>
                         ) : (
@@ -87,6 +97,40 @@ export default function Navbar() {
                     </div>
                 </div>
             </div>
+
+            {/* Mobile menu */}
+            {user && mobileOpen && (
+                <div className="md:hidden border-t border-[#00592B]/10 bg-[#FAFAF8] px-4 pb-4 pt-2 space-y-1">
+                    {navLinks.map((link) => {
+                        const isActive = pathname === link.href;
+                        return (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                onClick={closeMobile}
+                                className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                                    isActive
+                                        ? "bg-[#00592B] text-[#FAFAF8]"
+                                        : "text-[#1A1A1A]/70 hover:bg-[#00592B]/5"
+                                }`}
+                            >
+                                {link.label}
+                            </Link>
+                        );
+                    })}
+                    <div className="border-t border-[#00592B]/10 pt-2 mt-2 flex items-center justify-between px-4">
+                        <Link href="/profile" onClick={closeMobile} className="text-sm font-bold text-[#1A1A1A]/70 hover:text-[#00592B] transition-colors">
+                            Profile
+                        </Link>
+                        <button
+                            onClick={logout}
+                            className="text-sm font-bold text-[#1A1A1A]/70 hover:text-[#10B981] transition-colors"
+                        >
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            )}
         </nav>
     );
 }

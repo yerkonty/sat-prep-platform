@@ -56,7 +56,7 @@ def get_leaderboard(
             "is_current_user": user_id == current_user.id,
         })
 
-    entries.sort(key=lambda e: (-(e["best_exam_score"] or -1), -e["accuracy"]))
+    entries.sort(key=lambda e: (-(e["best_exam_score"] if e["best_exam_score"] is not None else -1), -e["accuracy"]))
 
     for i, entry in enumerate(entries, 1):
         entry["rank"] = i

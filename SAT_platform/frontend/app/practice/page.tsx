@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { BookOpen, Calculator, ChevronRight, ListTree } from "lucide-react";
+import { BookOpen, Calculator, ChevronRight, ListTree, Loader2 } from "lucide-react";
 import api from "@/lib/api";
 
 type SkillStats = {
@@ -79,8 +79,8 @@ export default function QuestionBankPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center text-[#1A1A1A]/60">
-                Loading question bank...
+            <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-[#10B981]" />
             </div>
         );
     }

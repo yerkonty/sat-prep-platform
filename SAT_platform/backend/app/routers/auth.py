@@ -3,7 +3,11 @@ from sqlalchemy.orm import Session
 from datetime import timedelta, datetime, timezone
 from typing import Optional
 from pydantic import BaseModel
+import secrets
 import uuid
+
+from google.oauth2 import id_token as google_id_token
+from google.auth.transport import requests as google_requests
 
 from app.database import get_db
 from app.models import User, InviteLink, RefreshToken
@@ -23,13 +27,18 @@ def _utcnow_naive() -> datetime:
     return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
+def _is_secure() -> bool:
+    return settings.FRONTEND_URL.startswith("https")
+
+
 def _set_auth_cookies(response: Response, refresh_token: str, role: str) -> None:
     max_age = settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400
+    secure = _is_secure()
     response.set_cookie(
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=True,
+        secure=secure,
         samesite="lax",
         max_age=max_age,
     )
@@ -37,7 +46,7 @@ def _set_auth_cookies(response: Response, refresh_token: str, role: str) -> None
         key="logged_in",
         value="true",
         httponly=False,
-        secure=True,
+        secure=secure,
         samesite="lax",
         max_age=max_age,
     )
@@ -45,7 +54,7 @@ def _set_auth_cookies(response: Response, refresh_token: str, role: str) -> None
         key="user_role",
         value=role,
         httponly=False,
-        secure=True,
+        secure=secure,
         samesite="lax",
         max_age=max_age,
     )
@@ -172,6 +181,7 @@ def register(request: RegisterRequest, response: Response, db: Session = Depends
         subscription_plan="free",
         ai_messages_limit=3,
         role="student",
+        invited_by_link_id=invite.id,
     )
     db.add(user)
 
@@ -194,6 +204,63 @@ def login(request: LoginRequest, response: Response, db: Session = Depends(get_d
 
     if not user or not verify_password(request.password, user.password_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
+
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account is deactivated")
+
+    user.last_active = _utcnow_naive()
+    db.commit()
+
+    access_token = _issue_tokens(user, db, response)
+    return AuthResponse(access_token=access_token, token_type="bearer", user=_user_dict(user))
+
+
+# ---------- Google OAuth ----------
+
+class GoogleAuthRequest(BaseModel):
+    credential: str
+
+
+@router.post("/google", response_model=AuthResponse)
+def google_auth(request: GoogleAuthRequest, response: Response, db: Session = Depends(get_db)):
+    if not settings.GOOGLE_CLIENT_ID:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Google OAuth not configured")
+
+    try:
+        idinfo = google_id_token.verify_oauth2_token(
+            request.credential, google_requests.Request(), settings.GOOGLE_CLIENT_ID
+        )
+    except ValueError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Google token")
+
+    google_sub = idinfo["sub"]
+    email = idinfo["email"]
+    name = idinfo.get("name", "")
+
+    user = db.query(User).filter(User.google_id == google_sub).first()
+
+    if not user:
+        user = db.query(User).filter(User.email == email).first()
+        if user:
+            user.google_id = google_sub
+            if not user.email_verified:
+                user.email_verified = True
+            db.commit()
+        else:
+            user = User(
+                id=str(uuid.uuid4()),
+                email=email,
+                password_hash=get_password_hash(secrets.token_urlsafe(32)),
+                name=name,
+                subscription_plan="free",
+                ai_messages_limit=3,
+                role="student",
+                google_id=google_sub,
+                email_verified=True,
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
 
     if not user.is_active:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account is deactivated")
@@ -329,7 +396,7 @@ def request_password_reset(payload: PasswordResetRequest, db: Session = Depends(
         user.reset_token = str(uuid.uuid4())
         user.reset_token_expires = _utcnow_naive() + timedelta(hours=1)
         db.commit()
-    return {"message": "If the email exists, a reset link was issued.", "reset_token": user.reset_token if user else None}
+    return {"message": "If the email exists, a reset link was issued."}
 
 
 @router.post("/reset-password")

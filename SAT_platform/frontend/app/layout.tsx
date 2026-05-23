@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter_Tight, Inter } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthContext";
+import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
 
 const interTight = Inter_Tight({ subsets: ["latin"], variable: "--font-inter-tight" });
@@ -20,10 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${interTight.variable} ${inter.variable} font-sans`}>
-        <AuthProvider>
+        <Providers>
           <Navbar />
           <main className="min-h-screen bg-[#FAFAF8] text-[#1A1A1A]">{children}</main>
-        </AuthProvider>
+        </Providers>
       </body>
     </html>
   );

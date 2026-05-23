@@ -191,6 +191,26 @@ def _figure_bbox_fractions(plumber_page) -> Optional[dict]:
     label_x1 = fig_x1
     LABEL_LINE_GAP = 25.0  # max vertical gap between figure and a label line
     LINE_TOL = 3.0         # words within this y-distance are on the same line
+
+    # Pick up small vector glyphs (vertex labels like P, Q, R rendered as curves)
+    # that sit immediately below the figure but were too small to be counted as
+    # figures themselves.  Tight 15pt gap — vertex labels are 1-8pt from figure
+    # edges; body-text math curves are 30+ pt away.
+    VERTEX_GAP = 15.0
+    for shape_attr in ("curves", "lines", "rects"):
+        for s in getattr(plumber_page, shape_attr, []):
+            if s["top"] <= HEADER_BOTTOM_Y:
+                continue
+            if s["top"] <= fig_y1:
+                continue
+            if s["top"] - fig_y1 > VERTEX_GAP:
+                continue
+            if s["x1"] < fig_x0 - 10 or s["x0"] > fig_x1 + 10:
+                continue
+            label_y_max = max(label_y_max, s["bottom"])
+            label_x0 = min(label_x0, s["x0"])
+            label_x1 = max(label_x1, s["x1"])
+
     # Group words below the figure into lines, then accept whole lines as labels.
     # A line is a "label" only if NO word on it begins at the left margin
     # (paragraph text starts at x0 < PARAGRAPH_X0_MAX).

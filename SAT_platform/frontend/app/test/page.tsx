@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Clock, BookOpen, Calculator, Play, AlertCircle } from "lucide-react";
+import { Clock, BookOpen, Calculator, Play, AlertCircle, Flag, ArrowLeftRight, BarChart3 } from "lucide-react";
 import api from "@/lib/api";
 
 type Question = {
@@ -93,15 +93,15 @@ export default function TestStartPage() {
                                     <span>Each module is timed independently. The clock counts down in the upper right.</span>
                                 </li>
                                 <li className="flex gap-3">
-                                    <Clock className="w-5 h-5 text-[#00592B] flex-shrink-0 mt-0.5" />
+                                    <Flag className="w-5 h-5 text-[#00592B] flex-shrink-0 mt-0.5" />
                                     <span>You can flag questions and navigate freely within a module before submitting.</span>
                                 </li>
                                 <li className="flex gap-3">
-                                    <Clock className="w-5 h-5 text-[#00592B] flex-shrink-0 mt-0.5" />
+                                    <ArrowLeftRight className="w-5 h-5 text-[#00592B] flex-shrink-0 mt-0.5" />
                                     <span>Once a module is submitted you cannot return to it.</span>
                                 </li>
                                 <li className="flex gap-3">
-                                    <Clock className="w-5 h-5 text-[#00592B] flex-shrink-0 mt-0.5" />
+                                    <BarChart3 className="w-5 h-5 text-[#00592B] flex-shrink-0 mt-0.5" />
                                     <span>Your section scores will display at the end (200–800 each, 400–1600 total).</span>
                                 </li>
                             </ul>
