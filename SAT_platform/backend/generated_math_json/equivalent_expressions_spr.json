@@ -1,0 +1,198 @@
+[
+  {
+    "question_id": "40c09d66",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "If $\\dfrac{\\sqrt{x^5}}{\\sqrt[3]{x^4}} = x^{\\frac{a}{b}}$ for all positive values of $x$, what is the value of $\\dfrac{a}{b}$?",
+    "options": [
+      "7/6, 1.166, 1.167"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is $\\dfrac{7}{6}$. The value of $\\dfrac{a}{b}$ can be found by first rewriting the left-hand side of the given equation as $\\dfrac{x^{\\frac{5}{2}}}{x^{\\frac{4}{3}}}$. Using the properties of exponents, this expression can be rewritten as $x^{\\left(\\frac{5}{2} - \\frac{4}{3}\\right)}$. This expression can be rewritten by subtracting the fractions in the exponent, which yields $x^{\\frac{7}{6}}$. Thus, $\\dfrac{a}{b}$ is $\\dfrac{7}{6}$. Note that 7/6, 1.166, and 1.167 are examples of ways to enter a correct answer.",
+    "image": null
+  },
+  {
+    "question_id": "b4a6ed81",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "The expression $90y^5 - 54y^4$ is equivalent to $ry^4(15y - 9)$, where $r$ is a constant. What is the value of $r$?",
+    "options": [
+      "6"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is 6. Applying the distributive property to the expression $ry^4(15y - 9)$ yields $15ry^5 - 9ry^4$. Since $90y^5 - 54y^4$ is equivalent to $ry^4(15y - 9)$, it follows that $90y^5 - 54y^4$ is also equivalent to $15ry^5 - 9ry^4$. Since these expressions are equivalent, it follows that corresponding coefficients are equivalent. Therefore, $90 = 15r$ and $-54 = -9r$. Solving either of these equations for $r$ will yield the value of $r$. Dividing both sides of $90 = 15r$ by 15 yields $6 = r$. Therefore, the value of $r$ is 6.",
+    "image": null
+  },
+  {
+    "question_id": "137cc6fd",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "$$\\sqrt{70n}\\left(\\sqrt{70n}\\right)^2$$\n\nFor what value of $x$ is the given expression equivalent to $(70n)^{30x}$, where $n > 1$?",
+    "options": [
+      ".0177, .0178, 4/225"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is $\\frac{4}{225}$. An expression of the form $\\sqrt[a]{a}$, where $k$ is an integer greater than 1 and $a \\geq 0$, is equivalent to $a^\\frac{1}{k}$. Therefore, the given expression, where $n > 1$, is equivalent to $(70n)^\\frac{1}{2}\\left((70n)^\\frac{1}{2}\\right)^2$. Applying properties of exponents, this expression can be rewritten as $(70n)^\\frac{1}{2}(70n)^{1 \\cdot 2}$, or $(70n)^\\frac{1}{2}(70n)^\\frac{1}{4}$, which can be rewritten as $(70n)^{\\frac{1}{2}+\\frac{1}{4}}$, or $(70n)^\\frac{3}{4}$. It's given that the expression $\\sqrt{70n}\\left(\\sqrt{70n}\\right)^2$ is equivalent to $(70n)^{30x}$, where $n > 1$. It follows that $(70n)^\\frac{3}{4}$ is equivalent to $(70n)^{30x}$. Therefore, $\\frac{3}{4} = 30x$. Dividing both sides of this equation by 30 yields $\\frac{3}{120} = x$, or $\\frac{4}{225} = x$. Thus, the value of $x$ for which the given expression is equivalent to $(70n)^{30x}$, where $n > 1$, is $\\frac{4}{225}$. Note that $4/225$, $.0177$, $.0178$, $0.017$, and $0.018$ are examples of ways to enter a correct answer.",
+    "image": null
+  },
+  {
+    "question_id": "ea6d05bb",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "The expression $(3x - 23)(19x + 6)$ is equivalent to the expression $ax^2 + bx + c$, where $a$, $b$, and $c$ are constants. What is the value of $b$?",
+    "options": [
+      "-419"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is $-419$. It's given that the expression $(3x - 23)(19x + 6)$ is equivalent to the expression $ax^2 + bx + c$, where $a$, $b$, and $c$ are constants. Applying the distributive property to the given expression, $(3x - 23)(19x + 6)$, yields $(3x)(19x) + (3x)(6) - (23)(19x) - (23)(6)$, which can be rewritten as $57x^2 + 18x - 437x - 138$. Combining like terms yields $57x^2 - 419x - 138$. Since this expression is equivalent to $ax^2 + bx + c$, it follows that the value of $b$ is $-419$.",
+    "image": null
+  },
+  {
+    "question_id": "5355c0ef",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "The given expression can be rewritten as $a(4x^2 + 7x + 13)$, where $a$ is a constant. What is the value of $a$?\n\n$$0.36x^2 + 0.63x + 1.17$$",
+    "options": [
+      ".09, 9/100"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is $.09$. It's given that the expression $0.36x^2 + 0.63x + 1.17$ can be rewritten as $a(4x^2 + 7x + 13)$. Applying the distributive property to the expression $a(4x^2 + 7x + 13)$ yields $4ax^2 + 7ax + 13a$. Therefore, $0.36x^2 + 0.63x + 1.17$ can be rewritten as $4ax^2 + 7ax + 13a$. It follows that in the expressions $0.36x^2 + 0.63x + 1.17$ and $4ax^2 + 7ax + 13a$, the coefficients of $x^2$ are equivalent, the coefficients of $x$ are equivalent, and the constant terms are equivalent. Therefore, $0.36 = 4a$, $0.63 = 7a$, and $1.17 = 13a$. Solving any of these equations for $a$ yields the value of $a$. Dividing both sides of the equation $0.36 = 4a$ by $4$ yields $0.09 = a$. Therefore, the value of $a$ is $0.09$. Note that $.09$ and $9/100$ are examples of ways to enter a correct answer.",
+    "image": null
+  },
+  {
+    "question_id": "565428e1",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "In the given equation, $p > 1$ and $t > 1$. If $t = p^{3n-1}$, where $n$ is a constant, what is the value of $n$?\n\n$$\\sqrt[3]{p^2} = t^\\frac{2}{9}$$",
+    "options": [
+      ".5061, .5062, 41/81"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is $\\frac{41}{81}$. An expression of the form $\\sqrt[n]{a^m}$, where $m$ and $n$ are integers greater than 1 and $a \\geq 0$, is equivalent to $a^\\frac{m}{n}$. Therefore, the expression on the left-hand side of the given equation is equivalent to $p^\\frac{2}{3}$; thus, $p^\\frac{2}{3} = t^\\frac{2}{9}$. If $t = p^{3n-1}$, then substituting $p^{3n-1}$ for $t$ in the equation yields $p^\\frac{2}{3} = \\left(p^{3n-1}\\right)^\\frac{2}{9}$. Multiplying each side of this equation by 21 yields $14 = 27(3n - 1)$. Distributing multiplication over subtraction yields $14 = 81n - 27$. Adding 27 to each side of this equation yields $41 = 81n$. Dividing each side of this equation by 81 yields $\\frac{41}{81} = n$. Therefore, if $t = p^{3n-1}$, where $n$ is a constant, the value of $n$ is $\\frac{41}{81}$. Note that $41/81$, $.5061$, $.5062$, and $0.506$ are examples of ways to enter a correct answer.",
+    "image": null
+  },
+  {
+    "question_id": "c6e85cd7",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "If $4^{8c} = \\sqrt[4]{4^7}$, what is the value of $c$?",
+    "options": [
+      ".2916, .2917, 7/24"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is $\\frac{7}{24}$. An expression of the form $\\sqrt[n]{a^m}$, where $m$ and $n$ are integers greater than $1$ and $a \\geq 0$, is equivalent to $a^\\frac{m}{n}$. Therefore, the expression on the right-hand side of the given equation, $\\sqrt[4]{4^7}$, is equivalent to $4^\\frac{7}{4}$. Thus, $4^{8c} = 4^\\frac{7}{4}$. It follows that $8c = \\frac{7}{4}$. Dividing both sides of this equation by $8$ yields $c = \\frac{7}{24}$. Note that $7/24$, $.2916$, $.2917$, $0.219$, and $0.292$ are examples of ways to enter a correct answer.",
+    "image": null
+  },
+  {
+    "question_id": "f237ccfc",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "The sum of $-2x^2 + x + 31$ and $3x^2 + 7x - 8$ can be written in the form $ax^2 + bx + c$, where $a$, $b$, and $c$ are constants. What is the value of $a + b + c$?",
+    "options": [
+      "32"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is 32. The sum of the given expressions is $(-2x^2 + x + 31) + (3x^2 + 7x - 8)$. Combining like terms yields $x^2 + 8x + 23$. Based on the form of the given equation, $a = 1$, $b = 8$, and $c = 23$. Therefore, $a + b + c = 32$.\n\nAlternate approach: Because $a + b + c$ is the value of $ax^2 + bx + c$ when $x = 1$, it is possible to first make that substitution into each polynomial before adding them. When $x = 1$, the first polynomial is equal to $-2 + 1 + 31 = 30$ and the second polynomial is equal to $3 + 7 - 8 = 2$. The sum of 30 and 2 is 32.",
+    "image": null
+  },
+  {
+    "question_id": "a391ed22",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$$\\left(\\frac{1}{2}x + \\frac{3}{2}\\right)\\left(\\frac{3}{2}x + \\frac{1}{2}\\right)$$\n\nThe expression above is equivalent to $ax^2 + bx + c$, where $a$, $b$, and $c$ are constants. What is the value of $b$?",
+    "options": [
+      "5/2, 2.5"
+    ],
+    "correct_answer": 0,
+    "explanation": "The expression $\\left(\\frac{1}{2}x + \\frac{3}{2}\\right)\\left(\\frac{3}{2}x + \\frac{1}{2}\\right)$ can be written in the form $ax^2 + bx + c$, where $a$, $b$, and $c$ are constants, by multiplying out the expression using the distributive property of multiplication over addition. The result is:\n\n$$\\left(\\frac{1}{2}\\right)\\left(\\frac{3}{2}\\right)x + \\left(\\frac{1}{2}\\right)\\left(\\frac{1}{2}\\right) + \\left(\\frac{3}{2}\\right)\\left(\\frac{3}{2}\\right)x + \\left(\\frac{3}{2}\\right)\\left(\\frac{1}{2}\\right)$$\n\nThis expression can be rewritten by multiplying as indicated to give:\n\n$$\\frac{3}{4}x^2 + \\frac{1}{4}x + \\frac{9}{4}x + \\frac{3}{4}$$\n\nwhich can be simplified to $\\frac{3}{4}x^2 + \\frac{10}{4}x + \\frac{3}{4}$, or $\\frac{3}{4}x^2 + \\frac{5}{2}x + \\frac{3}{4}$. This is in the form $ax^2 + bx + c$, where the value of $b$ is $\\frac{5}{2}$. Note that $5/2$ and $2.5$ are examples of ways to enter a correct answer.",
+    "image": null
+  },
+  {
+    "question_id": "42f8e4b4",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "One of the factors of $2x^3 + 42x^2 + 208x$ is $x + b$, where $b$ is a positive constant. What is the smallest possible value of $b$?",
+    "options": [
+      "8"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is 8. Since each term of the given expression, $2x^3 + 42x^2 + 208x$, has a factor of $2x$, the expression can be rewritten as $2x(x^2) + 2x(21x) + 2x(104)$, or $2x(x^2 + 21x + 104)$. Since the values 8 and 13 have a sum of 21 and a product of 104, the expression $x^2 + 21x + 104$ can be factored as $(x + 8)(x + 13)$. Therefore, the given expression can be factored as $2x(x + 8)(x + 13)$. It follows that the factors of the given expression are $2$, $x$, $x + 8$, and $x + 13$. Of these factors, only $x + 8$ and $x + 13$ are of the form $x + b$ where $b$ is a positive constant. Therefore, the possible values of $b$ are 8 and 13. Thus, the smallest possible value of $b$ is 8.",
+    "image": null
+  },
+  {
+    "question_id": "911c415b",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "$(7532 + 100y^2) + 10(10y^2 - 110)$\n\nThe expression above can be written in the form $ay^2 + b$, where $a$ and $b$ are constants. What is the value of $a + b$?",
+    "options": [
+      "6632"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is 6632. Applying the distributive property to the expression yields $(7532 + 100y^2) + (100y^2 - 1100)$. Then adding together $7532 + 100y^2$ and $100y^2 - 1100$ and collecting like terms results in $200y^2 + 6432$. This is written in the form $ay^2 + b$, where $a = 200$ and $b = 6432$. Therefore $a + b = 200 + 6432 = 6632$.",
+    "image": null
+  },
+  {
+    "question_id": "b74f2feb",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "The expression $6\\sqrt[3]{3^2x^{15}} \\cdot \\sqrt[2]{2^8x}$ is equivalent to $ax^b$, where $a$ and $b$ are positive constants and $x > 1$. What is the value of $a + b$?",
+    "options": [
+      "361/8, 45.12, 45.13"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is $\\frac{361}{8}$. The rational exponent property is $\\sqrt[n]{y^m} = y^{\\frac{m}{n}}$, where $y > 0$, $m$ and $n$ are integers, and $n > 0$. This property can be applied to rewrite the given expression $6\\sqrt[3]{3^2x^{15}} \\cdot \\sqrt[2]{2^8x}$ as $6\\left(3^{\\frac{2}{3}}\\right)\\left(x^{\\frac{15}{3}}\\right)\\left(2^{\\frac{8}{2}}\\right)\\left(x^{\\frac{1}{2}}\\right)$, or $6(3)\\left(x^5\\right)\\left(2^4\\right)\\left(x^{\\frac{1}{2}}\\right)$. This expression can be rewritten by multiplying the constants, which gives $36\\left(x^5\\right)\\left(x^{\\frac{1}{2}}\\right)$. The multiplication exponent property is $y^n \\cdot y^m = y^{n+m}$, where $y > 0$. This property can be applied to rewrite the expression $36\\left(x^5\\right)\\left(x^{\\frac{1}{2}}\\right)$ as $36x^{5+\\frac{1}{2}}$, or $36x^{\\frac{11}{2}}$. Therefore, $6\\sqrt[3]{3^2x^{15}} \\cdot \\sqrt[2]{2^8x} = 36x^{\\frac{11}{2}}$. It's given that $6\\sqrt[3]{3^2x^{15}} \\cdot \\sqrt[2]{2^8x}$ is equivalent to $ax^b$; therefore, $a = 36$ and $b = \\frac{11}{2}$. It follows that $a + b = 36 + \\frac{11}{2} = \\frac{72}{2} + \\frac{11}{2} = \\frac{288}{8} + \\frac{73}{8}$, or $a + b = \\frac{361}{8}$. Note that $361/8$, $45.12$, and $45.13$ are examples of ways to enter a correct answer.",
+    "image": null
+  },
+  {
+    "question_id": "16de54c7",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$$2x^2 + 5x - 12$$\n\nIf the given expression is rewritten in the form $(2x - 3)(x + k)$, where $k$ is a constant, what is the value of $k$?",
+    "options": [
+      "4"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is 4. It's given that $2x^2 + 5x - 12$ can be rewritten as $(2x - 3)(x + k)$; it follows that $(2x - 3)(x + k) = 2x^2 + 5x - 12$. Expanding the left-hand side of this equation yields $2x^2 + 2kx - 3x - 3k = 2x^2 + 5x - 12$.\n\nSubtracting $2x^2$ from both sides of this equation yields $2kx - 3x - 3k = 5x - 12$. Using properties of equality, $2kx - 3x = 5x$ and $-3k = -12$. Either equation can be solved for $k$. Dividing both sides of $-3k = -12$ by $-3$ yields $k = 4$. The equation $2kx - 3x = 5x$ can be rewritten as $x(2k - 3) = 5x$. It follows that $2k - 3 = 5$. Solving this equation for $k$ also yields $k = 4$. Therefore, the value of $k$ is 4.",
+    "image": null
+  },
+  {
+    "question_id": "1dd13816",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$(5x^3 - 3) - (-4x^3 + 8)$\n\nThe given expression is equivalent to $bx^3 - 11$, where $b$ is a constant. What is the value of $b$?",
+    "options": [
+      "9"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is 9. The given expression can be rewritten as $(5x^3 - 3) + (-1)(-4x^3 + 8)$. By applying the distributive property, this expression can be rewritten as $5x^3 - 3 + 4x^3 + (-8)$, which is equivalent to $(5x^3 + 4x^3) + (-3 + (-8))$. Adding like terms in this expression yields $9x^3 - 11$. Since it's given that $(5x^3 - 3) - (-4x^3 + 8)$ is equivalent to $bx^3 - 11$, it follows that $9x^3 - 11$ is equivalent to $bx^3 - 11$. Therefore, the coefficients of $x^3$ in these two expressions must be equivalent, and the value of $b$ must be 9.",
+    "image": null
+  }
+]

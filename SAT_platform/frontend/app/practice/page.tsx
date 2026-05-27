@@ -40,20 +40,41 @@ export default function QuestionBankPage() {
     const [questionIdSearch, setQuestionIdSearch] = useState("");
 
     useEffect(() => {
+        let cancelled = false;
+
         const fetchStats = async () => {
+            setLoading(true);
             try {
-                const response = await api.get<QuestionStatsResponse>("/api/questions/stats");
-                setStats(response.data);
+                const params = new URLSearchParams();
+                if (selectedDifficulties.length > 0) {
+                    params.set("difficulty", selectedDifficulties.join(","));
+                }
+
+                const queryString = params.toString();
+                const response = await api.get<QuestionStatsResponse>(
+                    `/api/questions/stats${queryString ? `?${queryString}` : ""}`
+                );
+                if (!cancelled) {
+                    setStats(response.data);
+                }
             } catch (error) {
                 console.error("Failed to load question stats", error);
-                setStats({ total_questions: 0, sections: [] });
+                if (!cancelled) {
+                    setStats({ total_questions: 0, sections: [] });
+                }
             } finally {
-                setLoading(false);
+                if (!cancelled) {
+                    setLoading(false);
+                }
             }
         };
 
-        fetchStats();
-    }, []);
+        void fetchStats();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [selectedDifficulties]);
 
     const sections = useMemo(() => {
         const map = new Map<string, SectionStats>();
@@ -68,12 +89,17 @@ export default function QuestionBankPage() {
     }, [stats]);
 
     function buildSessionUrl(params: { module: string; domain?: string; skill?: string }) {
+        const normalizedQuestionId = questionIdSearch.trim();
         const url = new URLSearchParams();
+        if (normalizedQuestionId) {
+            url.set("question_id", normalizedQuestionId);
+            return `/practice/session?${url.toString()}`;
+        }
+
         url.set("module", params.module);
         if (params.domain) url.set("domain", params.domain);
         if (params.skill) url.set("skill", params.skill);
         if (selectedDifficulties.length > 0) url.set("difficulty", selectedDifficulties.join(","));
-        if (questionIdSearch.trim()) url.set("question_id", questionIdSearch.trim());
         return `/practice/session?${url.toString()}`;
     }
 

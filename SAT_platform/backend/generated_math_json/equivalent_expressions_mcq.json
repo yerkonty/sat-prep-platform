@@ -1,0 +1,1583 @@
+[
+  {
+    "question_id": "f5c3e3b8",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $(m^4q^4z^{-1})(mq^5z^3)$, where $m$, $q$ and $z$ are positive?",
+    "options": [
+      "$m^4q^9z^{-3}$",
+      "$m^5q^9z^2$",
+      "$m^6q^8z^{-1}$",
+      "$m^{20}q^{12}z^{-2}$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Applying the commutative property of multiplication, the expression $(m^4q^4z^{-1})(mq^5z^3)$ can be rewritten as $(m^4m)(q^4q^5)(z^{-1}z^3)$. For positive values of $x$, $(x^a)(x^b) = x^{a+b}$. Therefore, the expression $(m^4m)(q^4q^5)(z^{-1}z^3)$ can be rewritten as $(m^{4+1})(q^{4+5})(z^{-1+3})$, or $m^5q^9z^2$.\n\nChoice A is incorrect and may result from multiplying, not adding, the exponents.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "72ebc024",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $16x^3y^2 + 14xy$?",
+    "options": [
+      "$2xy(8xy + 7)$",
+      "$2xy(8x^2y + 7)$",
+      "$14xy(2x^2y + 1)$",
+      "$14xy(8x^2y + 1)$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Since $2xy$ is a common factor of each term in the given expression, the expression can be rewritten as $2xy(8x^2y + 7)$.\n\nChoice A is incorrect. This expression is equivalent to $16x^2y^2 + 14xy$.\n\nChoice C is incorrect. This expression is equivalent to $28x^3y^2 + 14xy$.\n\nChoice D is incorrect. This expression is equivalent to $112x^3y^2 + 14xy$.",
+    "image": null
+  },
+  {
+    "question_id": "dd4ab4c4",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$$4a^2 + 20ab + 25b^2$$\n\nWhich of the following is a factor of the polynomial above?",
+    "options": [
+      "$a + b$",
+      "$2a + 5b$",
+      "$4a + 5b$",
+      "$4a + 25b$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The first and last terms of the polynomial are both squares such that $4a^2 = (2a)^2$ and $25b^2 = (5b)^2$. The second term is twice the product of the square root of the first and last terms: $20ab = 2(2a)(5b)$. Therefore, the polynomial is the square of a binomial such that $4a^2 + 20ab + 25b^2 = (2a + 5b)^2$, and $(2a + 5b)$ is a factor.\n\nChoice A is incorrect and may be the result of incorrectly factoring the polynomial. Choice C is incorrect and may be the result of dividing the second and third terms of the polynomial by their greatest common factor. Choice D is incorrect and may be the result of not factoring the coefficients.",
+    "image": null
+  },
+  {
+    "question_id": "b8caaf84",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "If $p = 3x + 4$ and $v = x + 5$, which of the following is equivalent to $pv - 2p + v$?",
+    "options": [
+      "$3x^2 + 12x + 7$",
+      "$3x^2 + 14x + 17$",
+      "$3x^2 + 19x + 20$",
+      "$3x^2 + 26x + 33$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. It's given that $p = 3x + 4$ and $v = x + 5$. Substituting the values for $p$ and $v$ into the expression $pv - 2p + v$ yields $(3x + 4)(x + 5) - 2(3x + 4) + x + 5$. Multiplying the terms $(3x + 4)(x + 5)$ yields $3x^2 + 4x + 15x + 20$. Using the distributive property to rewrite $-2(3x + 4)$ yields $-6x - 8$. Therefore, the entire expression can be represented as $3x^2 + 4x + 15x + 20 - 6x - 8 + x + 5$. Combining like terms yields $3x^2 + 14x + 17$.\n\nChoice A is incorrect and may result from subtracting, instead of adding, the term $x + 5$. Choice C is incorrect. This is the result of multiplying the terms $(3x + 4)(x + 5)$. Choice D is incorrect and may result from distributing $2$, instead of $-2$, to the term $3x + 4$.",
+    "image": null
+  },
+  {
+    "question_id": "e312081b",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "$(x+5)+(2x-3)$\n\nWhich of the following is equivalent to the given expression?",
+    "options": [
+      "$3x-2$",
+      "$3x+2$",
+      "$3x-8$",
+      "$3x+8$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Using the associative and commutative properties of addition, the given expression $(x+5)+(2x-3)$ can be rewritten as $(x+2x)+(5-3)$. Adding these like terms results in $3x+2$.\n\nChoice A is incorrect and may result from adding $(x-5)+(2x+3)$. Choice C is incorrect and may result from adding $(x-5)+(2x-3)$. Choice D is incorrect and may result from adding $(x+5)+(2x+3)$.",
+    "image": null
+  },
+  {
+    "question_id": "52931bfa",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which expression is equivalent to $\\frac{8x(x-7)-3(x-7)}{2x-14}$, where $x > 7$?",
+    "options": [
+      "$\\frac{x-7}{5}$",
+      "$\\frac{8x-3}{2}$",
+      "$\\frac{8x^2-3x-14}{2x-14}$",
+      "$\\frac{8x^2-3x-77}{2x-14}$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The given expression has a common factor of 2 in the denominator, so the expression can be rewritten as $\\frac{8x(x-7)-3(x-7)}{2(x-7)}$. The three terms in the numerator have a common factor of $(x-7)$. Since it's given that $x > 7$, $x$ can't be equal to 7. Therefore, each term in the expression $\\frac{8x(x-7)-3(x-7)}{2(x-7)}$ can be divided by $(x-7)$, which gives $\\frac{8x-3}{2}$. Choice A is incorrect and may result from conceptual or calculation errors. Choice C is incorrect and may result from conceptual or calculation errors. Choice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "075b29b0",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $(9x^3 + 5x + 7) + (6x^3 + 5x^2 - 5)$?",
+    "options": [
+      "$15x^6 + 5x^2 - 5x - 35$",
+      "$15x^3 + 10x^2 + 2$",
+      "$15x^6 + 5x^2 + 5x + 2$",
+      "$15x^3 + 5x^2 + 5x + 2$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. The given expression can be rewritten as $(9x^3 + 6x^3) + 5x^2 + 5x + (7 - 5)$. Combining like terms in this expression yields $15x^3 + 5x^2 + 5x + 2$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "ad2ec615",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which of the following is equivalent to the expression $x^4 - x^2 - 6$?",
+    "options": [
+      "$(x^2+1)(x^2-6)$",
+      "$(x^2+2)(x^2-3)$",
+      "$(x^2+3)(x^2-2)$",
+      "$(x^2+6)(x^2-1)$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The term $x^4$ can be factored as $(x^2)(x^2)$. Factoring $-6$ as $(2)(-3)$ yields values that add to $-1$, the coefficient of $x^2$ in the expression. Choices A, C, and D are incorrect and may result from finding factors of $-6$ that don't add to the coefficient of $x^2$ in the original expression.",
+    "image": null
+  },
+  {
+    "question_id": "42c71eb5",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which of the following is equivalent to the expression $(2x+5)^2-(x-2)+2(x+3)$?",
+    "options": [
+      "$4x^2+21x+33$",
+      "$4x^2+21x+29$",
+      "$4x^2+x+29$",
+      "$4x^2+x+33$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. The given expression can be rewritten as $(2x+5)^2+(-1)(x-2)+2(x+3)$. Applying the distributive property, the expression $(-1)(x-2)+2(x+3)$ can be rewritten as $-1(x)+(-1)(-2)+2(x)+2(3)$, or $-x+2+2x+6$. Adding like terms yields $x+8$. Substituting $x+8$ for $(-1)(x-2)+2(x+3)$ in the given expression yields $(2x+5)^2+x+8$. By the rules of exponents, the expression $(2x+5)^2$ is equivalent to $(2x+5)(2x+5)$. Applying the distributive property, this expression can be rewritten as $2x(2x)+2x(5)+5(2x)+5(5)$, or $4x^2+10x+10x+25$. Adding like terms gives $4x^2+20x+25$. Substituting $4x^2+20x+25$ for $(2x+5)^2$ in the rewritten expression yields $4x^2+20x+25+x+8$, and adding like terms yields $4x^2+21x+33$.\n\nChoices B, C, and D are incorrect. Choices C and D may result from rewriting the expression $(2x+5)^2$ as $4x^2+25$, instead of as $4x^2+20x+25$. Choices B and C may result from rewriting the expression $-(x-2)$ as $-x-2$, instead of $-x+2$.",
+    "image": null
+  },
+  {
+    "question_id": "371cbf6b",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "$(ax+3)(5x^2-bx+4)=20x^3-9x^2-2x+12$\n\nThe equation above is true for all $x$, where $a$ and $b$ are constants. What is the value of $ab$?",
+    "options": [
+      "18",
+      "20",
+      "24",
+      "40"
+    ],
+    "correct_answer": 2,
+    "explanation": "If the equation is true for all $x$, then the expressions on both sides of the equation will be equivalent. Multiplying the polynomials on the left-hand side of the equation gives $5ax^3 - abx^2 + 4ax + 15x^2 - 3bx + 12$. On the right-hand side of the equation, the only $x^2$-term is $-9x^2$. Since the expressions on both sides of the equation are equivalent, it follows that $-abx^2 + 15x^2 = -9x^2$, which can be rewritten as $(-ab + 15)x^2 = -9x^2$. Therefore, $-ab + 15 = -9$, which gives $ab = 24$.",
+    "image": null
+  },
+  {
+    "question_id": "a05bd3a4",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which of the following expressions is equivalent to $x^2 - 5$?",
+    "options": [
+      "$(x + \\sqrt{5})^2$",
+      "$(x - \\sqrt{5})^2$",
+      "$(x + \\sqrt{5})(x - \\sqrt{5})$",
+      "$(x + 5)(x - 1)$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. The expression can be written as a difference of squares $x^2 - y^2$, which can be factored as $(x + y)(x - y)$. Here, $y^2 = 5$, so $y = \\sqrt{5}$, and the expression therefore factors as $(x + \\sqrt{5})(x - \\sqrt{5})$.\n\nChoices A and B are incorrect and may result from misunderstanding how to factor a difference of squares. Choice D is incorrect; $(x + 5)(x - 1)$ can be rewritten as $x^2 + 4x - 5$, which is not equivalent to the original expression.",
+    "image": null
+  },
+  {
+    "question_id": "c3b116d7",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "Which of the following expressions is(are) a factor of $3x^2 + 20x - 63$?\n\nI. $x - 9$\n\nII. $3x - 7$",
+    "options": [
+      "I only",
+      "II only",
+      "I and II",
+      "Neither I nor II"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The given expression can be factored by first finding two values whose sum is 20 and whose product is $3(-63)$, or $-189$. Those two values are 27 and $-7$. It follows that the given expression can be rewritten as $3x^2 + 27x - 7x - 63$. Since the first two terms of this expression have a common factor of $3x$ and the last two terms of this expression have a common factor of $-7$, this expression can be rewritten as $3x(x + 9) - 7(x + 9)$. Since the two terms of this expression have a common factor of $(x + 9)$, it can be rewritten as $(3x - 7)(x + 9)$. Therefore, expression II, $3x - 7$, is a factor of $3x^2 + 20x - 63$, but expression I, $x - 9$, is not a factor of $3x^2 + 20x - 63$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "3206b905",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which of the following expressions is equivalent to $8x^{10} - 8x^9 + 88x$?",
+    "options": [
+      "$x(7x^{10} - 7x^9 + 87x)$",
+      "$x(8^{10} - 8^9 + 88)$",
+      "$8x(x^{10} - x^9 + 11x)$",
+      "$8x(x^9 - x^8 + 11)$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Since $8x$ is a common factor of each term in the given expression, the expression can be rewritten as $8x(x^9 - x^8 + 11)$.\n\nChoice A is incorrect. This expression is equivalent to $7x^{11} - 7x^{10} + 87x^2$.\n\nChoice B is incorrect. This expression is equivalent to $8^{10}x - 8^9x + 88x$.\n\nChoice C is incorrect. This expression is equivalent to $8x^{11} - 8x^{10} + 88x^2$.",
+    "image": null
+  },
+  {
+    "question_id": "34847f8a",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "$$\\frac{2}{x-2} + \\frac{3}{x+5} = \\frac{rx+t}{(x-2)(x+5)}$$\n\nThe equation above is true for all $x > 2$, where $r$ and $t$ are positive constants. What is the value of $rt$?",
+    "options": [
+      "$-20$",
+      "$15$",
+      "$20$",
+      "$60$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. To express the sum of the two rational expressions on the left-hand side of the equation as the single rational expression on the right-hand side of the equation, the expressions on the left-hand side must have the same denominator. Multiplying the first expression by $\\frac{x+5}{x+5}$ results in $\\frac{2(x+5)}{(x-2)(x+5)}$, and multiplying the second expression by $\\frac{x-2}{x-2}$ results in $\\frac{3(x-2)}{(x-2)(x+5)}$, so the given equation can be rewritten as $$\\frac{2(x+5)}{(x-2)(x+5)} + \\frac{3(x-2)}{(x-2)(x+5)} = \\frac{rx+t}{(x-2)(x+5)},$$ or $$\\frac{2x+10}{(x-2)(x+5)} + \\frac{3x-6}{(x-2)(x+5)} = \\frac{rx+t}{(x-2)(x+5)}.$$ Since the two rational expressions on the left-hand side of the equation have the same denominator as the rational expression on the right-hand side of the equation, it follows that $(2x+10)+(3x-6)=rx+t$. Combining like terms on the left-hand side yields $5x+4=rx+t$, so it follows that $r=5$ and $t=4$. Therefore, the value of $rt$ is $(5)(4)=20$.\n\nChoice A is incorrect and may result from an error when determining the sign of either $r$ or $t$. Choice B is incorrect and may result from not distributing the 2 and 3 to their respective terms in $\\frac{2(x+5)}{(x-2)(x+5)} + \\frac{3(x-2)}{(x-2)(x+5)} = \\frac{rx+t}{(x-2)(x+5)}$. Choice D is incorrect and may result from a calculation error.",
+    "image": null
+  },
+  {
+    "question_id": "253985c2",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $6x + 5x + 4y$?",
+    "options": [
+      "$15x$",
+      "$15y$",
+      "$11x + 4y$",
+      "$30x + 4y$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. In the given expression, $6x$ and $5x$ are like terms. Combining these like terms yields $11x$. It follows that the expression $6x + 5x + 4y$ is equivalent to $11x + 4y$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "cc776a04",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which of the following is an equivalent form of $(1.5x - 2.4)^2 - (5.2x^2 - 6.4)$?",
+    "options": [
+      "$-2.2x^2 + 1.6$",
+      "$-2.2x^2 + 11.2$",
+      "$-2.95x^2 - 7.2x + 12.16$",
+      "$-2.95x^2 - 7.2x + 0.64$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. The first expression $(1.5x - 2.4)^2$ can be rewritten as $(1.5x - 2.4)(1.5x - 2.4)$. Applying the distributive property to this product yields $(2.25x^2 - 3.6x - 3.6x + 5.76) - (5.2x^2 - 6.4)$. This difference can be rewritten as $(2.25x^2 - 3.6x - 3.6x + 5.76) + (-1)(5.2x^2 - 6.4)$. Distributing the factor of $-1$ through the second expression yields $2.25x^2 - 3.6x - 3.6x + 5.76 - 5.2x^2 + 6.4$. Regrouping like terms, the expression becomes $(2.25x^2 - 5.2x^2) + (-3.6x - 3.6x) + (5.76 + 6.4)$. Combining like terms yields $-2.95x^2 - 7.2x + 12.16$.\n\nChoices A, B, and D are incorrect and likely result from errors made when applying the distributive property or combining the resulting like terms.",
+    "image": null
+  },
+  {
+    "question_id": "4ac59df6",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $(8yz)(y)(7z)$?",
+    "options": [
+      "$56y^2z^2$",
+      "$56y^2z$",
+      "$56yz$",
+      "$16yz$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. The given expression can be rewritten as $(8 \\cdot 7)(y \\cdot y)(z \\cdot z)$, which is equivalent to $(56)(y^2)(z^2)$, or $56y^2z^2$.\n\nChoice B is incorrect. This expression is equivalent to $(8yz)(y)(7)$.\n\nChoice C is incorrect. This expression is equivalent to $(8z)(y)(7)$.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "70482e20",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $11x^3 - 5x^3y$?",
+    "options": [
+      "$16x^3$",
+      "$6x^3$",
+      "$6x^6$",
+      "$16x^6$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The given expression can be rewritten as $11x^3 + (-5)x^3$. Since the two terms of this expression are both constant multiples of $x^3$, they are like terms and can, therefore, be combined through addition. Adding like terms in the expression $11x^3 + (-5)x^3$ yields $6x^3$.\n\nChoice A is incorrect. This is equivalent to $11x^3 + 5x^3$, not $11x^3 - 5x^3$.\n\nChoice C is incorrect. This is equivalent to $11x^6 - 5x^6$, not $11x^3 - 5x^3$.\n\nChoice D is incorrect. This is equivalent to $11x^6 + 5x^6$, not $11x^3 - 5x^3$.",
+    "image": null
+  },
+  {
+    "question_id": "8452c42b",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $50x^2 + 5x^2y$?",
+    "options": [
+      "$250x^2$",
+      "$10x^2$",
+      "$45x^2$",
+      "$55x^2$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. The given expression shows addition of two like terms. Therefore, the given expression is equivalent to $(50 + 5)x^2$, or $55x^2$.\n\nChoice A is incorrect. This expression is equivalent to $(50)(5)x^2$, not $(50 + 5)x^2$.\n\nChoice B is incorrect. This expression is equivalent to $\\left(\\frac{50}{5}\\right)x^2$, not $(50 + 5)x^2$.\n\nChoice C is incorrect. This expression is equivalent to $(50 - 5)x^2$, not $(50 + 5)x^2$.",
+    "image": null
+  },
+  {
+    "question_id": "0536ad4f",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $20w - (4w + 3w)$?",
+    "options": [
+      "$10w$",
+      "$13w$",
+      "$19w$",
+      "$21w$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Combining like terms inside the parentheses of the given expression, $20w - (4w + 3w)$, yields $20w - (7w)$. Combining like terms in this resulting expression yields $13w$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "433184f1",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "Which expression is equivalent to $\\frac{4}{4z-5} - \\frac{1}{z+1}$?",
+    "options": [
+      "$\\frac{1}{(z+1)(4z-5)}$",
+      "$\\frac{3}{3z-6}$",
+      "$-\\frac{1}{(z+1)(4z-5)}$",
+      "$\\frac{9}{(z+1)(4z-5)}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. The expression $\\frac{4}{4z-5} - \\frac{1}{z+1}$ can be rewritten as $\\frac{4}{4z-5} + \\frac{(-1)}{z+1}$. To add the two terms of this expression, the terms can be rewritten with a common denominator. Since $\\frac{z+1}{z+1} = 1$, the expression $\\frac{4}{4z-5}$ can be rewritten as $\\frac{4(z+1)}{(4z-5)(z+1)}$. Since $\\frac{4z-5}{4z-5} = 1$, the expression $\\frac{(-1)}{z+1}$ can be rewritten as $\\frac{(-1)(4z-5)}{(z+1)(4z-5)}$. Therefore, the expression $\\frac{4}{4z-5} + \\frac{(-1)}{z+1}$ can be rewritten as $\\frac{4(z+1)}{(z+1)(4z-5)} + \\frac{(-1)(4z-5)}{(z+1)(4z-5)}$, which is equivalent to $\\frac{4(z+1)+(-1)(4z-5)}{(z+1)(4z-5)}$. Applying the distributive property to each term of the numerator yields $\\frac{4z+4-4z+5}{(z+1)(4z-5)} = \\frac{9}{(z+1)(4z-5)}$. Choice A is incorrect and may result from conceptual or calculation errors. Choice B is incorrect and may result from conceptual or calculation errors. Choice C is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "1d3fee25",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which of the following is equivalent to $3(x + 5) - 6$?",
+    "options": [
+      "$3x - 3$",
+      "$3x - 1$",
+      "$3x + 9$",
+      "$15x - 6$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Using the distributive property to multiply $3$ and $(x + 5)$ gives $3x + 15 - 6$, which can be rewritten as $3x + 9$. Choice A is incorrect and may result from rewriting the given expression as $3(x + 5 - 6)$. Choice B is incorrect and may result from incorrectly rewriting the expression as $(3x + 5) - 6$. Choice D is incorrect and may result from incorrectly rewriting the expression as $3(5x) - 6$.",
+    "image": null
+  },
+  {
+    "question_id": "d8789a4c",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "$$\\frac{x^2 - c}{x - b}$$\n\nIn the expression above, $b$ and $c$ are positive integers. If the expression is equivalent to $x + b$ and $x \neq b$, which of the following could be the value of $c$?",
+    "options": [
+      "4",
+      "6",
+      "8",
+      "10"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. If the given expression is equivalent to $x + b$, then $$\\frac{x^2 - c}{x - b} = x + b,$$ where $x$ is not equal to $b$. Multiplying both sides of this equation by $x - b$ yields $x^2 - c = (x + b)(x - b)$. Since the right-hand side of this equation is in factored form for the difference of squares, the value of $c$ must be a perfect square. Only choice A gives a perfect square for the value of $c$.\n\nChoices B, C, and D are incorrect. None of these values of $c$ produces a difference of squares. For example, when 6 is substituted for $c$ in the given expression, the result is $$\\frac{x^2 - 6}{x - b}.$$ The expression $x^2 - 6$ cannot be factored with integer values, and therefore $$\\frac{x^2 - 6}{x - b}$$ is not equivalent to $x + b$.",
+    "image": null
+  },
+  {
+    "question_id": "fde6f3bb",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "The functions $g$ and $h$ are defined by the equations shown. Which expression is equivalent to $g(x) \\cdot h(x)$?\n\n$$g(x) = \\frac{3}{5}x + \\frac{7}{6}$$\n\n$$h(x) = 6x - 5$$",
+    "options": [
+      "$\\frac{18x^2}{5} - \\frac{35}{6}$",
+      "$\\frac{18x^2}{5} + \\frac{27x}{11} - \\frac{35}{6}$",
+      "$\\frac{18x^2}{5} - 4x - \\frac{35}{6}$",
+      "$\\frac{18x^2}{5} + 4x - \\frac{35}{6}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. It's given that $g(x) = \\frac{3}{5}x + \\frac{7}{6}$ and $h(x) = 6x - 5$. Substituting $\\frac{3}{5}x + \\frac{7}{6}$ for $g(x)$ and $6x - 5$ for $h(x)$ in the expression $g(x) \\cdot h(x)$ yields $\\left(\\frac{3}{5}x + \\frac{7}{6}\\right)(6x - 5)$. This expression can be rewritten as $\\frac{3}{5}x(6x - 5) + \\frac{7}{6}(6x - 5)$, or $\\frac{18x^2}{5} - 3x + 7x - \\frac{35}{6}$, which is equivalent to $\\frac{18x^2}{5} + 4x - \\frac{35}{6}$.\n\nChoice A is incorrect. This expression is equivalent to $\\frac{3}{5}x(6x) + \\frac{7}{6}(-5)$, not $\\left(\\frac{3}{5}x + \\frac{7}{6}\\right)(6x - 5)$.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect. This expression is equivalent to $\\left(\\frac{3}{5}x - \\frac{7}{6}\\right)(6x + 5)$, not $\\left(\\frac{3}{5}x + \\frac{7}{6}\\right)(6x - 5)$.",
+    "image": null
+  },
+  {
+    "question_id": "a520ba07",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$$\\sqrt[3]{x^2 y^2}$$\n\nWhich of the following expressions is equivalent to the expression above?",
+    "options": [
+      "$y^2$",
+      "$xy^2$",
+      "$y^3$",
+      "$xy^3$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. One of the properties of radicals is $\\sqrt[n]{ab} = \\sqrt[n]{a} \\cdot \\sqrt[n]{b}$. Thus, the given expression can be rewritten as $\\sqrt[3]{x^3} \\cdot \\sqrt[3]{y^6}$.\n\nSimplifying by taking the cube root of each part gives $x^1 \\cdot y^2$, or $xy^2$.\n\nChoices A, C, and D are incorrect and may be the result of incorrect application of the properties of exponents and radicals.",
+    "image": null
+  },
+  {
+    "question_id": "5b6af6b1",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which expression is equivalent to $(d - 6)(8d^2 - 3)$?",
+    "options": [
+      "$8d^3 - 14d^2 - 3d + 18$",
+      "$8d^3 - 17d^2 + 48$",
+      "$8d^3 - 48d^2 - 3d + 18$",
+      "$8d^3 - 51d^2 + 48$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Applying the distributive property to the given expression yields $d(8d^2 - 3) - 6(8d^2 - 3)$. Applying the distributive property once more to this expression yields $(d)(8d^2) + (d)(-3) + (-6)(8d^2) + (-6)(-3)$, or $8d^3 + (-3d) + (-48d^2) + 18$. This expression can be rewritten as $8d^3 - 48d^2 - 3d + 18$. Thus, $(d - 6)(8d^2 - 3)$ is equivalent to $8d^3 - 48d^2 - 3d + 18$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "a255ae72",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "If $x^2 = a + b$ and $y^2 = a + c$, which of the following is equal to $(x^2 - y^2)^2$?",
+    "options": [
+      "$a^2 - 2ac + c^2$",
+      "$b^2 - 2bc + c^2$",
+      "$4a^2 - 4abc + c^2$",
+      "$4a^2 - 2abc + b^2c^2$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. It's given that $x^2 = a + b$ and $y^2 = a + c$. Using the distributive property, the expression $(x^2 - y^2)^2$ can be rewritten as $(x^2)^2 - 2x^2y^2 + (y^2)^2$. Substituting $a + b$ and $a + c$ for $x^2$ and $y^2$, respectively, in this expression yields $(a+b)^2 - 2((a+b)(a+c)) + (a+c)^2$. Expanding this expression yields $(a^2 + 2ab + b^2) - (2a^2 + 2bc + 2ac + 2ab) + (a^2 + 2ac + c^2)$. Combining like terms, this expression can be rewritten as $b^2 - 2bc + c^2$.",
+    "image": null
+  },
+  {
+    "question_id": "1e7a1deb",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "If $a = 4k + 5r$ and $b = 7k - 12r + 3$, which expression is equivalent to $a - b$?",
+    "options": [
+      "$-3k + 17r + 3$",
+      "$-3k + 17r - 3$",
+      "$-3k - 7r - 3$",
+      "$-3k - 7r + 3$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Substituting $4k + 5r$ for $a$ and $7k - 12r + 3$ for $b$ in the expression $a - b$ yields $(4k + 5r) - (7k - 12r + 3)$. This expression can be rewritten as $(4k + 5r) + (-1)(7k - 12r + 3)$. By applying the distributive property, this expression can be rewritten as $4k + 5r - 7k + 12r - 3$, which is equivalent to $(4k - 7k) + (5r + 12r) - 3$, or $-3k + 17r - 3$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "463eec13",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "If $x \neq 0$, which of the following expressions is equivalent to $\\dfrac{\\sqrt{16x^4y^8}}{x^3}$?",
+    "options": [
+      "$8x^2y^4$",
+      "$4xy^4$",
+      "$4x^{-2}y^2$",
+      "$4x^{-1}y^4$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Taking the square root of an exponential expression halves the exponent, so $\\dfrac{\\sqrt{16x^4y^8}}{x^3} = \\dfrac{4x^2y^4}{x^3}$, which further reduces to $\\dfrac{4y^4}{x}$. This can be rewritten as $4x^{-1}y^4$.\n\nChoice A is incorrect and may result from neglecting the denominator of the given expression and from incorrectly calculating the square root of 16. Choice B is incorrect and may result from rewriting $\\dfrac{1}{x}$ as $x^1$ rather than $x^{-1}$. Choice C is incorrect and may result from taking the square root of the variables in the numerator twice instead of once.",
+    "image": null
+  },
+  {
+    "question_id": "772de699",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $23x^3 + 2x^2 + 9x$?",
+    "options": [
+      "$23x(x^2 + 2x + 9)$",
+      "$9x(23x^3 + 2x^2 + 1)$",
+      "$x(23x^2 + 2x + 9)$",
+      "$34(x^3 + x^2 + x)$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Since $x$ is a common factor of each term in the given expression, the given expression can be rewritten as $x(23x^2 + 2x + 9)$.\n\nChoice A is incorrect. This expression is equivalent to $23x^3 + 46x^2 + 207x$.\n\nChoice B is incorrect. This expression is equivalent to $207x^4 + 18x^3 + 9x$.\n\nChoice D is incorrect. This expression is equivalent to $34x^3 + 34x^2 + 34x$.",
+    "image": null
+  },
+  {
+    "question_id": "02489d55",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $19(x^2 - 7)$?",
+    "options": [
+      "$19x^2 - 133$",
+      "$19x^2 - 26$",
+      "$19x^2 - 7$",
+      "$19x^2 + 12$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. The expression $19(x^2 - 7)$ can be rewritten as $19(x^2) - 19(7)$, which is equivalent to $19x^2 - 133$. Choice B is incorrect and may result from conceptual or calculation errors. Choice C is incorrect and may result from conceptual or calculation errors. Choice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "a1bf1c4e",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$$x^2 + 6x + 4$$\n\nWhich of the following is equivalent to the expression above?",
+    "options": [
+      "$(x + 3)^2 + 5$",
+      "$(x + 3)^2 - 5$",
+      "$(x - 3)^2 + 5$",
+      "$(x - 3)^2 - 5$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The given quadratic expression is in standard form, and each answer choice is in vertex form. Completing the square converts the expression as follows:\n\n$$x^2 + 6x + 4 = x^2 + 6x + 9 + 4 - 9$$\n\nThe first three terms of the revised expression can be rewritten as a perfect square as follows:\n\n$$x^2 + 6x + 9 + 4 - 9 = (x + 3)^2 + 4 - 9$$\n\nCombining the constant terms gives $(x + 3)^2 - 5$.\n\nChoice A is incorrect. Squaring the binomial and simplifying the expression in choice A gives $x^2 + 6x + 9 + 5$. Combining like terms gives $x^2 + 6x + 14$, not $x^2 + 6x + 4$. Choice C is incorrect. Squaring the binomial and simplifying the expression in choice C gives $x^2 - 6x + 9 + 5$. Combining like terms gives $x^2 - 6x + 14$, not $x^2 + 6x + 4$. Choice D is incorrect. Squaring the binomial and simplifying the expression in choice D gives $x^2 - 6x + 9 - 5$. Combining like terms gives $x^2 - 6x + 4$, not $x^2 + 6x + 4$.",
+    "image": null
+  },
+  {
+    "question_id": "c81b6c57",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "In the expression $3(2x^2 + px + 8) - 16x(p + 4)$, $p$ is a constant. This expression is equivalent to the expression $6x^2 - 155x + 24$. What is the value of $p$?",
+    "options": [
+      "$-3$",
+      "$7$",
+      "$13$",
+      "$155$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Using the distributive property, the first given expression can be rewritten as $6x^2 + 3px + 24 - 16px - 64x + 24$, and then rewritten as $6x^2 + (3p - 16p - 64)x + 24$. Since the expression $6x^2 + (3p - 16p - 64)x + 24$ is equivalent to $6x^2 - 155x + 24$, the coefficients of the $x$ terms in both expressions are equivalent to each other; thus $3p - 16p - 64 = -155$. Combining like terms gives $-13p - 64 = -155$. Adding 64 to both sides of the equation gives $-13p = -71$. Dividing both sides of the equation by $-13$ yields $p = 7$.\n\nChoice A is incorrect. If $p = -3$, then the first expression would be equivalent to $6x^2 - 25x + 24$. Choice C is incorrect. If $p = 13$, then the first expression would be equivalent to $6x^2 - 233x + 24$. Choice D is incorrect. If $p = 155$, then the first expression would be equivalent to $6x^2 - 2,079x + 24$.",
+    "image": null
+  },
+  {
+    "question_id": "6d04c89d",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "The expression $\\frac{24}{6x+42}$ is equivalent to $\\frac{4}{x+b}$, where $b$ is a constant and $x > 0$. What is the value of $b$?",
+    "options": [
+      "7",
+      "10",
+      "24",
+      "252"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. Since the given expressions are equivalent and the numerator of the second expression is $\\frac{1}{6}$ of the numerator of the first expression, the denominator of the second expression must also be $\\frac{1}{6}$ of the denominator of the first expression. By the distributive property, $\\frac{1}{6}(6x + 42)$ is equivalent to $\\frac{1}{6}(6x) + \\frac{1}{6}(42)$, or $x + 7$. Therefore, the value of $b$ is $7$.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "e51bf5b1",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "Which of the following expressions has a factor of $x + 2b$, where $b$ is a positive integer constant?",
+    "options": [
+      "$3x^2 + 7x + 14b$",
+      "$3x^2 + 28x + 14b$",
+      "$3x^2 + 42x + 14b$",
+      "$3x^2 + 49x + 14b$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Since each choice has a term of $3x^2$, which can be written as $(3x)(x)$, and each choice has a term of $14b$, which can be written as $(7)(2b)$, the expression that has a factor of $x + 2b$ can be represented as $(3x + 7)(x + 2b)$. Using the distributive property of multiplication, this expression is equivalent to $3x(x + 2b) + 7(x + 2b), or $3x^2 + 6bx + 7x + 14b$. Combining the $x$-terms in this expression yields $3x^2 + (7 + 6b)x + 14b$. It follows that the coefficient of the $x$-term is equal to $7 + 6b$. Thus, from the given choices, $7 + 6b$ must be equal to $7, 28, 42,$ or $49$. Therefore, $6b$ must be equal to $0, 21, 35,$ or $42$, respectively, and $b$ must be equal to $0, \\frac{7}{2}, \\frac{35}{6},$ or $\\frac{7}{1}$, respectively. Of these four values of $b$, only $\\frac{42}{6} = 7$, is a positive integer. It follows that $7 + 6b$ must be equal to $49$ because this is the only choice for which the value of $b$ is a positive integer constant. Therefore, the expression that has a factor of $x + 2b$ is $3x^2 + 49x + 14b$.\n\nChoice A is incorrect. If this expression has a factor of $x + 2b$, then the value of $b$ is $0$, which isn't positive.\n\nChoice B is incorrect. If this expression has a factor of $x + 2b$, then the value of $b$ is $\\frac{21}{6}$, which isn't an integer.\n\nChoice C is incorrect. If this expression has a factor of $x + 2b$, then the value of $b$ is $\\frac{35}{6}$, which isn't an integer.",
+    "image": null
+  },
+  {
+    "question_id": "60fdb4d4",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $(2x^2 - 4) - (-3x^2 + 2x - 7)$?",
+    "options": [
+      "$5x^2 - 2x + 3$",
+      "$5x^2 + 2x - 3$",
+      "$-x^2 - 2x - 11$",
+      "$-x^2 + 2x - 11$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. The given expression $(2x^2 - 4) - (-3x^2 + 2x - 7)$ can be rewritten as $2x^2 - 4 + 3x^2 - 2x + 7$. Combining like terms yields $5x^2 - 2x + 3$. Choices B, C, and D are incorrect and may be the result of errors when applying the distributive property.",
+    "image": null
+  },
+  {
+    "question_id": "967ef685",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "Which expression is equivalent to $\\frac{42a}{k} + 42ak$, where $k > 0$?",
+    "options": [
+      "$\\frac{84a}{k}$",
+      "$\\frac{84ak^2}{k}$",
+      "$\\frac{42a(k+1)}{k}$",
+      "$\\frac{42a(k^2+1)}{k}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Two fractions can be added together when they have a common denominator. Since $k > 0$, multiplying the second term in the given expression by $\\frac{k}{k}$ yields $42ak \\cdot \\frac{k}{k}$, which is equivalent to $\\frac{42ak^2}{k}$. Therefore, the expression $\\frac{42a}{k} + 42ak$ can be written as $\\frac{42a}{k} + \\frac{42ak^2}{k}$, which is equivalent to $\\frac{42a+42ak^2}{k}$. Since each term in the numerator of this expression is a factor of $42a$, the expression $\\frac{42a+42ak^2}{k}$ can be rewritten as $\\frac{42a(1+k^2)}{k}$, or $\\frac{42a(k^2+1)}{k}$, which is equivalent to $\\frac{42a(k^2+1)}{k}$.\n\nChoice A is incorrect. This expression is equivalent to $\\frac{42a}{k} + \\frac{42a}{k}$.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect. This expression is equivalent to $\\frac{42a}{k} + 42a$.",
+    "image": null
+  },
+  {
+    "question_id": "2c88af4d",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "The expression $\\frac{x^{-2}y^{\\frac{1}{2}}}{x^{\\frac{1}{3}}y^{-1}}$, where $x > 1$ and $y > 1$, is equivalent to which of the following?",
+    "options": [
+      "$\\frac{\\sqrt{y}}{\\sqrt[3]{x^2}}$",
+      "$\\frac{y\\sqrt{y}}{\\sqrt[3]{x^2}}$",
+      "$\\frac{y\\sqrt{y}}{x\\sqrt{x}}$",
+      "$\\frac{y\\sqrt{y}}{x^2\\sqrt[3]{x}}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. For $x > 1$ and $y > 1$, $x^{-\\frac{1}{3}}$ and $y^{\\frac{1}{2}}$ are equivalent to $\\sqrt[3]{x}$ and $\\sqrt{y}$, respectively. Also, $x^{-2}$ and $y^{-1}$ are equivalent to $\\frac{1}{x^2}$ and $\\frac{1}{y}$, respectively. Therefore, the given expression can be rewritten as $\\frac{y\\sqrt{y}}{x^2\\sqrt[3]{x}}$.\n\nChoices A, B, and C are incorrect because these choices are not equivalent to the given expression for $x > 1$ and $y > 1$.\n\nFor example, for $x = 2$ and $y = 2$, the value of the given expression is $2^{-\\frac{5}{6}}$; the values of the choices, however, are $2^{-\\frac{1}{3}}$, $2^{\\frac{5}{6}}$, and $1$, respectively.",
+    "image": null
+  },
+  {
+    "question_id": "ffdbcad4",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "The expression $4x^2 + bx - 45$, where $b$ is a constant, can be rewritten as $(hx + k)(x + j)$, where $h$, $k$, and $j$ are integer constants. Which of the following must be an integer?",
+    "options": [
+      "$\\frac{b}{h}$",
+      "$\\frac{b}{k}$",
+      "$\\frac{45}{k}$",
+      "$\\frac{45}{k}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. It's given that $4x^2 + bx - 45$ can be rewritten as $(hx + k)(x + j)$. The expression $(hx + k)(x + j)$ can be rewritten as $hx^2 + jhx + kx + kj$, or $hx^2 + (jh + k)x + kj$. Therefore, $hx^2 + (jh + k)x + kj$ is equivalent to $4x^2 + bx - 45$. It follows that $kj = -45$. Dividing each side of this equation by $k$ yields $j = -\\frac{45}{k}$. Since $j$ is an integer, $-\\frac{45}{k}$ must be an integer. Therefore, $\\frac{45}{k}$ must also be an integer.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "4a5af623",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is a factor of $2x^2 + 38x + 10$?",
+    "options": [
+      "2",
+      "5x",
+      "38x",
+      "2x^2"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. Since 2 is a common factor of each of the terms in the given expression, the expression can be rewritten as $2(x^2 + 19x + 5)$. Therefore, the factors of the given expression are 2 and $x^2 + 19x + 5$. Of these two factors, only 2 is listed as a choice.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect. This is a term of the given expression, not a factor of the given expression.\n\nChoice D is incorrect. This is a term of the given expression, not a factor of the given expression.",
+    "image": null
+  },
+  {
+    "question_id": "22fd3e1f",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "Given $f(x) = x^3 - 9x$ and $g(x) = x^2 - 2x - 3$, which of the following expressions is equivalent to $\\frac{f(x)}{g(x)}$ for $x > 3$?",
+    "options": [
+      "$\\frac{1}{x+1}$",
+      "$\\frac{x+3}{x+1}$",
+      "$\\frac{x(x-3)}{x+1}$",
+      "$\\frac{x(x+3)}{x+1}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Since $x^3 - 9x = x(x+3)(x-3)$ and $x^2 - 2x - 3 = (x+1)(x-3)$, the fraction $\\frac{f(x)}{g(x)}$ can be written as $\\frac{x(x+3)(x-3)}{(x+1)(x-3)}$. It is given that $x > 3$, so the common factor $x - 3$ is not equal to $0$. Therefore, the fraction can be further simplified to $\\frac{x(x+3)}{x+1}$.\n\nChoice A is incorrect. The expression $\\frac{1}{x+1}$ is not equivalent to $\\frac{f(x)}{g(x)}$ because at $x = 0$, $\\frac{1}{x+1}$ as a value of $1$ and $\\frac{f(x)}{g(x)}$ has a value of $0$.\n\nChoice B is incorrect and results from omitting the factor $x$ in the factorization of $f(x)$. Choice C is incorrect and may result from incorrectly factoring $g(x)$ as $(x+1)(x+3)$ instead of $(x+1)(x-3)$.",
+    "image": null
+  },
+  {
+    "question_id": "a0b4103e",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "The expression $\\frac{1}{3}x^2 - 2$ can be rewritten as $\\frac{1}{3}(x-k)(x+k)$, where $k$ is a positive constant. What is the value of $k$?",
+    "options": [
+      "2",
+      "6",
+      "$\\sqrt{2}$",
+      "$\\sqrt{6}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Factoring out the coefficient $\\frac{1}{3}$, the given expression can be rewritten as $\\frac{1}{3}(x^2 - 6)$. The expression $x^2 - 6$ can be approached as a difference of squares and rewritten as $(x - \\sqrt{6})(x + \\sqrt{6})$. Therefore, $k$ must be $\\sqrt{6}$.\n\nChoice A is incorrect. If $k$ were 2, then the expression given would be rewritten as $\\frac{1}{3}(x-2)(x+2)$, which is equivalent to $\\frac{1}{3}x^2 - \\frac{4}{3}$, not $\\frac{1}{3}x^2 - 2$.\n\nChoice B is incorrect. This may result from incorrectly factoring the expression and finding $(x - 6)(x + 6)$ as the factored form of the expression. Choice C is incorrect. This may result from incorrectly distributing the $\\frac{1}{3}$ and rewriting the expression as $\\frac{1}{3}(x^2 - 2)$.",
+    "image": null
+  },
+  {
+    "question_id": "49efde89",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "The expression $2x^2 + ax$ is equivalent to $x(2x + 7)$ for some constant $a$. What is the value of $a$?",
+    "options": [
+      "2",
+      "3",
+      "4",
+      "7"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. It's given that $2x^2 + ax$ is equivalent to $x(2x + 7)$ for some constant $a$. Distributing the $x$ over each term in the parentheses gives $2x^2 + 7x$, which is in the same form as the first given expression, $2x^2 + ax$. The coefficient of the second term in $2x^2 + 7x$ is $7$. Therefore, the value of $a$ is $7$.\n\nChoice A is incorrect. If the value of $a$ were $2$, then $2x^2 + ax$ would be equivalent to $2x^2 + 2x$, which isn't equivalent to $x(2x + 7)$. Choice B is incorrect. If the value of $a$ were $3$, then $2x^2 + ax$ would be equivalent to $2x^2 + 3x$, which isn't equivalent to $x(2x + 7)$. Choice C is incorrect. If the value of $a$ were $4$, then $2x^2 + ax$ would be equivalent to $2x^2 + 4x$, which isn't equivalent to $x(2x + 7)$.",
+    "image": null
+  },
+  {
+    "question_id": "5805e747",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which expression is equivalent to $(7x^3 + 7x) - (6x^3 - 3x)$?",
+    "options": [
+      "$x^3 + 10x$",
+      "$-13x^3 + 10x$",
+      "$-13x^3 + 4x$",
+      "$x^3 + 4x$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. Applying the distributive property, the given expression can be written as $7x^3 + 7x - 6x^3 + 3x$. Grouping like terms in this expression yields $(7x^3 - 6x^3) + (7x + 3x)$. Combining like terms in this expression yields $x^3 + 10x$. Choice B is incorrect and may result from conceptual or calculation errors. Choice C is incorrect and may result from conceptual or calculation errors. Choice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "8f82ad81",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $4(x^2 + 6)$?",
+    "options": [
+      "$4x^2 + 24$",
+      "$4x^2 + 10$",
+      "$4x^2 + 6$",
+      "$4x^2 - 2$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. The expression $4(x^2 + 6)$ can be rewritten as $4(x^2) + 4(6)$, which is equivalent to $4x^2 + 24$.\n\nChoice B is incorrect. This expression is equivalent to $4\\left(x^2 + \\frac{5}{2}\\right)$, not $4(x^2 + 6)$.\n\nChoice C is incorrect. This expression is equivalent to $4\\left(x^2 + \\frac{3}{2}\\right)$, not $4(x^2 + 6)$.\n\nChoice D is incorrect. This expression is equivalent to $4\\left(x^2 - \\frac{1}{2}\\right)$, not $4(x^2 + 6)$.",
+    "image": null
+  },
+  {
+    "question_id": "26eb61c1",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which expression is equivalent to $6x^8y^2 + 12x^2y^9$?",
+    "options": [
+      "$6x^2y^2(2x^6)$",
+      "$6x^2y^2(x^4)$",
+      "$6x^2y^2(x^6 + 2)$",
+      "$6x^2y^2(x^4 + 2)$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Since each term of the given expression has a common factor of $6x^2y^2$, it may be rewritten as $6x^2y^2(x^6) + 6x^2y^2(2)$, or $6x^2y^2(x^6 + 2)$.\n\nChoice A is incorrect. This expression is equivalent to $12x^8y^2$, not $6x^8y^2 + 12x^2y^2$.\n\nChoice B is incorrect. This expression is equivalent to $6x^6y^2$, not $6x^8y^2 + 12x^2y^2$.\n\nChoice D is incorrect. This expression is equivalent to $6x^6y^2 + 12x^2y^2$, not $6x^8y^2 + 12x^2y^2$.",
+    "image": null
+  },
+  {
+    "question_id": "9ed9f54d",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which of the following is equivalent to $2(x^2 - x) + 3(x^2 - x)$?",
+    "options": [
+      "$5x^2 - 5x$",
+      "$5x^2 + 5x$",
+      "$5x$",
+      "$5x^2$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. Since $(x^2 - x)$ is a common term in the original expression, like terms can be added: $2(x^2 - x) + 3(x^2 - x) = 5(x^2 - x)$. Distributing the constant term $5$ yields $5x^2 - 5x$.\n\nChoice B is incorrect and may result from not distributing the negative signs in the expressions within the parentheses. Choice C is incorrect and may result from not distributing the negative signs in the expressions within the parentheses and from incorrectly eliminating the $x^2$-term.\n\nChoice D is incorrect and may result from incorrectly eliminating the $x$-term.",
+    "image": null
+  },
+  {
+    "question_id": "18c7c3e0",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $13x^2 - 7x^2$?",
+    "options": [
+      "$-91x^2$",
+      "$6x^2$",
+      "$20x^2$",
+      "$40x^2$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Since each term in the given expression has a common factor of $x^2$, it can be rewritten as $(13-7)x^2$, or $6x^2$. Therefore, the expression $6x^2$ is equivalent to $13x^2 - 7x^2$.\n\nAlternate approach: Since the two terms of the given expression are both constant multiples of $x^2$, they are like terms and can, therefore, be combined through subtraction. Subtracting like terms in the expression $13x^2 - 7x^2$ yields $6x^2$.\n\nChoice A is incorrect. This expression is equivalent to $(13x)(-7x)$, not $13x^2 - 7x^2$.\n\nChoice C is incorrect. This expression is equivalent to $13x^2 + 7x^2$, not $13x^2 - 7x^2$.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "42f19012",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which expression is equivalent to $a^{\\frac{11}{12}}$, where $a > 0$?",
+    "options": [
+      "$\\sqrt{a^{132}}$",
+      "$\\sqrt[12]{a^{132}}$",
+      "$\\sqrt[11]{a^{132}}$",
+      "$\\sqrt{a^{132}}$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Since $\\frac{12}{12} = 1$, multiplying the exponent of the given expression by $\\frac{12}{12}$ yields an equivalent expression: $a^{\\left(\\frac{11}{12}\\right)\\left(\\frac{12}{12}\\right)} = a^{\\frac{132}{144}}$. Since $\\frac{132}{144} = 132\\left(\\frac{1}{144}\\right)$, the expression $a^{\\frac{132}{144}}$ can be rewritten as $a^{132\\left(\\frac{1}{12}\\right)}$. Applying properties of exponents, this expression can be rewritten as $\\left(a^{132}\\right)^{\\frac{1}{12}}$. An expression of the form $(m)^{\\frac{1}{k}}$, where $m > 0$ and $k > 0$, is equivalent to $\\sqrt[k]{m}$. Therefore, $\\left(a^{132}\\right)^{\\frac{1}{12}}$ is equivalent to $\\sqrt[12]{a^{132}}$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "294db8ec",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which of the following is equivalent to $2x^3 + 4$?",
+    "options": [
+      "$4(x^3 + 4)$",
+      "$4(x^3 + 2)$",
+      "$2(x^3 + 4)$",
+      "$2(x^3 + 2)$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. The expression $2x^3 + 4$ has two terms, $2x^3$ and $4$. The greatest common factor of these two terms is $2$. Factoring $2$ from each of these terms yields $2(x^3) + 2(2)$, or $2(x^3 + 2)$. Choices A and B are incorrect because $4$ is not a factor of the term $2x^3$. Choice C is incorrect and may result from factoring $2$ from $2x^3$ but not from $4$.",
+    "image": null
+  },
+  {
+    "question_id": "1be909aa",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which expression is equivalent to $\\frac{h^{13}q^7}{h^{5}q^{21}}$, where $h > 0$ and $q > 0$?",
+    "options": [
+      "$\\frac{h^{10}}{q^{14}}$",
+      "$\\frac{h^3}{q^3}$",
+      "$h^{10}q^{14}$",
+      "$h^3q^3$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. For positive values of $a$, $\\frac{a^m}{a^n} = a^{(m-n)}$, where $m$ and $n$ are integers. Since it's given that $h > 0$ and $q > 0$, this property can be applied to rewrite the given expression as $\\left(h^{(15-5)}\\right)\\left(q^{(7-21)}\\right)$, which is equivalent to $h^{10}q^{-14}$. For positive values of $a$, $a^{-n} = \\frac{1}{a^n}$. This property can be applied to rewrite the expression $h^{10}q^{-14}$ as $\\left(h^{10}\\right)\\left(\\frac{1}{q^{14}}\\right)$, which is equivalent to $\\frac{h^{10}}{q^{14}}$.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "bdb0aa23",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $5x^5 - 6x^4 + 8x^3$?",
+    "options": [
+      "$x^4(5x - 6)$",
+      "$x^3(5x^2 - 6x + 8)$",
+      "$8x^3(5x^2 - 6x + 1)$",
+      "$6x^5(-6x^4 + 8x^3 + 1)$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Since $x^3$ is a common factor of each term in the given expression, the expression can be rewritten as $x^3(5x^2 - 6x + 8)$.\n\nChoice A is incorrect. This expression is equivalent to $5x^5 - 6x^4$.\n\nChoice C is incorrect. This expression is equivalent to $40x^5 - 48x^4 + 8x^3$.\n\nChoice D is incorrect. This expression is equivalent to $-36x^9 + 48x^8 + 6x^5$.",
+    "image": null
+  },
+  {
+    "question_id": "beb86a0c",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $9x^2 + 5x$?",
+    "options": [
+      "$x(9x + 5)$",
+      "$5x(9x + 1)$",
+      "$9x(x + 5)$",
+      "$x^2(9x + 5)$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. Since $x$ is a factor of each term in the given expression, the expression is equivalent to $x(9x) + x(5)$, or $x(9x + 5)$.\n\nChoice B is incorrect. This expression is equivalent to $45x^2 + 5x$, not $9x^2 + 5x$.\n\nChoice C is incorrect. This expression is equivalent to $9x^2 + 45x$, not $9x^2 + 5x$.\n\nChoice D is incorrect. This expression is equivalent to $9x^3 + 5x^2$, not $9x^2 + 5x$.",
+    "image": null
+  },
+  {
+    "question_id": "6e06a0a7",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which of the following expressions is equivalent to $2a^2(a+3)$?",
+    "options": [
+      "$5a^3$",
+      "$8a^5$",
+      "$2a^3+3$",
+      "$2a^3+6a^2$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Expanding the given expression using the distributive property yields $2a^2(a)+2a^2(3)$. Combining like terms yields $2a^2(a^1)+2(3)(a^2)$, or $2a^{2+1}+6a^2$, which is equivalent to $2a^3+6a^2$. Choices A and B are incorrect and may result from incorrectly combining like terms. Choice C is incorrect and may result from distributing $2a^2$ only to $a$, and not to $3$, in the given expression.",
+    "image": null
+  },
+  {
+    "question_id": "ad038c19",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "Which of the following is equivalent to $\\left(a + \\frac{b}{2}\\right)^2$?",
+    "options": [
+      "$a^2 + \\frac{b^2}{2}$",
+      "$a^2 + \\frac{b^2}{4}$",
+      "$a^2 + \\frac{ab}{2} + \\frac{b^2}{2}$",
+      "$a^2 + ab + \\frac{b^2}{4}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. The expression $\\left(a + \\frac{b}{2}\\right)^2$ can be rewritten as $\\left(a + \\frac{b}{2}\\right)\\left(a + \\frac{b}{2}\\right)$. Using the distributive property, the expression yields $\\left(a + \\frac{b}{2}\\right)\\left(a + \\frac{b}{2}\\right) = a^2 + \\frac{ab}{2} + \\frac{ab}{2} + \\frac{b^2}{4}$. Combining like terms gives $a^2 + ab + \\frac{b^2}{4}$. Choices A, B, and C are incorrect and may result from errors using the distributive property on the given expression or combining like terms.",
+    "image": null
+  },
+  {
+    "question_id": "290cdc2c",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $(x)^{\\frac{1}{14}}$, where $x > 0$?",
+    "options": [
+      "$\\frac{1}{14} \\cdot x$",
+      "$\\sqrt[14]{x}$",
+      "$14 \\cdot x$",
+      "$(x)^{14}$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. An expression in the form $x^{\\frac{1}{k}}$, where $x > 0$ and $k > 0$, is equivalent to $\\sqrt[k]{x}$. It follows that $x^{\\frac{1}{14}}$, where $x > 0$, is equivalent to $\\sqrt[14]{x}$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "499cb491",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $5x^2 - 50xy^2$?",
+    "options": [
+      "$5x(x - 10y^2)$",
+      "$5x(x - 50y^2)$",
+      "$5x^2(10xy^2)$",
+      "$5x^2(50xy^2)$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. Since each term of the given expression has a factor of $5x$, it can be rewritten as $5x(x) - 5x(10y^2)$, or $5x(x - 10y^2)$.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "482a445b",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which expression is equivalent to $(x^2 + 11)^2 + (x - 5)(x + 5)$?",
+    "options": [
+      "$x^4 + 23x^2 - 14$",
+      "$x^4 + 23x^2 + 96$",
+      "$x^4 + 12x^2 + 121$",
+      "$x^4 + x^2 + 146$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The expression $(x^2 + 11)^2$ can be written as $(x^2 + 11)(x^2 + 11)$, which is equivalent to $x^2(x^2 + 11) + 11(x^2 + 11)$. Distributing $x^2$ and $11$ to $(x^2 + 11)$ yields $x^4 + 11x^2 + 11x^2 + 121$, or $x^4 + 22x^2 + 121$. The expression $(x - 5)(x + 5)$ is equivalent to $(x - 5)x + (x - 5) \\cdot 5 = x^2 - 5x + 5x - 25$, or $x^2 - 25$. Therefore, the expression $(x^2 + 11)^2 + (x - 5)(x + 5)$ is equivalent to $(x^4 + 22x^2 + 121) + (x^2 - 25)$, or $x^4 + 22x^2 + 121 + x^2 - 25$. Combining like terms in this expression yields $x^4 + 23x^2 + 96$.\n\nChoice A is incorrect. Equivalent expressions must be equivalent for any value of $x$. Substituting $0$ for $x$ in this expression yields $-14$, whereas substituting $0$ for $x$ in the given expression yields $96$.\n\nChoice C is incorrect. Equivalent expressions must be equivalent for any value of $x$. Substituting $0$ for $x$ in this expression yields $121$, whereas substituting $0$ for $x$ in the given expression yields $96$.\n\nChoice D is incorrect. Equivalent expressions must be equivalent for any value of $x$. Substituting $0$ for $x$ in this expression yields $146$, whereas substituting $0$ for $x$ in the given expression yields $96$.",
+    "image": null
+  },
+  {
+    "question_id": "20291f47",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "Which expression is equivalent to $\\frac{y+12}{z-8} + \\frac{y(z-8)}{z^2y-8zy}$?",
+    "options": [
+      "$\\frac{zy+y+4}{z^2y-16z^2y+64zy}$",
+      "$\\frac{zy+9y+12}{z^2y-8zy+z-8}$",
+      "$\\frac{zy^2+13zy-8y}{z^2y-8zy}$",
+      "$\\frac{zy^2+13zy-8y}{z^2y-16z^2y+64zy}$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Factoring the denominator in the second term of the given expression gives $\\frac{y+12}{z-8} + \\frac{y(z-8)}{zy(z-8)}$. This expression can be rewritten with common denominators by multiplying the first term by $\\frac{zy}{zy}$, giving $\\frac{zy(y+12)}{zy(z-8)} + \\frac{y(z-8)}{zy(z-8)}$. Adding these two terms yields $\\frac{zy(y+12)+y(z-8)}{zy(z-8)}$. Using the distributive property to rewrite this expression gives $\\frac{zy^2+12zy+yz-8y}{z^2y-8zy}$. Combining the like terms in the numerator of this expression gives $\\frac{zy^2+13zy-8y}{z^2y-8zy}$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "c8a5c221",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "$(9x^4 + 8x^3) - (7x^3 + 5x^2) - (3x^2 + x)$\n\nThe given expression can be written in the form $9x^4 + x^3 + ax^2 - x$, where $a$ is a constant. What is the value of $a$?",
+    "options": [
+      "$-8$",
+      "$-2$",
+      "$2$",
+      "$8$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. The given expression is equivalent to $9x^4 + 8x^3 - 7x^3 - 5x^2 - 3x^2 - x$. By combining like terms, this can be written as $9x^4 + x^3 - 8x^2 - x$. This expression is in the form $9x^4 + x^3 + ax^2 - x$, where $a$ is a constant. Therefore, the value of $a$ is $-8$.\n\nChoice B is incorrect. This may result from adding $-5x^2$ and $3x^2$ rather than $-5x^2$ and $-3x^2$.\n\nChoice C is incorrect. This may result from adding $5x^2$ and $-3x^2$ rather than $-5x^2$ and $-3x^2$.\n\nChoice D is incorrect. This may result from adding $5x^2$ and $3x^2$ rather than $-5x^2$ and $-3x^2$.",
+    "image": null
+  },
+  {
+    "question_id": "67e866b5",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $9x^2 + 7x^2 + 9x$?",
+    "options": [
+      "$63x^4 + 9x$",
+      "$9x^2 + 16x$",
+      "$25x^5$",
+      "$16x^2 + 9x$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. In the given expression, the first two terms, $9x^2$ and $7x^2$, are like terms. Combining these like terms yields $9x^2 + 7x^2$, or $16x^2$. It follows that the expression $9x^2 + 7x^2 + 9x$ is equivalent to $16x^2 + 9x$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "fd65f47f",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $(2x^2 + x - 9) + (x^2 + 6x + 1)$?",
+    "options": [
+      "$2x^2 + 7x + 10$",
+      "$2x^2 + 6x - 8$",
+      "$3x^2 + 7x - 10$",
+      "$3x^2 + 7x - 8$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. The given expression is equivalent to $(2x^2 + x + (-9)) + (x^2 + 6x + 1)$, which can be rewritten as $(2x^2 + x^2) + (x + 6x) + (-9 + 1)$. Adding like terms in this expression yields $3x^2 + 7x + (-8)$, or $3x^2 + 7x - 8$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice B is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "12e7faf8",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "The equation $$\\frac{x^2+6x-7}{x+7} = ax + d$$ is true for all $x \neq -7$, where $a$ and $d$ are integers. What is the value of $a + d$?",
+    "options": [
+      "$-6$",
+      "$-1$",
+      "$0$",
+      "$1$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Since the expression $x^2+6x-7$ can be factored as $(x+7)(x-1)$, the given equation can be rewritten as $$\\frac{(x+7)(x-1)}{x+7} = ax+d.$$ Since $x \neq -7$, $x+7$ is also not equal to $0$, so both the numerator and denominator of $\\frac{(x+7)(x-1)}{x+7}$ can be divided by $x+7$. This gives $x-1=ax+d$. Equating the coefficient of $x$ on each side of the equation gives $a=1$. Equating the constant terms gives $d=-1$. The sum is $1+(-1)=0$.\n\nChoice A is incorrect and may result from incorrectly simplifying the equation. Choices B and D are incorrect. They are the values of $d$ and $a$, respectively, not $a+d$.",
+    "image": null
+  },
+  {
+    "question_id": "24016dee",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which expression is equivalent to $(8x^3 + 8) - (x^3 - 2)$?",
+    "options": [
+      "$8x^3 + 6$",
+      "$7x^3 + 10$",
+      "$8x^3 + 10$",
+      "$7x^3 + 6$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The given expression is equivalent to $8x^3 + 8 - x^3 - (-2)$, or $8x^3 + 8 - x^3 + 2$. Combining like terms in this expression yields $7x^3 + 10$.\n\nChoice A is incorrect. This expression is equivalent to $(8x^3 + 8) - 2$, not $(8x^3 + 8) - (x^3 - 2)$.\n\nChoice C is incorrect. This expression is equivalent to $(8x^3 + 8) - (-2)$, not $(8x^3 + 8) - (x^3 - 2)$.\n\nChoice D is incorrect. This expression is equivalent to $(8x^3 + 8) - (x^3 + 2)$, not $(8x^3 + 8) - (x^3 - 2)$.",
+    "image": null
+  },
+  {
+    "question_id": "89fc23af",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "Which of the following expressions is equivalent to $\\frac{x^2 - 2x - 5}{x - 3}$?",
+    "options": [
+      "$x - 5 - \\frac{20}{x - 3}$",
+      "$x - 5 - \\frac{10}{x - 3}$",
+      "$x + 1 - \\frac{8}{x - 3}$",
+      "$x + 1 - \\frac{2}{x - 3}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. The numerator of the given expression can be rewritten in terms of the denominator, $x - 3$, as follows: $x^2 - 2x - 5 = x^2 - 3x + x - 3 - 2$, which is equivalent to $x(x - 3) + (x - 3) - 2$. So the given expression is equivalent to $\\frac{x(x - 3) + (x - 3) - 2}{x - 3} = \\frac{x(x - 3)}{x - 3} + \\frac{x - 3}{x - 3} - \\frac{2}{x - 3}$. Since the given expression is defined for $x \neq 3$, the expression can be rewritten as $x + 1 - \\frac{2}{x - 3}$. Long division can also be used as an alternate approach. Choices A, B, and C are incorrect and may result from errors made when dividing the two polynomials or making use of structure.",
+    "image": null
+  },
+  {
+    "question_id": "c3a72da5",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which of the following is equivalent to the sum of $3x^4 + 2x^3$ and $4x^4 + 7x^3$?",
+    "options": [
+      "$16x^{14}$",
+      "$7x^8 + 9x^6$",
+      "$12x^4 + 14x^3$",
+      "$7x^4 + 9x^3$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Adding the two expressions yields $3x^4 + 2x^3 + 4x^4 + 7x^3$. Because the pair of terms $3x^4$ and $4x^4$ and the pair of terms $2x^3$ and $7x^3$ each contain the same variable raised to the same power, they are like terms and can be combined as $7x^4$ and $9x^3$, respectively. The sum of the given expressions therefore simplifies to $7x^4 + 9x^3$.\n\nChoice A is incorrect and may result from adding the coefficients and the exponents in the given expressions. Choice B is incorrect and may result from adding the exponents as well as the coefficients of the like terms in the given expressions. Choice C is incorrect and may result from multiplying, rather than adding, the coefficients of the like terms in the given expressions.",
+    "image": null
+  },
+  {
+    "question_id": "d9137a84",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which expression represents the product of $(x^{-6}y^3z^5)$ and $(x^4z^5 + y^8z^{-7})$?",
+    "options": [
+      "$x^{-2}z^{10} + y^{11}z^{-2}$",
+      "$x^{-2}z^{10} + x^{-6}z^{-2}$",
+      "$x^{-2}y^3z^{10} + y^8z^{-7}$",
+      "$x^{-2}y^3z^{10} + x^{-6}y^{11}z^{-2}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. The product of $(x^{-6}y^3z^5)$ and $(x^4z^5 + y^8z^{-7})$ can be represented by the expression $(x^{-6}y^3z^5)(x^4z^5 + y^8z^{-7})$. Applying the distributive property to this expression yields $(x^{-6}y^3z^5)(x^4z^5) + (x^{-6}y^3z^5)(y^8z^{-7})$, or $x^{-6+4}y^3z^{5+5} + x^{-6}y^{3+8}z^{5-7}$. This expression is equivalent to $x^{-2}y^3z^{10} + x^{-6}y^{11}z^{-2}$. Choice A is incorrect and may result from conceptual or calculation errors. Choice B is incorrect and may result from conceptual or calculation errors. Choice C is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "f89e1d6f",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "If $a = c + d$, which of the following is equivalent to the expression $x^2 - c^2 - 2cd - d^2$?",
+    "options": [
+      "$(x + a)^2$",
+      "$(x - a)^2$",
+      "$(x + a)(x - a)$",
+      "$x^2 - ax - a^2$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Factoring $-1$ from the second, third, and fourth terms gives $x^2 - c^2 - 2cd - d^2 = x^2 - (c^2 + 2cd + d^2)$. The expression $c^2 + 2cd + d^2$ is the expanded form of a perfect square: $c^2 + 2cd + d^2 = (c + d)^2$. Therefore, $x^2 - (c^2 + 2cd + d^2) = x^2 - (c + d)^2$. Since $a = c + d$, $x^2 - (c + d)^2 = x^2 - a^2$. Finally, because $x^2 - a^2$ is the difference of squares, it can be expanded as $x^2 - a^2 = (x + a)(x - a)$. Choices A and B are incorrect and may be the result of making an error in factoring the difference of squares $x^2 - a^2$. Choice D is incorrect and may be the result of incorrectly combining terms.",
+    "image": null
+  },
+  {
+    "question_id": "df0ef054",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which of the following is equivalent to the expression $(2x^3 + 3x)(x^3 - 2x)$?",
+    "options": [
+      "$x^3 + 5x$",
+      "$3x^3 + x$",
+      "$2x^6 - x^4 - 6x^2$",
+      "$3x^6 - x^4 - 6x^2$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Using the distributive property to multiply the terms in the parentheses yields $(2x^3 \\cdot x^3) + (2x^3 \\cdot (-2x)) + (3x \\cdot x^3) + (3x \\cdot (-2x))$, which is equivalent to $2x^6 - 4x^4 + 3x^4 - 6x^2$. Combining like terms results in $2x^6 - x^4 - 6x^2$. Choices A and D are incorrect and may result from conceptual errors when multiplying the terms in the given expression. Choice B is incorrect and may result from adding, instead of multiplying, $(2x^3 + 3x)$ and $(x^3 - 2x)$.",
+    "image": null
+  },
+  {
+    "question_id": "3e9cc0c2",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which of the following is equivalent to $(1-p)(1+p+p^2+p^3+p^4+p^5+p^6)$?",
+    "options": [
+      "$1-p^8$",
+      "$1-p^7$",
+      "$1-p^6$",
+      "$1-p^5$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Multiplying $(1-p)$ by each term of the polynomial within the second pair of parentheses gives $(1-p)\\cdot 1 = 1-p$; $(1-p)\\cdot p = p-p^2$; $(1-p)\\cdot p^2 = p^2-p^3$; $(1-p)\\cdot p^3 = p^3-p^4$; $(1-p)\\cdot p^4 = p^4-p^5$; $(1-p)\\cdot p^5 = p^5-p^6$; and $(1-p)\\cdot p^6 = p^6-p^7$. Adding these seven expressions together and combining like terms gives $1+(p-p)+(p^2-p^2)+(p^3-p^3)+(p^4-p^4)+(p^5-p^5)+(p^6-p^6)-p^7$, which can be simplified to $1-p^7$.\n\nChoices A, C, and D are incorrect and may result from incorrectly identifying the highest power of $p$ in the expressions or incorrectly combining like terms.",
+    "image": null
+  },
+  {
+    "question_id": "7348f046",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$(2x + 3) - (x - 7)$\n\nWhich of the following is equivalent to the given expression?",
+    "options": [
+      "$x - 4$",
+      "$3x - 4$",
+      "$x + 10$",
+      "$2x^2 + 21$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Distributing the negative sign to the terms in the second parentheses yields $(2x + 3) - x + 7$. This expression can be rewritten as $2x - x + 3 + 7$. Combining like terms results in $x + 10$.\n\nChoice A is incorrect and may result from not distributing the negative sign to the $7$. Choice B is incorrect and may result from adding $(x - 7)$ to $2x + 3$ instead of subtracting $(x - 7)$. Choice D is incorrect and may result from adding the product of $2x$ and $x$ to the product of $3$ and $7$.",
+    "image": null
+  },
+  {
+    "question_id": "26e83bbc",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Functions $f$ and $g$ are given, and in function $f$, $b$ is a constant. If $f(x) \\cdot g(x) = 9x^4 - 26x^3 - 3x^2$, what is the value of $b$?\n\n$$f(x) = x^2 + bx$$\n$$g(x) = 9x^2 - 27x$$",
+    "options": [
+      "$-26$",
+      "$-\\frac{26}{9}$",
+      "$\\frac{1}{9}$",
+      "$9$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Multiplying the given functions $f$ and $g$ yields $f(x) \\cdot g(x) = (x^2 + bx)(9x^2 - 27x)$. Applying the distributive property to the right-hand side of this equation yields $f(x) \\cdot g(x) = (x^2)(9x^2 - 27x) + (bx)(9x^2 - 27x)$. Applying the distributive property once more to the right-hand side of this equation yields $f(x) \\cdot g(x) = (x^2)(9x^2) - (x^2)(27x) + (bx)(9x^2) - (bx)(27x)$, which is equivalent to $f(x) \\cdot g(x) = 9x^4 - 27x^3 + 9bx^3 - 27bx^2$. Factoring out $x^3$ from the second and third terms yields $f(x) \\cdot g(x) = 9x^4 + (-27 + 9b)x^3 - 27bx^2$. Since the left-hand sides of $f(x) \\cdot g(x) = 9x^4 + (-27 + 9b)x^3 - 27bx^2$ and $f(x) \\cdot g(x) = 9x^4 - 26x^3 - 3x^2$ are equal, it follows that $(-27 + 9b)x^3 = -26x^3$, and $-27b = -3$, or $-27b = -3$. Adding 27 to each side of $-27 + 9b = -26$ yields $-26 + 27 = 9b$ and $1 = 9b$. Dividing each side of this equation by 9 yields $b = \\frac{1}{9}$. Similarly, dividing each side of $-27b = -3$ by $-27$ yields $b = \\frac{1}{9}$. Therefore, the value of $b$ is $\\frac{1}{9}$.",
+    "image": null
+  },
+  {
+    "question_id": "b47419f4",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which of the following is equivalent to the expression $$\\left(\\frac{1}{2}x+3\\right)-\\left(\\frac{2}{3}x-5\\right)$$?",
+    "options": [
+      "-\\frac{1}{6}x+8",
+      "-\\frac{1}{6}x-2",
+      "-\\frac{1}{3}x^2+\\frac{1}{2}x+15",
+      "-\\frac{1}{3}x^2-\\frac{9}{2}x-15"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. By distributing the minus sign through the expression $\\left(\\frac{2}{3}x-5\\right)$, the given expression can be rewritten as $$\\left(\\frac{1}{2}x+3\\right)-\\frac{2}{3}x+5, \\text{ which is equivalent to } \\frac{1}{2}x-\\frac{2}{3}x+3+5.$$ Combining like terms gives $\\left(\\frac{1}{2}-\\frac{2}{3}\\right)x+(3+5)$, or $-\\frac{1}{6}x+8$. Choice B is incorrect and may be the result of failing to distribute the minus sign appropriately through the second term and simplifying the expression $\\frac{1}{2}x+3-\\frac{2}{3}x-5$. Choice C is incorrect and may be the result of multiplying the expressions $\\left(\\frac{1}{2}x+3\\right)$ and $\\left(-\\frac{2}{3}x+5\\right)$. Choice D is incorrect and may be the result of multiplying the expressions $\\left(\\frac{1}{2}x+3\\right)$ and $\\left(-\\frac{2}{3}x-5\\right)$.",
+    "image": null
+  },
+  {
+    "question_id": "8838a672",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$(4x^3 - 5x^2 + 3) - (6x^3 + 2x^2 - x)$\n\nWhich of the following expressions is equivalent to the expression above?",
+    "options": [
+      "$-10x^3 - 3x^2 + x + 3$",
+      "$-2x^3 - 7x^2 + x + 3$",
+      "$-2x^3 - 3x^2 + x + 3$",
+      "$10x^3 - 7x^2 - x + 3$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Using the distributive property, the given expression can be rewritten as $4x^3 - 5x^2 + 3 - 6x^3 - 2x^2 + x$. Combining like terms, this expression can be rewritten as $(4 - 6)x^3 + (-5 - 2)x^2 + x + 3$, which is equivalent to $-2x^3 - 7x^2 + x + 3$.\n\nChoices A, C, and D are incorrect and may result from an error when applying the distributive property or an error when combining like terms.",
+    "image": null
+  },
+  {
+    "question_id": "0b3d25c5",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which of the following is equivalent to $\\sqrt[4]{x^2 + 8x + 16}$, where $x > 0$?",
+    "options": [
+      "$(x+4)^4$",
+      "$(x+4)^2$",
+      "$(x+4)$",
+      "$(x+4)^{\\frac{1}{2}}$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. The given expression can also be written as $(x^2 + 8x + 16)^{\\frac{1}{4}}$. The trinomial $x^2 + 8x + 16$ can be rewritten in factored form as $(x+4)^2$. Thus, the entire expression can be rewritten as $\\left((x+4)^2\\right)^{\\frac{1}{4}}$. Simplifying the exponents yields $(x+4)^{\\frac{1}{2}}$.\n\nChoices A, B, and C are incorrect and may result from errors made when simplifying the exponents in the expression $\\left((x+4)^2\\right)^{\\frac{1}{4}}$.",
+    "image": null
+  },
+  {
+    "question_id": "e117d3b8",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "If $a$ and $c$ are positive numbers, which of the following is equivalent to $\\sqrt{(a+c)^3} \\cdot \\sqrt{a+c}$?",
+    "options": [
+      "$a+c$",
+      "$a^2+c^2$",
+      "$a^2+2ac+c^2$",
+      "$a^2c^2$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Using the property that $\\sqrt{x} \\cdot \\sqrt{y} = \\sqrt{xy}$ for positive numbers $x$ and $y$, with $x = (a+c)^3$ and $y = a+c$, it follows that $\\sqrt{(a+c)^3} \\cdot \\sqrt{a+c} = \\sqrt{(a+c)^4}$. By rewriting $(a+c)^4$ as $((a+c)^2)^2$, it is possible to simplify the square root expression as follows: $\\sqrt{((a+c)^2)^2} = (a+c)^2 = a^2+2ac+c^2$.\n\nChoice A is incorrect and may be the result of $\\sqrt{(a+c)^3} + \\sqrt{(a+c)}$. Choice B is incorrect and may be the result of incorrectly rewriting $(a+c)^2$ as $a^2+c^2$. Choice D is incorrect and may be the result of incorrectly applying properties of exponents.",
+    "image": null
+  },
+  {
+    "question_id": "50338a48",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $15w^2 + 8w$?",
+    "options": [
+      "$w(15w + 8)$",
+      "$8w(15w + 1)$",
+      "$15w^2(8w + 1)$",
+      "$23(w^2 + w)$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. Since each term of the given expression has a common factor of $w$, it may be rewritten as $w(15w + 8)$. Therefore, the expression $w(15w + 8)$ is equivalent to $15w^2 + 8w$.\n\nChoice B is incorrect. This expression is equivalent to $120w^2 + 8w$, not $15w^2 + 8w$.\n\nChoice C is incorrect. This expression is equivalent to $120w^3 + 15w^2$, not $15w^2 + 8w$.\n\nChoice D is incorrect. This expression is equivalent to $23w^2 + 23w$, not $15w^2 + 8w$.",
+    "image": null
+  },
+  {
+    "question_id": "127b2759",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $8 + d^2 + 3$?",
+    "options": [
+      "$d^2 + 24$",
+      "$d^2 + 11$",
+      "$d^2 + 5$",
+      "$d^2 - 11$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The given expression can be rewritten as $d^2 + 8 + 3$. Adding 8 and 3 in this expression yields $d^2 + 11$.\n\nChoice A is incorrect. This expression is equivalent to $d^2 + 8(3)$.\n\nChoice C is incorrect. This expression is equivalent to $8 + d^2 - 3$.\n\nChoice D is incorrect. This expression is equivalent to $-8 + d^2 - 3$.",
+    "image": null
+  },
+  {
+    "question_id": "dc67c130",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $64t^2s^3 - 56t^3s$?",
+    "options": [
+      "$4ts(16s^2 - 14ts)$",
+      "$4ts(16t^2s^2 - 14t)$",
+      "$4t^2s(16ts - 14s)$",
+      "$4t^2s(16s^2 - 14t)$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. For the expression $64t^2s^3 - 56t^3s$, 4 is a common factor of 64 and 56, $t^2$ is a common factor of $t^2$ and $t^3$, and $s$ is a common factor of $s^3$ and $s$. It follows that $4t^2s$ is a common factor of each term in the given expression. Factoring out $4t^2s$ from each term in the expression $64t^2s^3 - 56t^3s$ yields $4t^2s(16s^2 - 14t)$. Therefore, $4t^2s(16s^2 - 14t)$ is equivalent to $64t^2s^3 - 56t^3s$.\n\nChoice A is incorrect. This expression is equivalent to $64ts^3 - 56t^2s^2$, not $64t^2s^3 - 56t^3s$.\n\nChoice B is incorrect. This expression is equivalent to $64t^3s^3 - 56t^4s$, not $64t^2s^3 - 56t^3s$.\n\nChoice C is incorrect. This expression is equivalent to $64t^3s^2 - 56t^2s^2$, not $64t^2s^3 - 56t^3s$.",
+    "image": null
+  },
+  {
+    "question_id": "fb96a5b3",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which of the following expressions is equivalent to $2(ab - 3) + 2$?",
+    "options": [
+      "$2ab - 1$",
+      "$2ab - 4$",
+      "$2ab - 5$",
+      "$2ab - 8$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Applying the distributive property to the given expression yields $2(ab) + 2(-3) + 2$ or $2ab - 6 + 2$. Adding the like terms $-6$ and $2$ results in the expression $2ab - 4$.\n\nChoice A is incorrect and may result from multiplying $ab$ by $2$ without multiplying $-3$ by $2$ when applying the distributive property. Choices C and D are incorrect and may result from computational or conceptual errors.",
+    "image": null
+  },
+  {
+    "question_id": "7355b9d9",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "If $k - x$ is a factor of the expression $-x^2 + \\frac{1}{29}nk^2$, where $n$ and $k$ are constants and $k > 0$, what is the value of $n$?",
+    "options": [
+      "$-29$",
+      "$-\\frac{1}{29}$",
+      "$\\frac{1}{29}$",
+      "$29$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. If $k - x$ is a factor of the expression $-x^2 + \\left(\\frac{1}{29}\\right)nk^2$, then the expression can be written as $(k - x)(ax + b)$, where $a$ and $b$ are constants. This expression can be rewritten as $akx + bk - ax^2 - bx$, or $-ax^2 + (ak - b)x + bk$. Since this expression is equivalent to $-x^2 + \\left(\\frac{1}{29}\\right)nk^2$, it follows that $-a = -1$, $ak - b = 0$, and $bk = \\left(\\frac{1}{29}\\right)nk^2$. Dividing each side of the equation $-a = -1$ by $-1$ yields $a = 1$. Substituting $1$ for $a$ in the equation $ak - b = 0$ yields $k - b = 0$. Adding $b$ to each side of this equation yields $k = b$. Substituting $k$ for $b$ in the equation $bk = \\left(\\frac{1}{29}\\right)nk^2$ yields $k^2 = \\left(\\frac{1}{29}\\right)nk^2$. Since $k$ is positive, dividing each side of this equation by $k^2$ yields $1 = \\left(\\frac{1}{29}\\right)n$. Multiplying each side of this equation by $29$ yields $29 = n$.\n\nAlternate approach: The expression $x^2 - y^2$ can be written as $(x - y)(x + y)$, which is a difference of two squares. It follows that $\\left(\\frac{1}{29}\\right)nk^2 - x^2$ is equivalent to $\\left(\\left(\\sqrt{\\frac{1}{29}n}\\right)k - x\\right)\\left(\\left(\\sqrt{\\frac{1}{29}n}\\right)k + x\\right)$. It's given that $k - x$ is a factor of $-x^2 + \\left(\\frac{1}{29}\\right)nk^2$, so the factor $\\left(\\sqrt{\\frac{1}{29}n}\\right)k - x$ is equal to $k - x$. Adding $x$ to both sides of the equation $\\left(\\sqrt{\\frac{1}{29}n}\\right)k - x = k - x$ yields $\\left(\\sqrt{\\frac{1}{29}n}\\right)k = k$. Since $k$ is positive, dividing both sides of this equation by $k$ yields $\\sqrt{\\frac{1}{29}n} = 1$. Squaring both sides of this equation yields $\\frac{1}{29}n = 1$. Multiplying both sides of this equation by $29$ yields $n = 29$.\n\nChoice A is incorrect. This value of $n$ gives the expression $-x^2 + \\left(\\frac{1}{29}\\right)(-29)k^2$, or $-x^2 - k^2$. This expression doesn't have $k - x$ as a factor.\n\nChoice B is incorrect. This value of $n$ gives the expression $-x^2 + \\left(\\frac{1}{29}\\right)\\left(-\\frac{1}{29}\\right)k^2$, or $-x^2 + \\left(-\\frac{1}{841}\\right)k^2$. This expression doesn't have $k - x$ as a factor.\n\nChoice C is incorrect. This value of $n$ gives the expression $-x^2 + \\left(\\frac{1}{29}\\right)\\left(\\frac{1}{29}\\right)k^2$, or $-x^2 + \\left(\\frac{1}{841}\\right)k^2$. This expression doesn't have $k - x$ as a factor.",
+    "image": null
+  },
+  {
+    "question_id": "df747160",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $17(x^2 - 100y^2)$?",
+    "options": [
+      "$17(x - 2y)(x - 50y)$",
+      "$17(x - 2y)(x + 50y)$",
+      "$17(x - 10y)(x - 10y)$",
+      "$17(x - 10y)(x + 10y)$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Expressions in the form $a^2 - b^2$ follow the difference of two squares pattern and can be factored as $(a - b)(a + b)$. In the given expression, $17(x^2 - 100y^2)$, the expression $x^2 - 100y^2$ follows the difference of two squares pattern. It follows that the expression $x^2 - 100y^2$ can be rewritten as $(x - 10y)(x + 10y)$. Therefore, the expression $17(x - 10y)(x + 10y)$ is equivalent to $17(x^2 - 100y^2)$.\n\nChoice A is incorrect. This expression is equivalent to $17(x^2 - 52xy + 100y^2)$, not $17(x^2 - 100y^2)$.\n\nChoice B is incorrect. This expression is equivalent to $17(x^2 + 48xy - 100y^2)$, not $17(x^2 - 100y^2)$.\n\nChoice C is incorrect. This expression is equivalent to $17(x^2 - 20xy + 100y^2)$, not $17(x^2 - 100y^2)$.",
+    "image": null
+  },
+  {
+    "question_id": "e597050f",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $9x + 6x + 2y + 3y$?",
+    "options": [
+      "$3x + 5y$",
+      "$6x + 8y$",
+      "$12x + 8y$",
+      "$15x + 5y$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Combining like terms in the given expression yields $(9x + 6x) + (2y + 3y)$, or $15x + 5y$. Choice A is incorrect and may result from conceptual or calculation errors. Choice B is incorrect and may result from conceptual or calculation errors. Choice C is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "5dd53f73",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $34x + 34y$?",
+    "options": [
+      "$34xy$",
+      "$34(x + y)$",
+      "$68y$",
+      "$68x$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Since $34$ is a common factor of each term in the given expression, the expression can be rewritten as $34(x + y)$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect. This expression is equivalent to $34y + 34y$.\n\nChoice D is incorrect. This expression is equivalent to $34x + 34x$.",
+    "image": null
+  },
+  {
+    "question_id": "1e8d7183",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $256w^2 - 676$?",
+    "options": [
+      "$(16w - 26)(16w - 26)$",
+      "$(8w - 13)(8w + 13)$",
+      "$(8w - 13)(8w - 13)$",
+      "$(16w - 26)(16w + 26)$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. The given expression follows the difference of two squares pattern, $x^2 - y^2$, which factors as $(x - y)(x + y)$. Therefore, the expression $256w^2 - 676$ can be written as $(16w)^2 - 26^2$, or $(16w)(16w) - (26)(26)$, which factors as $(16w - 26)(16w + 26)$.\n\nChoice A is incorrect. This expression is equivalent to $256w^2 - 832w + 676$.\n\nChoice B is incorrect. This expression is equivalent to $64w^2 - 169$.\n\nChoice C is incorrect. This expression is equivalent to $64w^2 - 208w + 169$.",
+    "image": null
+  },
+  {
+    "question_id": "0354c7de",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "$5x + 15$\n\nWhich of the following is equivalent to the given expression?",
+    "options": [
+      "$5(x + 3)$",
+      "$5(x + 10)$",
+      "$5(x + 15)$",
+      "$5(x + 20)$"
+    ],
+    "correct_answer": 0,
+    "explanation": "Choice A is correct. Since 5 is a factor of both terms, $5x$ and $15$, the given expression can be factored and rewritten as $5(x + 3)$.\n\nChoice B is incorrect and may result from subtracting 5 from the constant when factoring 5 from the given expression. Choice C is incorrect and may result from factoring 5 from only the first term, not both terms, of the given expression. Choice D is incorrect and may result from adding 5 to the constant when factoring 5 from the given expression.",
+    "image": null
+  },
+  {
+    "question_id": "4eaf0a3a",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which expression is equivalent to $\\sqrt[4]{x^9y^9}$, where $x$ and $y$ are positive?",
+    "options": [
+      "$(xy)^\\frac{2}{9}$",
+      "$(xy)^\\frac{9}{4}$",
+      "$(xy)^{16}$",
+      "$(xy)^{63}$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. For positive values of $a$ and $b$, $a^m b^m = (ab)^m$, $\\sqrt[n]{a} = (a)^\\frac{1}{n}$, and $(a^j)^k = a^{jk}$. Therefore, the given expression, $\\sqrt[4]{x^9y^9}$, can be rewritten as $\\sqrt[4]{(xy)^9}$. This expression is equivalent to $\\left((xy)^9\\right)^\\frac{1}{4}$, which can be rewritten as $(xy)^\\frac{9}{4}$ or $(xy)^\\frac{9}{4}$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "508344ac",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $16(x + 15)$?",
+    "options": [
+      "$16x + 31$",
+      "$16x + 240$",
+      "$16x + 1$",
+      "$16x + 15$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The expression $16(x + 15)$ can be rewritten as $16(x) + 16(15)$, which is equivalent to $16x + 240$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice C is incorrect and may result from conceptual or calculation errors.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "c602140f",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "Which of the following is equivalent to the expression $(x - 11y)(2x - 3y) - 12y(-2x + 3y)$?",
+    "options": [
+      "$x - 23y$",
+      "$2x^2 - xy - 3y^2$",
+      "$2x^2 + 24xy + 36y^2$",
+      "$2x^2 - 49xy + 69y^2$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. Expanding all terms yields $(x - 11y)(2x - 3y) - 12y(-2x + 3y)$, which is equivalent to $2x^2 - 22xy - 3xy + 33y^2 + 24xy - 36y^2$. Combining like terms gives $2x^2 - xy - 3y^2$.\n\nChoice A is incorrect and may be the result of using the sums of the coefficients of the existing $x$ and $y$ terms as the coefficients of the $x$ and $y$ terms in the new expression. Choice C is incorrect and may be the result of incorrectly combining like terms. Choice D is incorrect and may be the result of using the incorrect sign in front of the $12y$ term.",
+    "image": null
+  },
+  {
+    "question_id": "fd4b2aa0",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $12x^3 - 5x^3$?",
+    "options": [
+      "$7x^6$",
+      "$17x^3$",
+      "$7x^3$",
+      "$17x^6$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. The given expression shows subtraction of two like terms. The two terms can be subtracted as follows: $12x^3 - 5x^3 = (12 - 5)x^3$, or $7x^3$.\n\nChoice A is incorrect and may result from conceptual or calculation errors.\n\nChoice B is incorrect. This is the result of adding, not subtracting, the two like terms.\n\nChoice D is incorrect and may result from conceptual or calculation errors.",
+    "image": null
+  },
+  {
+    "question_id": "5d93c782",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $x^2 + 3x - 40$?",
+    "options": [
+      "$(x - 4)(x + 10)$",
+      "$(x - 5)(x + 8)$",
+      "$(x - 8)(x + 5)$",
+      "$(x - 10)(x + 4)$"
+    ],
+    "correct_answer": 1,
+    "explanation": "Choice B is correct. The given expression may be rewritten as $x^2 + 8x - 5x - 40$. Since the first two terms of this expression have a common factor of $x$ and the last two terms of this expression have a common factor of $-5$, this expression may be rewritten as $x(x) + x(8) - 5(x) - 5(8)$, or $x(x + 8) - 5(x + 8)$. Since each term of this expression has a common factor of $(x + 8)$, it may be rewritten as $(x - 5)(x + 8)$.\n\nAlternate approach: An expression of the form $x^2 + bx + c$, where $b$ and $c$ are constants, can be factored if there are two values that add to give $b$ and multiply to give $c$. In the given expression, $b = 3$ and $c = -40$. The values of $-5$ and $8$ add to give $3$ and multiply to give $-40$, so the expression can be factored as $(x - 5)(x + 8)$.\n\nChoice A is incorrect. This expression is equivalent to $x^2 + 6x - 40$, not $x^2 + 3x - 40$.\n\nChoice C is incorrect. This expression is equivalent to $x^2 - 3x - 40$, not $x^2 + 3x - 40$.\n\nChoice D is incorrect. This expression is equivalent to $x^2 - 6x - 40$, not $x^2 + 3x - 40$.",
+    "image": null
+  },
+  {
+    "question_id": "974d33dc",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which of the following expressions is equivalent to the sum of $(r^3 + 5r^2 + 7)$ and $(r^2 + 8r + 12)$?",
+    "options": [
+      "$r^3 + 13r^2 + 19$",
+      "$2r^3 + 13r^2 + 19$",
+      "$r^3 + 5r^2 + 7r + 12$",
+      "$r^3 + 6r^2 + 8r + 19$"
+    ],
+    "correct_answer": 3,
+    "explanation": "Choice D is correct. Grouping like terms, the given expressions can be rewritten as $r^3 + (5r^2 + r^2) + 8r + (7 + 12)$. This can be rewritten as $r^3 + 6r^2 + 8r + 19$.\n\nChoice A is incorrect and may result from adding the two sets of unlike terms, $r^3$ and $r^2$ as well as $5r^2$ and $8r$, and then adding the respective exponents. Choice B is incorrect and may result from adding the unlike terms $r^3$ and $r^2$ as if they were $r^3$ and $r^3$ and adding the unlike terms $5r^2$ and $8r$ as if they were $5r^2$ and $8r^2$. Choice C is incorrect and may result from errors when combining like terms.",
+    "image": null
+  },
+  {
+    "question_id": "d4d513ff",
+    "skill": "Equivalent expressions",
+    "domain": "Advanced Math",
+    "difficulty": "easy",
+    "section": "math",
+    "content": "Which expression is equivalent to $12x + 27$?",
+    "options": [
+      "$12(9x + 1)$",
+      "$27(12x + 1)$",
+      "$3(4x + 9)$",
+      "$3(9x + 24)$"
+    ],
+    "correct_answer": 2,
+    "explanation": "Choice C is correct. Each term in the given expression, $12x + 27$, has a common factor of $3$. Therefore, the expression can be rewritten as $3(4x) + 3(9)$, or $3(4x + 9)$. Thus, the expression $3(4x + 9)$ is equivalent to the given expression.\n\nChoice A is incorrect. This expression is equivalent to $108x + 12$, not $12x + 27$.\n\nChoice B is incorrect. This expression is equivalent to $324x + 27$, not $12x + 27$.\n\nChoice D is incorrect. This expression is equivalent to $27x + 72$, not $12x + 27$.",
+    "image": null
+  }
+]

@@ -1,7 +1,7 @@
 from collections import defaultdict
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from pydantic import BaseModel
 from typing import Optional, List, Dict
 import uuid
@@ -165,8 +165,16 @@ def get_questions(
 ):
     """Get practice questions with optional filters"""
     query = db.query(Question)
+    normalized_question_id = question_id.strip().lower() if question_id else None
 
-    if section:
+    if normalized_question_id:
+        query = query.filter(
+            or_(
+                func.lower(Question.external_id) == normalized_question_id,
+                func.lower(Question.id) == normalized_question_id,
+            )
+        )
+    elif section:
         section_value = section.strip().lower()
         if section_value in {
             "rw",
@@ -214,10 +222,6 @@ def get_questions(
             query = query.filter(func.lower(Question.difficulty) == difficulties[0])
         elif difficulties:
             query = query.filter(func.lower(Question.difficulty).in_(difficulties))
-    if question_id:
-        query = query.filter(
-            func.lower(Question.external_id) == question_id.strip().lower()
-        )
     if has_image is False:
         query = query.filter(Question.image.is_(None))
     elif has_image is True:
@@ -228,15 +232,23 @@ def get_questions(
 
 
 @router.get("/stats", response_model=QuestionStatsResponse)
-def get_question_stats(db: Session = Depends(get_db)):
+def get_question_stats(
+    difficulty: Optional[str] = None,
+    db: Session = Depends(get_db),
+):
     """Return nested question counts by section -> domain -> skill using real DB data."""
-    rows = (
-        db.query(
-            Question.section, Question.domain, Question.skill, func.count(Question.id)
-        )
-        .group_by(Question.section, Question.domain, Question.skill)
-        .all()
+    query = db.query(
+        Question.section, Question.domain, Question.skill, func.count(Question.id)
     )
+
+    if difficulty:
+        difficulties = [d.strip().lower() for d in difficulty.split(",") if d.strip()]
+        if len(difficulties) == 1:
+            query = query.filter(func.lower(Question.difficulty) == difficulties[0])
+        elif difficulties:
+            query = query.filter(func.lower(Question.difficulty).in_(difficulties))
+
+    rows = query.group_by(Question.section, Question.domain, Question.skill).all()
 
     sections: Dict[str, Dict] = {
         "rw": {

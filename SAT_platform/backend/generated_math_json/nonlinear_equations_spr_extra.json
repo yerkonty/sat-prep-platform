@@ -1,0 +1,86 @@
+[
+  {
+    "question_id": "f2f3fa00",
+    "skill": "Nonlinear equations in one variable and systems of equations in two variables",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "During a 5-second time interval, the average acceleration $a$, in meters per second squared, of an object with an initial velocity of 12 meters per second is defined by the equation $a = \\frac{v_f - 12}{5}$, where $v_f$ is the final velocity of the object in meters per second. If the equation is rewritten in the form $v_f = xa + y$ where $x$ and $y$ are constants, what is the value of $x$?",
+    "options": [
+      "5"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is 5. The given equation can be rewritten in the form $v_f = xa + y$, like so:\n\n$$a = \\frac{v_f - 12}{5}$$\n\n$$v_f - 12 = 5a$$\n\n$$v_f = 5a + 12$$\n\nIt follows that the value of $x$ is 5 and the value of $y$ is 12.",
+    "image": null
+  },
+  {
+    "question_id": "fcdf87b7",
+    "skill": "Nonlinear equations in one variable and systems of equations in two variables",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$$y = x^2 - 4x + 4$$\n$$y = 4 - x$$\n\nIf the ordered pair $(x, y)$ satisfies the system of equations above, what is one possible value of $x$?",
+    "options": [
+      "0, 3"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is either 0 or 3. For an ordered pair to satisfy a system of equations, both the $x$- and $y$-values of the ordered pair must satisfy each equation in the system. Both expressions on the right-hand side of the given equations are equal to $y$, therefore it follows that both expressions on the right-hand side of the equations are equal to each other: $x^2 - 4x + 4 = 4 - x$. This equation can be rewritten as $x^2 - 3x = 0$, and then through factoring, the equation becomes $x(x - 3) = 0$. Because the product of the two factors is equal to 0, it can be concluded that either $x = 0$ or $x - 3 = 0$, or rather, $x = 0$ or $x = 3$. Note that 0 and 3 are examples of ways to enter a correct answer.",
+    "image": null
+  },
+  {
+    "question_id": "6e02cd78",
+    "skill": "Nonlinear equations in one variable and systems of equations in two variables",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "In the xy-plane, what is the y-coordinate of the point of intersection of the graphs of $y = (x - 1)^2$ and $y = 2x - 3$?",
+    "options": [
+      "1"
+    ],
+    "correct_answer": 0,
+    "explanation": "The point of intersection of the graphs of the given equations is the solution to the system of the two equations. Since $y = (x - 1)^2$ and $y = 2x - 3$, it follows that $(x - 1)^2 = 2x - 3$, or $(x - 1)(x - 1) = 2x - 3$. Applying the distributive property to the left-hand side of this equation yields $x^2 - 2x + 1 = 2x - 3$. Subtracting $2x$ from and adding $3$ to both sides of this equation yields $x^2 - 4x + 4 = 0$. Factoring the left-hand side of this equation yields $(x - 2)(x - 2) = 0$. By the zero product property, if $(x - 2)(x - 2) = 0$, it follows that $x - 2 = 0$. Adding $2$ to both sides of $x - 2 = 0$ yields $x = 2$. Substituting $2$ for $x$ in either of the given equations yields $y = 1$. For example, substituting $2$ for $x$ in the second given equation yields $y = 2(2) - 3$, or $y = 1$. Therefore, the point of intersection of the graphs of the given equations is $(2,1)$. The y-coordinate of this point is $1$.",
+    "image": null
+  },
+  {
+    "question_id": "a4f61d75",
+    "skill": "Nonlinear equations in one variable and systems of equations in two variables",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$$x^2 - ax + 12 = 0$$\n\nIn the equation above, $a$ is a constant and $a > 0$. If the equation has two integer solutions, what is a possible value of $a$?",
+    "options": [
+      "7, 8, 13"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is either 7, 8, or 13. Since the given equation has two integer solutions, the expression on the left-hand side of this equation can be factored as $(x + c)(x + d)$, where $c$ and $d$ are also integers. The product of $c$ and $d$ must equal the constant term of the original quadratic expression, which is 12. Additionally, the sum of $c$ and $d$ must be a negative number since it's given that $a > 0$, but the sign preceding $a$ in the given equation is negative. The possible pairs of values for $c$ and $d$ that satisfy both of these conditions are $-4$ and $-3$, $-6$ and $-2$, and $-12$ and $-1$. Since the value of $-a$ is the sum of $c$ and $d$, the possible values of $-a$ are $-4 + (-3) = -7$, $-6 + (-2) = -8$, and $-12 + (-1) = -13$. It follows that the possible values of $a$ are 7, 8, and 13. Note that 7, 8, and 13 are examples of ways to enter a correct answer.",
+    "image": null
+  },
+  {
+    "question_id": "87a3de81",
+    "skill": "Nonlinear equations in one variable and systems of equations in two variables",
+    "domain": "Advanced Math",
+    "difficulty": "medium",
+    "section": "math",
+    "content": "$$x^2 + x - 12 = 0$$\n\nIf $a$ is a solution of the equation above and $a > 0$, what is the value of $a$?",
+    "options": [
+      "3"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is 3. The solution to the given equation can be found by factoring the quadratic expression. The factors can be determined by finding two numbers with a sum of 1 and a product of $-12$. The two numbers that meet these constraints are 4 and $-3$. Therefore, the given equation can be rewritten as $(x + 4)(x - 3) = 0$. It follows that the solutions to the equation are $x = -4$ or $x = 3$. Since it is given that $a > 0$, $a$ must equal 3.",
+    "image": null
+  },
+  {
+    "question_id": "1697ffcf",
+    "skill": "Nonlinear equations in one variable and systems of equations in two variables",
+    "domain": "Advanced Math",
+    "difficulty": "hard",
+    "section": "math",
+    "content": "In the $xy$-plane, the graph of $y = 3x^2 - 14x$ intersects the graph of $y = x$ at the points $(0, 0)$ and $(a, a)$. What is the value of $a$?",
+    "options": [
+      "5"
+    ],
+    "correct_answer": 0,
+    "explanation": "The correct answer is 5. The intersection points of the graphs of $y = 3x^2 - 14x$ and $y = x$ can be found by solving the system consisting of these two equations. To solve the system, substitute $x$ for $y$ in the first equation. This gives $x = 3x^2 - 14x$. Subtracting $x$ from both sides of the equation gives $0 = 3x^2 - 15x$. Factoring $3x$ out of each term on the left-hand side of the equation gives $0 = 3x(x - 5)$. Therefore, the possible values for $x$ are 0 and 5. Since $y = x$, the two intersection points are $(0,0)$ and $(5,5)$. Therefore, $a = 5$.",
+    "image": null
+  }
+]
