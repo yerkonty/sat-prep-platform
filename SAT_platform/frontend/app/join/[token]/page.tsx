@@ -61,42 +61,42 @@ export default function JoinPage({ params }: { params: Promise<{ token: string }
 
   if (inviteValid === null) {
     return (
-      <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#10B981]" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-accent" />
       </div>
     );
   }
 
   if (inviteValid === false) {
     return (
-      <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
-        <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#00592B]/10 max-w-md w-full text-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="bg-card p-8 rounded-2xl shadow-sm border border-border max-w-md w-full text-center">
           <div className="text-red-500 text-5xl mb-4">!</div>
-          <h2 className="text-xl font-bold text-[#1A1A1A] mb-2">Invalid Invite</h2>
-          <p className="text-[#1A1A1A]/60">{inviteReason}</p>
+          <h2 className="text-xl font-bold text-foreground mb-2">Invalid invite</h2>
+          <p className="text-text-2">{inviteReason}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center text-[#00592B] mb-6">
-          <BookOpen className="w-12 h-12" />
+        <div className="flex justify-center text-primary mb-4">
+          <BookOpen className="w-10 h-10" />
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-[#1A1A1A]">
+        <h2 className="text-center text-2xl font-extrabold text-foreground">
           Join MaxSAT Academy
         </h2>
-        <p className="mt-2 text-center text-sm text-[#1A1A1A]/60">
+        <p className="mt-1 text-center text-sm text-text-2">
           Create your account to get started
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-sm border border-[#00592B]/10 sm:rounded-2xl sm:px-10">
+      <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-card py-6 px-4 shadow-sm border border-border sm:rounded-2xl sm:px-8">
           {error && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-medium mb-6">
+            <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-medium mb-4">
               {error}
             </div>
           )}
@@ -112,23 +112,23 @@ export default function JoinPage({ params }: { params: Promise<{ token: string }
             />
           </div>
 
-          <div className="relative my-6">
+          <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#1A1A1A]/10" />
+              <div className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-[#1A1A1A]/40">or sign up with email</span>
+              <span className="px-4 bg-card text-text-3">or sign up with email</span>
             </div>
           </div>
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-[#1A1A1A]/70">
-                Full Name
+              <label htmlFor="name" className="block text-sm font-medium text-text-2">
+                Full name
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-[#1A1A1A]/30" />
+                  <User className="h-4 w-4 text-text-3" />
                 </div>
                 <input
                   id="name"
@@ -137,19 +137,19 @@ export default function JoinPage({ params }: { params: Promise<{ token: string }
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="block w-full pl-10 px-3 py-2 border border-[#1A1A1A]/10 rounded-xl focus:outline-none focus:ring-[#10B981] focus:border-[#10B981] sm:text-sm text-[#1A1A1A] bg-white"
+                  className="block w-full pl-10 px-3 py-2.5 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent text-sm text-foreground bg-card"
                   placeholder="Jane Doe"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[#1A1A1A]/70">
+              <label htmlFor="email" className="block text-sm font-medium text-text-2">
                 Email address
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-[#1A1A1A]/30" />
+                  <Mail className="h-4 w-4 text-text-3" />
                 </div>
                 <input
                   id="email"
@@ -159,19 +159,19 @@ export default function JoinPage({ params }: { params: Promise<{ token: string }
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 px-3 py-2 border border-[#1A1A1A]/10 rounded-xl focus:outline-none focus:ring-[#10B981] focus:border-[#10B981] sm:text-sm text-[#1A1A1A] bg-white"
+                  className="block w-full pl-10 px-3 py-2.5 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent text-sm text-foreground bg-card"
                   placeholder="you@example.com"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[#1A1A1A]/70">
+              <label htmlFor="password" className="block text-sm font-medium text-text-2">
                 Password
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-[#1A1A1A]/30" />
+                  <Lock className="h-4 w-4 text-text-3" />
                 </div>
                 <input
                   id="password"
@@ -180,20 +180,17 @@ export default function JoinPage({ params }: { params: Promise<{ token: string }
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 px-3 py-2 border border-[#1A1A1A]/10 rounded-xl focus:outline-none focus:ring-[#10B981] focus:border-[#10B981] sm:text-sm text-[#1A1A1A] bg-white"
-                  placeholder=""
+                  className="block w-full pl-10 px-3 py-2.5 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent text-sm text-foreground bg-card"
                 />
               </div>
             </div>
 
-            <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[#00592B] hover:bg-[#10B981] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#10B981] transition-colors"
-              >
-                Create Account
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2.5 px-4 rounded-xl text-sm font-medium text-white bg-primary hover:bg-accent transition-colors active:scale-[0.97]"
+            >
+              Create account
+            </button>
           </form>
         </div>
       </div>

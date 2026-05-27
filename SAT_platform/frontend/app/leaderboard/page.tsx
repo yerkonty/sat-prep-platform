@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Trophy } from 'lucide-react';
 import api from '@/lib/api';
 
 interface LeaderboardEntry {
@@ -32,60 +32,62 @@ export default function LeaderboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#10B981]" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-accent" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-black text-[#00592B] mb-8">Class Leaderboard</h1>
+    <div className="min-h-screen bg-background py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-2xl font-black text-primary mb-6">Class Leaderboard</h1>
 
-        <div className="bg-white rounded-2xl border border-[#00592B]/10 shadow-sm overflow-hidden">
+        <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="text-left text-sm font-semibold text-[#1A1A1A]/60 border-b border-[#00592B]/5">
-                <th className="px-6 py-3 w-16">Rank</th>
-                <th className="px-6 py-3">Name</th>
-                <th className="px-6 py-3 text-right">Questions</th>
-                <th className="px-6 py-3 text-right">Accuracy</th>
-                <th className="px-6 py-3 text-right">Best Score</th>
+              <tr className="text-left text-sm font-semibold text-text-2 border-b border-border">
+                <th className="px-5 py-3 w-16">Rank</th>
+                <th className="px-5 py-3">Name</th>
+                <th className="px-5 py-3 text-right">Questions</th>
+                <th className="px-5 py-3 text-right">Accuracy</th>
+                <th className="px-5 py-3 text-right">Best Score</th>
               </tr>
             </thead>
             <tbody>
               {entries.map((entry) => (
                 <tr
                   key={entry.rank}
-                  className={`border-b border-[#00592B]/5 transition-colors ${
+                  className={`border-b border-border transition-colors ${
                     entry.is_current_user
-                      ? 'bg-[#1CE585]/10 border-l-4 border-l-[#1CE585]'
-                      : 'hover:bg-[#00592B]/[0.02]'
+                      ? 'bg-highlight/10 border-l-4 border-l-highlight'
+                      : 'hover:bg-primary/[0.03]'
                   }`}
                 >
-                  <td className={`px-6 py-4 font-black text-lg ${RANK_STYLES[entry.rank] || 'text-[#1A1A1A]/40'}`}>
+                  <td className={`px-5 py-3.5 font-black text-base tabular-nums ${RANK_STYLES[entry.rank] || 'text-text-3'}`}>
                     {entry.rank <= 3 ? ['', '1st', '2nd', '3rd'][entry.rank] : `#${entry.rank}`}
                   </td>
-                  <td className="px-6 py-4 font-semibold text-[#1A1A1A]">
+                  <td className="px-5 py-3.5 font-semibold text-foreground">
                     {entry.display_name}
                     {entry.is_current_user && (
-                      <span className="ml-2 text-xs font-bold text-[#00592B] bg-[#1CE585]/20 px-2 py-0.5 rounded-full">
+                      <span className="ml-2 text-xs font-bold text-primary bg-highlight/20 px-2 py-0.5 rounded-full">
                         You
                       </span>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm text-[#1A1A1A]/70">{entry.questions_answered}</td>
-                  <td className="px-6 py-4 text-right text-sm font-medium text-[#1A1A1A]">{entry.accuracy}%</td>
-                  <td className="px-6 py-4 text-right text-sm font-bold text-[#00592B]">
+                  <td className="px-5 py-3.5 text-right text-sm text-text-2 tabular-nums">{entry.questions_answered}</td>
+                  <td className="px-5 py-3.5 text-right text-sm font-medium text-foreground tabular-nums">{entry.accuracy}%</td>
+                  <td className="px-5 py-3.5 text-right text-sm font-bold text-primary tabular-nums">
                     {entry.best_exam_score !== null ? entry.best_exam_score : '-'}
                   </td>
                 </tr>
               ))}
               {entries.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-[#1A1A1A]/40">
-                    No students on the leaderboard yet.
+                  <td colSpan={5} className="px-6 py-12 text-center">
+                    <Trophy className="w-10 h-10 text-text-3 mx-auto mb-3" />
+                    <p className="text-foreground font-semibold mb-1">No students on the leaderboard yet</p>
+                    <p className="text-text-3 text-sm">Start practicing to claim the top spot.</p>
                   </td>
                 </tr>
               )}

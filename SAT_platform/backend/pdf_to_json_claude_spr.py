@@ -86,6 +86,7 @@ Rules:
 - Do NOT invent options. SPR questions have a free-response answer only.
 - correct_answer_text: keep multiple acceptable forms if the PDF lists them,
   separated by a comma (e.g. "1/2, 0.5").
+- IMPORTANT: Escape currency dollar signs as \\$ (e.g., \\$20, \\$500). Do NOT use bare $ for currency — it conflicts with LaTeX delimiters.
 - Return ONLY the JSON object or the word null. No markdown.\
 """
 

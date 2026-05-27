@@ -3,134 +3,187 @@
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { Menu, X } from "lucide-react";
-import gsap from "gsap";
+import { useState } from "react";
+import {
+    BarChart3,
+    BookOpen,
+    Bot,
+    ClipboardList,
+    Layers,
+    LayoutDashboard,
+    LogOut,
+    Menu,
+    Moon,
+    Shield,
+    Trophy,
+    X,
+} from "lucide-react";
+
+const NAV_ITEMS = [
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/practice", label: "Practice", icon: BookOpen },
+    { href: "/test", label: "Practice Test", icon: ClipboardList },
+    { href: "/ai-tutor", label: "AI Tutor", icon: Bot },
+    { href: "/flashcards", label: "Flashcards", icon: Layers },
+    { href: "/progress", label: "Progress", icon: BarChart3 },
+    { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
+];
+
+const HIDDEN_ROUTES = ["/practice/session", "/test/session"];
+
+function UserAvatar({ name }: { name: string }) {
+    const initial = (name || "S").charAt(0).toUpperCase();
+    return (
+        <div className="w-8 h-8 rounded-full bg-highlight/20 flex items-center justify-center text-sm font-bold text-highlight shrink-0">
+            {initial}
+        </div>
+    );
+}
 
 export default function Navbar() {
     const { user, logout } = useAuth();
     const pathname = usePathname();
-    const navRef = useRef<HTMLElement>(null);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const closeMobile = () => setMobileOpen(false);
 
-    useEffect(() => {
-        if (navRef.current) {
-            gsap.fromTo(
-                navRef.current,
-                { y: -100, opacity: 0 },
-                { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+    const isHidden = HIDDEN_ROUTES.some((r) => pathname.startsWith(r));
+    if (!user || isHidden) {
+        if (!user && !isHidden) {
+            return (
+                <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border">
+                    <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-14">
+                        <Link href="/" className="flex items-center gap-2 text-lg font-black text-primary tracking-tighter">
+                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-highlight to-accent flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                                M
+                            </div>
+                            MaxSAT
+                        </Link>
+                        <Link
+                            href="/login"
+                            className="px-5 py-2 rounded-lg text-sm font-bold text-white bg-primary hover:bg-accent transition-colors active:scale-[0.97]"
+                        >
+                            Log in
+                        </Link>
+                    </div>
+                </nav>
             );
         }
-    }, []);
+        return null;
+    }
 
     const navLinks = [
-        { href: "/dashboard", label: "Dashboard" },
-        { href: "/practice", label: "Practice" },
-        { href: "/test", label: "Practice Test" },
-        { href: "/ai-tutor", label: "AI Tutor" },
-        { href: "/flashcards", label: "Flashcards" },
-        { href: "/progress", label: "Progress" },
-        { href: "/leaderboard", label: "Leaderboard" },
-        ...(user?.role === "admin" ? [{ href: "/admin", label: "Admin" }] : []),
+        ...NAV_ITEMS,
+        ...(user.role === "admin" ? [{ href: "/admin", label: "Admin", icon: Shield }] : []),
     ];
 
-    return (
-        <nav ref={navRef} className="bg-[#FAFAF8]/90 backdrop-blur-xl border-b border-[#00592B]/10 sticky top-0 z-50 transition-all duration-300">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-20 items-center">
-                    <div className="flex items-center space-x-8">
-                        <Link href="/" className="text-2xl font-black text-[#00592B] tracking-tighter flex items-center gap-2 group">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1CE585] to-[#10B981] flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-[#1CE585]/30 group-hover:scale-105 transition-transform duration-300">
-                                O
-                            </div>
-                            <span className="group-hover:opacity-80 transition-opacity">MaxSAT</span>
+    const sidebarContent = (mobile: boolean) => (
+        <>
+            {/* Logo */}
+            <Link
+                href="/dashboard"
+                onClick={mobile ? () => setMobileOpen(false) : undefined}
+                className="flex items-center gap-2.5 px-5 h-14 shrink-0"
+            >
+                <div className="w-7 h-7 rounded-lg bg-highlight flex items-center justify-center text-primary font-bold text-sm">
+                    M
+                </div>
+                <span className="text-lg font-black text-white tracking-tighter">MaxSAT</span>
+            </Link>
+
+            {/* Nav links */}
+            <nav className="flex-1 overflow-y-auto pt-4 pb-2 px-3 space-y-0.5">
+                {navLinks.map((link) => {
+                    const isActive = pathname === link.href || (link.href !== "/dashboard" && pathname.startsWith(link.href + "/"));
+                    const Icon = link.icon;
+                    return (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            onClick={mobile ? () => setMobileOpen(false) : undefined}
+                            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-[background-color,color] duration-[var(--dur)] ease-[var(--ease)] ${
+                                isActive
+                                    ? "bg-white/15 text-white font-semibold"
+                                    : "text-white/60 hover:text-white hover:bg-white/8"
+                            }`}
+                        >
+                            <Icon className="w-[18px] h-[18px] shrink-0" />
+                            {link.label}
                         </Link>
-                        {user && (
-                            <div className="hidden md:flex space-x-2">
-                                {navLinks.map((link) => {
-                                    const isActive = pathname === link.href;
-                                    return (
-                                        <Link
-                                            key={link.href}
-                                            href={link.href}
-                                            className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${isActive
-                                                    ? "bg-[#00592B] text-[#FAFAF8] shadow-md shadow-[#00592B]/20"
-                                                    : "text-[#1A1A1A]/70 hover:text-[#00592B] hover:bg-[#00592B]/5"
-                                                }`}
-                                        >
-                                            {link.label}
-                                        </Link>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
-                    <div className="flex items-center space-x-4">
-                        {user ? (
-                            <>
-                                <span className="text-sm font-bold text-[#1A1A1A]/80 hidden sm:block bg-[#00592B]/5 px-3 py-1.5 rounded-full">
-                                    {user.name || "Student"}
-                                </span>
-                                <Link href="/profile" className="hidden sm:inline-block text-sm font-bold text-[#1A1A1A]/70 hover:text-[#00592B] transition-colors hover:-translate-y-0.5">
-                                    Profile
-                                </Link>
-                                <button
-                                    onClick={logout}
-                                    className="hidden sm:inline-block text-sm font-bold text-[#1A1A1A]/70 hover:text-[#10B981] transition-colors hover:-translate-y-0.5"
-                                >
-                                    Logout
-                                </button>
-                                <button
-                                    onClick={() => setMobileOpen((v) => !v)}
-                                    className="md:hidden p-2 rounded-lg text-[#1A1A1A]/70 hover:bg-[#00592B]/5 transition-colors"
-                                    aria-label="Toggle menu"
-                                >
-                                    {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                                </button>
-                            </>
-                        ) : (
-                            <Link href="/login" className="inline-flex items-center px-6 py-2.5 rounded-full shadow-lg shadow-[#10B981]/20 text-sm font-bold text-[#FAFAF8] bg-[#00592B] hover:bg-[#10B981] hover:-translate-y-0.5 transition-all duration-300 active:scale-95">
-                                Log in
-                            </Link>
-                        )}
-                    </div>
+                    );
+                })}
+            </nav>
+
+            {/* Bottom section */}
+            <div className="px-3 pb-3 space-y-3">
+                {/* User row */}
+                <Link
+                    href="/profile"
+                    onClick={mobile ? () => setMobileOpen(false) : undefined}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
+                        pathname === "/profile"
+                            ? "bg-white/15 text-white"
+                            : "text-white/60 hover:text-white hover:bg-white/8"
+                    }`}
+                >
+                    <UserAvatar name={user.name} />
+                    <span className="text-sm font-medium truncate">{user.name || "Profile"}</span>
+                </Link>
+
+                {/* Actions row */}
+                <div className="flex items-center gap-1 px-1">
+                    <button
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-white/40 hover:text-white/70 hover:bg-white/8 transition-colors"
+                        title="Dark mode coming soon"
+                    >
+                        <Moon className="w-4 h-4" />
+                        Dark mode
+                    </button>
+                    <button
+                        onClick={() => { logout(); if (mobile) setMobileOpen(false); }}
+                        className="ml-auto flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-white/40 hover:text-red-300 hover:bg-white/8 transition-colors active:scale-[0.97]"
+                    >
+                        <LogOut className="w-4 h-4" />
+                    </button>
                 </div>
             </div>
+        </>
+    );
 
-            {/* Mobile menu */}
-            {user && mobileOpen && (
-                <div className="md:hidden border-t border-[#00592B]/10 bg-[#FAFAF8] px-4 pb-4 pt-2 space-y-1">
-                    {navLinks.map((link) => {
-                        const isActive = pathname === link.href;
-                        return (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                onClick={closeMobile}
-                                className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                                    isActive
-                                        ? "bg-[#00592B] text-[#FAFAF8]"
-                                        : "text-[#1A1A1A]/70 hover:bg-[#00592B]/5"
-                                }`}
-                            >
-                                {link.label}
-                            </Link>
-                        );
-                    })}
-                    <div className="border-t border-[#00592B]/10 pt-2 mt-2 flex items-center justify-between px-4">
-                        <Link href="/profile" onClick={closeMobile} className="text-sm font-bold text-[#1A1A1A]/70 hover:text-[#00592B] transition-colors">
-                            Profile
-                        </Link>
-                        <button
-                            onClick={logout}
-                            className="text-sm font-bold text-[#1A1A1A]/70 hover:text-[#10B981] transition-colors"
-                        >
-                            Logout
-                        </button>
+    return (
+        <>
+            {/* ── Desktop Sidebar ── */}
+            <aside className="hidden md:flex fixed left-0 top-0 bottom-0 z-40 w-[220px] flex-col bg-primary">
+                {sidebarContent(false)}
+            </aside>
+
+            {/* ── Mobile Top Bar ── */}
+            <header className="md:hidden fixed top-0 left-0 right-0 z-50 h-14 bg-primary flex items-center justify-between px-4">
+                <Link href="/dashboard" className="flex items-center gap-2 text-lg font-black text-white tracking-tighter">
+                    <div className="w-7 h-7 rounded-lg bg-highlight flex items-center justify-center text-primary font-bold text-sm">
+                        M
                     </div>
+                    MaxSAT
+                </Link>
+                <button
+                    onClick={() => setMobileOpen((v) => !v)}
+                    className="p-2 rounded-lg text-white/70 hover:bg-white/10 transition-[transform,background-color] duration-[var(--dur)] ease-[var(--ease)] active:scale-[0.97]"
+                    aria-label="Toggle menu"
+                >
+                    {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
+            </header>
+
+            {/* ── Mobile Overlay ── */}
+            {mobileOpen && (
+                <div className="md:hidden fixed inset-0 z-50 overlay-enter" onClick={() => setMobileOpen(false)}>
+                    <div className="absolute inset-0 bg-black/40" />
+                    <aside
+                        className="absolute left-0 top-0 bottom-0 w-[260px] bg-primary shadow-2xl flex flex-col sidebar-enter"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {sidebarContent(true)}
+                    </aside>
                 </div>
             )}
-        </nav>
+        </>
     );
 }

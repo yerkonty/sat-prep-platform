@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { Inter_Tight, Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
+import "./globals.css";
 import Providers from "@/components/Providers";
 import Navbar from "@/components/Navbar";
+import AppShell from "@/components/AppShell";
 
-const interTight = Inter_Tight({ subsets: ["latin"], variable: "--font-inter-tight" });
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "SAT Prep Platform",
-  description: "AI-powered Digital SAT preparation",
+  title: "MaxSAT — Digital SAT Prep",
+  description: "AI-powered Digital SAT preparation. Practice with real questions, get instant feedback, and track your progress.",
 };
 
 export default function RootLayout({
@@ -18,10 +19,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${interTight.variable} ${inter.variable} font-sans`}>
+      <body className={`${jakarta.variable} font-sans bg-background text-foreground`}>
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg">
+          Skip to content
+        </a>
         <Providers>
           <Navbar />
-          <main className="min-h-screen bg-[#FAFAF8] text-[#1A1A1A]">{children}</main>
+          <AppShell>
+            <main id="main-content" className="min-h-screen">{children}</main>
+          </AppShell>
         </Providers>
       </body>
     </html>

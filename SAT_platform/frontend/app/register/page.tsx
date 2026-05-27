@@ -32,21 +32,21 @@ export default function RegisterPage() {
   if (token) return null;
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center text-[#00592B] mb-6">
-          <BookOpen className="w-12 h-12" />
-        </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-[#1A1A1A]">
+        <Link href="/" className="flex justify-center text-primary mb-4">
+          <BookOpen className="w-10 h-10" />
+        </Link>
+        <h2 className="text-center text-2xl font-extrabold text-foreground">
           Join MaxSAT Academy
         </h2>
-        <p className="mt-2 text-center text-sm text-[#1A1A1A]/60">
+        <p className="mt-1 text-center text-sm text-text-2">
           Create your account to get started
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow-sm border border-[#00592B]/10 sm:rounded-2xl">
+      <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-card py-6 px-5 shadow-sm border border-border sm:rounded-2xl">
           <div className="flex justify-center">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
@@ -58,22 +58,22 @@ export default function RegisterPage() {
             />
           </div>
 
-          <div className="relative my-6">
+          <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#1A1A1A]/10" />
+              <div className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-[#1A1A1A]/40">or</span>
+              <span className="px-4 bg-card text-text-3">or</span>
             </div>
           </div>
 
-          <p className="text-center text-[#1A1A1A]/60 text-sm">
+          <p className="text-center text-text-2 text-sm">
             To register with email and password, you need an invite link from your instructor.
           </p>
 
-          <p className="mt-6 text-center text-sm text-[#1A1A1A]/50">
+          <p className="mt-5 text-center text-sm text-text-3">
             Already have an account?{' '}
-            <Link href="/login" className="font-medium text-[#00592B] hover:text-[#10B981]">
+            <Link href="/login" className="font-medium text-primary hover:text-accent transition-colors">
               Sign in
             </Link>
           </p>

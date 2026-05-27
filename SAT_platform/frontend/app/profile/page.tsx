@@ -51,7 +51,7 @@ export default function ProfilePage() {
 
     try {
       await api.put('/api/auth/profile', { name });
-      setMessage('Profile updated successfully!');
+      setMessage('Profile updated successfully');
       if (user) {
         user.name = name;
       }
@@ -85,7 +85,7 @@ export default function ProfilePage() {
         current_password: currentPassword,
         new_password: newPassword
       });
-      setMessage('Password changed successfully!');
+      setMessage('Password changed successfully');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
@@ -104,168 +104,127 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#10B981]" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-accent" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold text-[#1A1A1A] mb-8">Settings</h1>
+    <div className="min-h-screen bg-background py-6 px-4">
+      <div className="max-w-2xl mx-auto space-y-5">
+        <h1 className="text-2xl font-bold text-foreground">Settings</h1>
 
         {message && (
-          <div className={`mb-6 p-4 rounded-xl text-sm font-medium ${message.includes('success') ? 'bg-[#10B981]/10 text-[#00592B] border border-[#10B981]/20' : 'bg-red-50 text-red-700 border border-red-100'}`}>
+          <div className={`p-3 rounded-xl text-sm font-medium ${message.includes('success') ? 'bg-accent/10 text-primary border border-accent/20' : 'bg-red-50 text-red-700 border border-red-100'}`}>
             {message}
           </div>
         )}
 
-        {/* Profile Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#00592B]/10 p-6 mb-6">
-          <h2 className="text-xl font-bold text-[#1A1A1A] mb-4">Profile Information</h2>
+        <div className="bg-card rounded-2xl shadow-sm border border-border p-5">
+          <h2 className="text-lg font-bold text-foreground mb-4">Profile information</h2>
           <form onSubmit={handleUpdateProfile}>
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1">
-                  Email
-                </label>
+                <label className="block text-sm font-medium text-text-2 mb-1">Email</label>
                 <input
                   type="email"
                   value={profile?.email || ''}
                   disabled
-                  className="w-full px-4 py-2 border border-[#1A1A1A]/10 rounded-xl bg-[#FAFAF8] text-[#1A1A1A]/50"
+                  className="w-full px-4 py-2 border border-border rounded-xl bg-background text-text-3 text-sm"
                 />
-                <p className="text-xs text-[#1A1A1A]/40 mt-1">Email cannot be changed</p>
+                <p className="text-xs text-text-3 mt-1">Email cannot be changed</p>
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1">
-                  Name
-                </label>
+                <label className="block text-sm font-medium text-text-2 mb-1">Name</label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-2 border border-[#1A1A1A]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-[#1A1A1A]"
+                  className="w-full px-4 py-2 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent bg-card text-foreground text-sm"
                   required
                 />
               </div>
-
             </div>
-
             <button
               type="submit"
               disabled={saving}
-              className="mt-6 w-full py-2.5 bg-[#00592B] text-white rounded-xl hover:bg-[#10B981] disabled:opacity-50 font-medium transition-colors"
+              className="mt-4 w-full py-2.5 bg-primary text-white rounded-xl hover:bg-accent disabled:opacity-50 font-medium transition-colors text-sm active:scale-[0.97]"
             >
-              {saving ? 'Saving...' : 'Save Changes'}
+              {saving ? 'Saving...' : 'Save changes'}
             </button>
           </form>
         </div>
 
-        {/* AI Messages Usage */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#00592B]/10 p-6 mb-6">
-          <h2 className="text-xl font-bold text-[#1A1A1A] mb-4">AI Messages Usage</h2>
+        <div className="bg-card rounded-2xl shadow-sm border border-border p-5">
+          <h2 className="text-lg font-bold text-foreground mb-3">AI messages usage</h2>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[#1A1A1A]/60">Daily messages</p>
-              <p className="text-2xl font-bold text-[#1A1A1A]">
+              <p className="text-text-2 text-sm">Daily messages</p>
+              <p className="text-2xl font-bold text-foreground tabular-nums">
                 {profile?.ai_messages_used || 0} / {profile?.ai_messages_limit || 3}
               </p>
             </div>
-            <div className="w-32 bg-[#1A1A1A]/10 rounded-full h-3">
+            <div className="w-32 bg-foreground/10 rounded-full h-2.5">
               <div
-                className="bg-[#10B981] h-3 rounded-full transition-all"
+                className="bg-accent h-2.5 rounded-full transition-[width] duration-700 ease-[var(--ease)]"
                 style={{ width: `${((profile?.ai_messages_used || 0) / (profile?.ai_messages_limit || 3)) * 100}%` }}
               />
             </div>
           </div>
         </div>
 
-        {/* Change Password */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#00592B]/10 p-6 mb-6">
-          <h2 className="text-xl font-bold text-[#1A1A1A] mb-4">Change Password</h2>
+        <div className="bg-card rounded-2xl shadow-sm border border-border p-5">
+          <h2 className="text-lg font-bold text-foreground mb-4">Change password</h2>
           <form onSubmit={handleChangePassword}>
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1">
-                  Current Password
-                </label>
-                <input
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full px-4 py-2 border border-[#1A1A1A]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-[#1A1A1A]"
-                  required
-                />
+                <label className="block text-sm font-medium text-text-2 mb-1">Current password</label>
+                <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} className="w-full px-4 py-2 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent bg-card text-foreground text-sm" required />
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1">
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-4 py-2 border border-[#1A1A1A]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-[#1A1A1A]"
-                  required
-                  minLength={6}
-                />
+                <label className="block text-sm font-medium text-text-2 mb-1">New password</label>
+                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-4 py-2 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent bg-card text-foreground text-sm" required minLength={6} />
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-[#1A1A1A]/70 mb-1">
-                  Confirm New Password
-                </label>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 py-2 border border-[#1A1A1A]/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#10B981] bg-white text-[#1A1A1A]"
-                  required
-                  minLength={6}
-                />
+                <label className="block text-sm font-medium text-text-2 mb-1">Confirm new password</label>
+                <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-accent bg-card text-foreground text-sm" required minLength={6} />
               </div>
             </div>
-
             <button
               type="submit"
               disabled={saving}
-              className="mt-6 w-full py-2.5 bg-[#1A1A1A] text-white rounded-xl hover:bg-[#1A1A1A]/80 disabled:opacity-50 font-medium transition-colors"
+              className="mt-4 w-full py-2.5 bg-foreground text-background rounded-xl hover:opacity-80 disabled:opacity-50 font-medium transition-colors text-sm active:scale-[0.97]"
             >
-              {saving ? 'Changing...' : 'Change Password'}
+              {saving ? 'Changing...' : 'Change password'}
             </button>
           </form>
         </div>
 
-        {/* Account Info */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#00592B]/10 p-6 mb-6">
-          <h2 className="text-xl font-bold text-[#1A1A1A] mb-4">Account</h2>
-          <p className="text-sm text-[#1A1A1A]/50 mb-4">
+        <div className="bg-card rounded-2xl shadow-sm border border-border p-5">
+          <h2 className="text-lg font-bold text-foreground mb-2">Account</h2>
+          <p className="text-sm text-text-3 mb-3">
             Member since: {profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : 'N/A'}
           </p>
           <button
             onClick={handleLogout}
-            className="w-full py-2.5 border border-red-300 text-red-600 rounded-xl hover:bg-red-50 font-medium transition-colors"
+            className="w-full py-2.5 border border-red-300 text-red-600 rounded-xl hover:bg-red-50 font-medium transition-colors text-sm active:scale-[0.97]"
           >
-            Sign Out
+            Sign out
           </button>
         </div>
 
-        {/* Danger Zone */}
-        <div className="bg-white rounded-2xl shadow-sm border border-red-200 p-6">
-          <h2 className="text-xl font-bold text-red-600 mb-4">Danger Zone</h2>
-          <p className="text-sm text-[#1A1A1A]/50 mb-4">
-            Once you delete your account, there is no going back. Please be certain.
+        <div className="bg-card rounded-2xl shadow-sm border border-red-200 p-5">
+          <h2 className="text-lg font-bold text-red-600 mb-2">Danger zone</h2>
+          <p className="text-sm text-text-3 mb-3">
+            Once you delete your account, there is no going back.
           </p>
           <button
-            className="w-full py-2.5 border border-red-300 text-red-600 rounded-xl hover:bg-red-50 font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full py-2.5 border border-red-300 text-red-600 rounded-xl hover:bg-red-50 font-medium transition-colors text-sm disabled:opacity-40 disabled:cursor-not-allowed"
             disabled
             title="Feature coming soon"
           >
-            Delete Account
+            Delete account
           </button>
         </div>
       </div>

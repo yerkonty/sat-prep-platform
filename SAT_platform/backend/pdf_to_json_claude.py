@@ -81,13 +81,14 @@ Required fields:
   "options":       ["choice A text", "choice B text", "choice C text", "choice D text"],
   "correct_answer": 0,
   "explanation":   "Full Rationale text. Use LaTeX for all math.",
-  "has_image":     true if there is a graph, chart, coordinate plane, table, or diagram in the question,
+  "has_image":     true if there is a graph, coordinate plane, geometric figure, or diagram — NOT data tables (extract table content as text in "content" instead),
   "image_crop":    if has_image, {"top": 0.0, "left": 0.0, "bottom": 0.4, "right": 1.0} as 0.0-1.0 fractions of page size, else null
 }
 
 Rules:
 - correct_answer: 0=A, 1=B, 2=C, 3=D
 - Use LaTeX for ALL math: variables, fractions, exponents, equations, inequalities, symbols
+- IMPORTANT: Escape currency dollar signs as \\$ (e.g., \\$20, \\$500, \\$1,200). Do NOT use bare $ for currency — it conflicts with LaTeX delimiters.
 - image_crop must tightly bound the graph/figure only (not the full question text)
 - Return null if: no question on this page, OR question has no A-D choices (Student-Produced Response)
 - Return ONLY the JSON object or the word null. No markdown, no explanation.\
@@ -141,36 +142,45 @@ def _figure_bbox_fractions(plumber_page) -> Optional[dict]:
       - Raster images larger than MIN_FIGURE_PT (filters out inline math glyphs)
       - Vector shapes (curves/lines/rects) taller/wider than MIN_VECTOR_PT
         below the header area (filters out text glyph curves)
-      - Tables below the header area
+      - Tables below the header area (only included in bbox when a real
+        figure is also present — table-only pages return None because Claude
+        already extracts table content as text)
     """
     rects = []
+    has_real_figure = False
+
+    # Pre-collect table bboxes so we can exclude vector shapes that are
+    # just table borders (lines/rects inside a table).
+    table_bboxes = []
+    for t in plumber_page.find_tables():
+        if t.bbox[1] > HEADER_BOTTOM_Y:
+            table_bboxes.append(t.bbox)
+            rects.append(tuple(t.bbox))
+
+    def _inside_table(x0, top, x1, bottom):
+        for tb in table_bboxes:
+            if x0 >= tb[0] - 5 and top >= tb[1] - 5 and x1 <= tb[2] + 5 and bottom <= tb[3] + 5:
+                return True
+        return False
 
     for img in plumber_page.images:
-        # Real figures are taller than a text line. Inline math glyphs are
-        # typically <= 22pt tall even when wide ("45π" can be 77pt wide).
-        # Also accept smaller-but-square images (small circle diagrams that
-        # render under 60pt tall but are still square-ish and far from inline-math
-        # aspect ratios).
         if img["height"] >= MIN_FIGURE_PT or (
             img["height"] >= 40 and img["width"] >= 40
             and img["height"] * img["width"] >= 2500
         ):
             rects.append((img["x0"], img["top"], img["x1"], img["bottom"]))
+            has_real_figure = True
 
     for shape_attr in ("curves", "lines", "rects"):
         for s in getattr(plumber_page, shape_attr, []):
             if s["top"] <= HEADER_BOTTOM_Y:
-                continue  # ignore header decorations
-            # Require meaningful vertical extent — filters out \overline{} bars
-            # and underscores embedded in body text (height ≈ 0 but width > 20).
+                continue
             if s.get("height", 0) >= MIN_VECTOR_PT:
                 rects.append((s["x0"], s["top"], s["x1"], s["bottom"]))
+                if not _inside_table(s["x0"], s["top"], s["x1"], s["bottom"]):
+                    has_real_figure = True
 
-    for t in plumber_page.find_tables():
-        if t.bbox[1] > HEADER_BOTTOM_Y:
-            rects.append(tuple(t.bbox))
-
-    if not rects:
+    if not rects or not has_real_figure:
         return None
     W, H = float(plumber_page.width), float(plumber_page.height)
     fig_x0 = min(r[0] for r in rects)

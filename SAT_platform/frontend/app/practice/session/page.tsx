@@ -497,12 +497,12 @@ function PracticeSession() {
 
     if (!currentQuestion) {
         return (
-            <div className="flex h-screen flex-col items-center justify-center bg-[#f7f7f7] px-6 text-center">
-                <h2 className="text-2xl font-semibold text-slate-800">No questions found</h2>
-                <p className="text-slate-500 mt-2">Try another section or topic.</p>
+            <div className="flex h-screen flex-col items-center justify-center bg-background px-6 text-center">
+                <h2 className="text-2xl font-semibold text-foreground">No questions found</h2>
+                <p className="text-text-3 mt-2">Try another section or topic.</p>
                 <button
                     onClick={() => router.push("/practice")}
-                    className="mt-5 rounded-lg bg-[#00592B] px-5 py-2.5 text-white font-medium hover:bg-[#0c6a37]"
+                    className="mt-5 rounded-lg bg-primary px-5 py-2.5 text-white font-medium hover:bg-accent transition-colors active:scale-[0.97]"
                 >
                     Back to Question Bank
                 </button>
@@ -511,7 +511,7 @@ function PracticeSession() {
     }
 
     return (
-        <div className={`h-screen overflow-hidden bg-white text-[#1a1a1a] ${highlightMode ? "cursor-text" : ""}`}>
+        <div className={`h-screen overflow-hidden bg-card text-foreground ${highlightMode ? "cursor-text" : ""}`}>
             <div className="flex h-full flex-col">
 
                 {/* ── Header ── */}
@@ -555,7 +555,7 @@ function PracticeSession() {
                                     onClick={() => setCalcOpen((prev) => !prev)}
                                     className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
                                         calcOpen
-                                            ? "border-[#00592B] bg-[#00592B] text-white"
+                                            ? "border-primary bg-primary text-white"
                                             : "border-slate-200 text-slate-600 hover:bg-slate-50"
                                     }`}
                                 >
@@ -588,7 +588,7 @@ function PracticeSession() {
                                             />
                                         </div>
                                     )}
-                                    <article className="prose max-w-none font-serif text-[1rem] md:text-[1.06rem] leading-[1.75] text-[#1d1d1d]">
+                                    <article className="prose max-w-none font-serif text-[1rem] md:text-[1.06rem] leading-[1.75] text-foreground">
                                         {parsedQuestion.passageHtml.split(/\n\n+/).filter(Boolean).map((para, i) => (
                                             <p key={i} dangerouslySetInnerHTML={{ __html: renderMath(para.replace(/\n/g, "<br />")) }} />
                                         ))}
@@ -617,7 +617,7 @@ function PracticeSession() {
 
                             {/* Question toolbar */}
                             <div className="mb-5 flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2">
-                                <div className="grid h-8 w-8 shrink-0 place-items-center rounded bg-[#1a1a1a] text-sm font-bold text-white">
+                                <div className="grid h-8 w-8 shrink-0 place-items-center rounded bg-foreground text-sm font-bold text-white">
                                     {currentIndex + 1}
                                 </div>
                                 <button
@@ -672,7 +672,7 @@ function PracticeSession() {
                                         </div>
                                     )}
                                     <div
-                                        className="space-y-3 text-[1rem] leading-[1.7] text-[#1a1a1a] [&_p]:m-0 [&_table]:my-3"
+                                        className="space-y-3 text-[1rem] leading-[1.7] text-foreground [&_p]:m-0 [&_table]:my-3"
                                         dangerouslySetInnerHTML={{ __html: renderContentBlocks(currentQuestion.content) }}
                                     />
 
@@ -681,7 +681,7 @@ function PracticeSession() {
 
                             {/* RW: show question prompt only */}
                             {!isMath && (
-                                <p className="mb-6 text-[1.05rem] font-medium leading-[1.65] text-[#1a1a1a]"
+                                <p className="mb-6 text-[1.05rem] font-medium leading-[1.65] text-foreground"
                                     dangerouslySetInnerHTML={{ __html: renderMath(parsedQuestion.prompt) }}
                                 />
                             )}
@@ -845,12 +845,12 @@ function PracticeSession() {
                         {/* Center — Progress + Question counter */}
                         <div className="flex flex-col items-center gap-1">
                             <p className="flex items-center gap-1.5 text-[11px] text-slate-400">
-                                <CheckCircle className="h-3 w-3 text-[#00592B]" />
+                                <CheckCircle className="h-3 w-3 text-primary" />
                                 Progress: {Object.keys(answerStates).length} of {questions.length} questions checked
                             </p>
                             <button
                                 onClick={() => setNavigatorOpen(true)}
-                                className="group relative flex items-center gap-2 rounded-full bg-[#1a1a1a] px-5 py-1.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:scale-[1.04] hover:bg-black hover:shadow-md active:scale-[0.97]"
+                                className="group relative flex items-center gap-2 rounded-full bg-foreground px-5 py-1.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:scale-[1.04] hover:bg-black hover:shadow-md active:scale-[0.97]"
                                 title="Jump to a question or toggle shuffle"
                             >
                                 <span className="grid h-4 w-4 place-items-center rounded-sm bg-white/15 text-[10px] font-bold transition-colors group-hover:bg-white/25">
@@ -871,7 +871,7 @@ function PracticeSession() {
                             {!answerState && (isFreeResponse ? textAnswer.trim().length > 0 : selectedOption !== undefined) && (
                                 <button
                                     onClick={handleCheckAnswer}
-                                    className="flex items-center gap-1.5 rounded-full bg-[#1a1a1a] px-5 py-2 text-sm font-semibold text-white hover:bg-black transition-colors"
+                                    className="flex items-center gap-1.5 rounded-full bg-foreground px-5 py-2 text-sm font-semibold text-white hover:bg-black transition-colors active:scale-[0.97]"
                                 >
                                     <CheckCircle className="h-4 w-4" />
                                     Check
@@ -979,7 +979,7 @@ function PracticeSession() {
                                         cls = "border-slate-400 bg-slate-100 text-slate-800";
                                     }
                                     if (isCurrent) {
-                                        cls += " ring-2 ring-offset-1 ring-[#00592B]";
+                                        cls += " ring-2 ring-offset-1 ring-primary";
                                     }
 
                                     return (
@@ -1024,7 +1024,7 @@ function PracticeSession() {
                         height: `${calcSize.h}px`,
                         zIndex: 200,
                         borderRadius: "12px",
-                        border: "1px solid #e2e8f0",
+                        border: "1px solid var(--border)",
                         boxShadow: "0 8px 40px rgba(0,0,0,0.18)",
                         display: "flex",
                         flexDirection: "column",
@@ -1045,7 +1045,7 @@ function PracticeSession() {
                             alignItems: "center",
                             justifyContent: "space-between",
                             padding: "8px 14px",
-                            background: "#1a1a1a",
+                            background: "var(--foreground)",
                             borderRadius: "11px 11px 0 0",
                             flexShrink: 0,
                             cursor: "grab",
@@ -1058,7 +1058,7 @@ function PracticeSession() {
                         <button
                             onMouseDown={(e) => e.stopPropagation()}
                             onClick={() => setCalcOpen(false)}
-                            style={{ color: "#9ca3af", background: "none", border: "none", cursor: "pointer", fontSize: "18px", lineHeight: 1, padding: "0 2px" }}
+                            style={{ color: "var(--text-3)", background: "none", border: "none", cursor: "pointer", fontSize: "18px", lineHeight: 1, padding: "0 2px" }}
                         >
                             ×
                         </button>
@@ -1090,7 +1090,7 @@ function PracticeSession() {
                             width: "20px",
                             height: "20px",
                             cursor: "se-resize",
-                            background: "linear-gradient(135deg, transparent 50%, #cbd5e1 50%)",
+                            background: "linear-gradient(135deg, transparent 50%, var(--border) 50%)",
                             borderBottomRightRadius: "11px",
                         }}
                     />

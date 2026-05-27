@@ -79,38 +79,37 @@ export default function QuestionBankPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-[#10B981]" />
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-accent" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#FAFAF8] text-[#1A1A1A] pb-24">
-            <div className="max-w-6xl mx-auto px-4 md:px-8 pt-10">
-                <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <div className="min-h-screen bg-background text-foreground pb-16">
+            <div className="max-w-6xl mx-auto px-4 md:px-8 pt-6">
+                <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
                     <div>
-                        <h1 className="text-3xl md:text-5xl font-black tracking-tight">Question Bank</h1>
-                        <p className="text-[#1A1A1A]/60 mt-2 text-sm md:text-base">
-                            Real questions from your database, grouped by section, domain, and skill.
+                        <h1 className="text-2xl md:text-4xl font-black tracking-tight">Question Bank</h1>
+                        <p className="text-text-2 mt-1 text-sm">
+                            Real questions grouped by section, domain, and skill.
                         </p>
                     </div>
-                    <div className="inline-flex items-center gap-2 rounded-xl border border-[#00592B]/20 bg-white px-4 py-2 text-sm font-semibold text-[#00592B]">
+                    <div className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-3 py-1.5 text-sm font-semibold text-primary">
                         <ListTree className="w-4 h-4" />
-                        Total available: {stats?.total_questions ?? 0}
+                        Total: {stats?.total_questions ?? 0}
                     </div>
                 </div>
 
-                {/* Filter Panel */}
-                <div className="mb-6 flex flex-wrap items-center gap-4">
+                <div className="mb-5 flex flex-wrap items-center gap-3">
                     <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-[#1A1A1A]/60">Difficulty:</span>
+                        <span className="text-sm font-semibold text-text-2">Difficulty:</span>
                         {(["Easy", "Medium", "Hard"] as const).map((level) => {
                             const isSelected = selectedDifficulties.includes(level);
                             const colorMap: Record<string, string> = {
-                                Easy:   isSelected ? "bg-emerald-600 text-white border-emerald-600"   : "bg-white text-emerald-700 border-emerald-300 hover:border-emerald-500",
-                                Medium: isSelected ? "bg-amber-500 text-white border-amber-500"       : "bg-white text-amber-700 border-amber-300 hover:border-amber-500",
-                                Hard:   isSelected ? "bg-rose-600 text-white border-rose-600"         : "bg-white text-rose-700 border-rose-300 hover:border-rose-500",
+                                Easy:   isSelected ? "bg-emerald-600 text-white border-emerald-600"   : "bg-card text-emerald-700 border-emerald-300 hover:border-emerald-500",
+                                Medium: isSelected ? "bg-amber-500 text-white border-amber-500"       : "bg-card text-amber-700 border-amber-300 hover:border-amber-500",
+                                Hard:   isSelected ? "bg-rose-600 text-white border-rose-600"         : "bg-card text-rose-700 border-rose-300 hover:border-rose-500",
                             };
                             return (
                                 <button
@@ -120,7 +119,7 @@ export default function QuestionBankPage() {
                                             prev.includes(level) ? prev.filter((d) => d !== level) : [...prev, level]
                                         )
                                     }
-                                    className={`rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${colorMap[level]}`}
+                                    className={`rounded-lg border px-3 py-1 text-xs font-semibold transition-colors active:scale-95 ${colorMap[level]}`}
                                 >
                                     {level}
                                 </button>
@@ -129,7 +128,7 @@ export default function QuestionBankPage() {
                         {selectedDifficulties.length > 0 && (
                             <button
                                 onClick={() => setSelectedDifficulties([])}
-                                className="text-xs text-slate-400 hover:text-slate-700 underline ml-1"
+                                className="text-xs text-text-3 hover:text-foreground underline ml-1"
                             >
                                 Clear
                             </button>
@@ -137,7 +136,7 @@ export default function QuestionBankPage() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <label htmlFor="qid-search" className="text-sm font-semibold text-[#1A1A1A]/60 whitespace-nowrap">
+                        <label htmlFor="qid-search" className="text-sm font-semibold text-text-2 whitespace-nowrap">
                             Question ID:
                         </label>
                         <input
@@ -146,12 +145,12 @@ export default function QuestionBankPage() {
                             value={questionIdSearch}
                             onChange={(e) => setQuestionIdSearch(e.target.value)}
                             placeholder="e.g. a1b2c3d4"
-                            className="w-36 rounded-xl border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#00592B] focus:border-[#00592B]"
+                            className="w-36 rounded-xl border border-border bg-card px-3 py-1.5 text-sm text-foreground placeholder:text-text-3 focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
                         />
                         {questionIdSearch.trim() && (
                             <Link
                                 href={buildSessionUrl({ module: "rw" })}
-                                className="inline-flex items-center gap-1 rounded-xl bg-[#00592B] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#0c6a37] transition-colors"
+                                className="inline-flex items-center gap-1 rounded-xl bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-accent transition-colors active:scale-95"
                             >
                                 Go
                             </Link>
@@ -159,28 +158,28 @@ export default function QuestionBankPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                     {sections.map((section) => {
                         const isMath = section.id === "math";
                         const Icon = isMath ? Calculator : BookOpen;
-                        const cardAccent = isMath ? "bg-[#00592B]" : "bg-[#10B981]";
+                        const cardAccent = isMath ? "bg-primary" : "bg-accent";
 
                         return (
-                            <div key={section.id} className="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-                                <div className={`p-6 ${cardAccent} text-white`}>
+                            <div key={section.id} className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
+                                <div className={`p-5 ${cardAccent} text-white`}>
                                     <div className="flex items-center justify-between gap-3">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-11 h-11 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                                                <Icon className="w-6 h-6" />
+                                            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                                                <Icon className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <h2 className="text-2xl font-bold tracking-tight">{section.title}</h2>
-                                                <p className="text-white/90 text-sm mt-1">{section.count} questions</p>
+                                                <h2 className="text-xl font-bold tracking-tight">{section.title}</h2>
+                                                <p className="text-white/80 text-sm mt-0.5 tabular-nums">{section.count} questions</p>
                                             </div>
                                         </div>
                                         <Link
                                             href={buildSessionUrl({ module: section.id })}
-                                            className="inline-flex items-center gap-1 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-[#1A1A1A] hover:bg-slate-50 transition-colors"
+                                            className="inline-flex items-center gap-1 rounded-xl bg-white px-4 py-2 text-sm font-semibold text-foreground hover:bg-background transition-colors active:scale-[0.97]"
                                         >
                                             Solve
                                             <ChevronRight className="w-4 h-4" />
@@ -188,38 +187,38 @@ export default function QuestionBankPage() {
                                     </div>
                                 </div>
 
-                                <div className="p-6 space-y-5">
+                                <div className="p-5 space-y-4">
                                     {section.domains.length === 0 && (
-                                        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+                                        <div className="rounded-xl border border-border bg-background p-3 text-sm text-text-3">
                                             0 questions in this section.
                                         </div>
                                     )}
 
                                     {section.domains.map((domain) => (
-                                        <div key={domain.name} className="rounded-2xl border border-slate-200 p-4">
-                                            <div className="flex items-center justify-between gap-2 mb-3">
+                                        <div key={domain.name} className="rounded-xl border border-border p-3">
+                                            <div className="flex items-center justify-between gap-2 mb-2">
                                                 <Link
                                                     href={buildSessionUrl({ module: section.id, domain: domain.name })}
-                                                    className="font-bold text-lg text-slate-900 hover:text-[#00592B] transition-colors"
+                                                    className="font-bold text-base text-foreground hover:text-primary transition-colors"
                                                 >
                                                     {domain.name}
                                                 </Link>
-                                                <span className="text-sm font-semibold text-slate-500">{domain.count} questions</span>
+                                                <span className="text-sm font-semibold text-text-3 tabular-nums">{domain.count}</span>
                                             </div>
 
-                                            <div className="space-y-2">
+                                            <div className="space-y-0.5">
                                                 {domain.skills.length === 0 && (
-                                                    <div className="text-sm text-slate-500">0 questions</div>
+                                                    <div className="text-sm text-text-3">0 questions</div>
                                                 )}
 
                                                 {domain.skills.map((skill) => (
                                                     <Link
                                                         key={`${domain.name}-${skill.name}`}
                                                         href={buildSessionUrl({ module: section.id, domain: domain.name, skill: skill.name })}
-                                                        className="flex items-center justify-between rounded-lg px-3 py-2 hover:bg-slate-50 transition-colors"
+                                                        className="flex items-center justify-between rounded-lg px-3 py-1.5 hover:bg-background transition-colors text-sm"
                                                     >
-                                                        <span className="text-sm text-slate-700">{skill.name}</span>
-                                                        <span className="text-sm font-medium text-slate-500">{skill.count}</span>
+                                                        <span className="text-text-2">{skill.name}</span>
+                                                        <span className="font-medium text-text-3 tabular-nums">{skill.count}</span>
                                                     </Link>
                                                 ))}
                                             </div>

@@ -4,30 +4,178 @@
 :root {
   --background: #FAFAF8;
   --foreground: #1A1A1A;
-  --primary-green: #00592B;
-  --accent-green: #10B981;
-  /* Emerald */
-  --bright-green: #1CE585;
-  /* Lime */
+  --primary: #00592B;
+  --accent: #10B981;
+  --highlight: #1CE585;
+
+  --text-1: #1A1A1A;
+  --text-2: rgba(26, 26, 26, 0.6);
+  --text-3: rgba(26, 26, 26, 0.4);
+  --text-inv: #ffffff;
+
+  --card: #ffffff;
+  --card-hover: #fcfdfc;
+  --border: rgba(0, 89, 43, 0.1);
+  --border-focus: #10B981;
+  --input-bg: #ffffff;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-full: 9999px;
+
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur: 160ms;
+  --dur-slow: 300ms;
+}
+
+[data-theme="dark"] {
+  --background: #0d110f;
+  --foreground: #f1f4f2;
+  --text-1: #f1f4f2;
+  --text-2: rgba(241, 244, 242, 0.6);
+  --text-3: rgba(241, 244, 242, 0.4);
+  --card: #151a17;
+  --card-hover: #1e2520;
+  --border: rgba(16, 185, 129, 0.15);
+  --border-focus: #1CE585;
+  --input-bg: #1e2520;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: var(--primary-green);
-  --color-accent: var(--accent-green);
-  --color-bright: var(--bright-green);
-  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-highlight: var(--highlight);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-border: var(--border);
+  --color-text-1: var(--text-1);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
+  min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   overflow-x: hidden;
 }
 
-/* Base GSAP utility classes */
-.visibility-hidden {
-  visibility: hidden;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hover-lift:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* ── Entry animations ── */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-in {
+  animation: fadeSlideIn var(--dur-slow) var(--ease) both;
+}
+
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 60ms; }
+.stagger-3 { animation-delay: 120ms; }
+.stagger-4 { animation-delay: 180ms; }
+.stagger-5 { animation-delay: 240ms; }
+.stagger-6 { animation-delay: 300ms; }
+
+/* ── Sidebar slide ── */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sidebar-enter {
+  animation: slideInLeft var(--dur-slow) var(--ease) both;
+}
+
+.overlay-enter {
+  animation: fadeOverlay 200ms ease both;
+}
+
+/* ── Bar chart grow ── */
+@keyframes growUp {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* ── Message bubble entry ── */
+@keyframes bubbleIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bubble-in {
+  animation: bubbleIn 250ms var(--ease) both;
 }

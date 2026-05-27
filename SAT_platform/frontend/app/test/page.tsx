@@ -52,63 +52,63 @@ export default function TestStartPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center px-4 py-12">
+        <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
             <div className="max-w-3xl w-full">
-                <div className="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
-                    <div className="bg-gradient-to-br from-[#00592B] to-[#10B981] text-white p-10">
-                        <h1 className="text-4xl font-black mb-3">SAT Practice Test</h1>
-                        <p className="text-white/90 text-lg">
+                <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden">
+                    <div className="bg-gradient-to-br from-primary to-accent text-white p-8">
+                        <h1 className="text-3xl font-black mb-2">SAT Practice Test</h1>
+                        <p className="text-white/90 text-base">
                             A timed, full-length practice test modeled on the Digital SAT.
                         </p>
                     </div>
 
-                    <div className="p-10 space-y-8">
+                    <div className="p-8 space-y-6">
                         <div>
-                            <h2 className="text-xl font-bold text-slate-900 mb-4">Test Structure</h2>
-                            <div className="grid sm:grid-cols-2 gap-4">
-                                <div className="border border-slate-200 rounded-xl p-5">
-                                    <div className="flex items-center gap-2 text-[#00592B] font-bold mb-2">
+                            <h2 className="text-lg font-bold text-foreground mb-3">Test structure</h2>
+                            <div className="grid sm:grid-cols-2 gap-3">
+                                <div className="border border-border rounded-xl p-4">
+                                    <div className="flex items-center gap-2 text-primary font-bold mb-1.5">
                                         <BookOpen className="w-5 h-5" />
                                         Module 1
                                     </div>
-                                    <div className="text-slate-900 font-semibold">Reading & Writing</div>
-                                    <div className="text-sm text-slate-600 mt-1">27 questions • 32 minutes</div>
+                                    <div className="text-foreground font-semibold text-sm">Reading & Writing</div>
+                                    <div className="text-sm text-text-3 mt-0.5 tabular-nums">27 questions · 32 minutes</div>
                                 </div>
-                                <div className="border border-slate-200 rounded-xl p-5">
-                                    <div className="flex items-center gap-2 text-[#00592B] font-bold mb-2">
+                                <div className="border border-border rounded-xl p-4">
+                                    <div className="flex items-center gap-2 text-primary font-bold mb-1.5">
                                         <Calculator className="w-5 h-5" />
                                         Module 2
                                     </div>
-                                    <div className="text-slate-900 font-semibold">Math</div>
-                                    <div className="text-sm text-slate-600 mt-1">22 questions • 35 minutes</div>
+                                    <div className="text-foreground font-semibold text-sm">Math</div>
+                                    <div className="text-sm text-text-3 mt-0.5 tabular-nums">22 questions · 35 minutes</div>
                                 </div>
                             </div>
                         </div>
 
                         <div>
-                            <h2 className="text-xl font-bold text-slate-900 mb-3">Directions</h2>
-                            <ul className="space-y-2 text-slate-700">
+                            <h2 className="text-lg font-bold text-foreground mb-3">Directions</h2>
+                            <ul className="space-y-2 text-text-2 text-sm">
                                 <li className="flex gap-3">
-                                    <Clock className="w-5 h-5 text-[#00592B] flex-shrink-0 mt-0.5" />
+                                    <Clock className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                                     <span>Each module is timed independently. The clock counts down in the upper right.</span>
                                 </li>
                                 <li className="flex gap-3">
-                                    <Flag className="w-5 h-5 text-[#00592B] flex-shrink-0 mt-0.5" />
+                                    <Flag className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                                     <span>You can flag questions and navigate freely within a module before submitting.</span>
                                 </li>
                                 <li className="flex gap-3">
-                                    <ArrowLeftRight className="w-5 h-5 text-[#00592B] flex-shrink-0 mt-0.5" />
+                                    <ArrowLeftRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                                     <span>Once a module is submitted you cannot return to it.</span>
                                 </li>
                                 <li className="flex gap-3">
-                                    <BarChart3 className="w-5 h-5 text-[#00592B] flex-shrink-0 mt-0.5" />
+                                    <BarChart3 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                                     <span>Your section scores will display at the end (200–800 each, 400–1600 total).</span>
                                 </li>
                             </ul>
                         </div>
 
                         {error && (
-                            <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex gap-3">
+                            <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex gap-3">
                                 <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                                 <p className="text-sm text-red-800">{error}</p>
                             </div>
@@ -117,7 +117,7 @@ export default function TestStartPage() {
                         <button
                             onClick={handleStart}
                             disabled={loading}
-                            className="w-full bg-[#00592B] text-white font-bold py-4 rounded-xl hover:bg-[#10B981] transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-accent transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-[0.97]"
                         >
                             {loading ? (
                                 <>

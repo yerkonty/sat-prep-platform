@@ -101,16 +101,16 @@ export default function ProgressPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAFAF8] flex items-center justify-center">
-        <Loader2 className="w-6 h-6 animate-spin text-[#10B981]" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-accent" />
       </div>
     );
   }
 
   if (error || !analytics) {
     return (
-      <div className="min-h-screen bg-[#FAFAF8] py-12 px-6">
-        <div className="max-w-3xl mx-auto p-6 bg-red-50 border border-red-100 rounded-xl text-red-700">
+      <div className="min-h-screen bg-background py-8 px-6">
+        <div className="max-w-3xl mx-auto p-5 bg-red-50 border border-red-100 rounded-xl text-red-700 text-sm">
           {error || 'No analytics available.'}
         </div>
       </div>
@@ -122,102 +122,64 @@ export default function ProgressPage() {
   const rwSection = analytics.by_section.find((s) => s.section === 'rw');
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] py-12 px-6">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-[#1A1A1A]">Your Progress</h1>
-            <p className="text-[#1A1A1A]/50 mt-1">
-              Track your performance and focus on high-yield improvements.
-            </p>
-          </div>
+    <div className="min-h-screen bg-background py-8 px-6">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Your Progress</h1>
+          <p className="text-text-3 mt-1 text-sm">
+            Track your performance and focus on high-yield improvements.
+          </p>
         </div>
 
         {!hasProgress ? (
-          <div className="bg-white p-12 rounded-2xl shadow-sm border border-[#00592B]/10 text-center">
-            <Target className="w-12 h-12 mx-auto text-[#1A1A1A]/20 mb-4" />
-            <h2 className="text-xl font-semibold text-[#1A1A1A] mb-2">
-              No practice data yet
-            </h2>
-            <p className="text-[#1A1A1A]/50 mb-6">
-              Answer a few practice questions to start seeing analytics here.
-            </p>
+          <div className="bg-card p-10 rounded-2xl shadow-sm border border-border text-center">
+            <Target className="w-10 h-10 mx-auto text-text-3 mb-3" />
+            <h2 className="text-lg font-semibold text-foreground mb-2">No practice data yet</h2>
+            <p className="text-text-3 mb-5 text-sm">Answer a few questions to start seeing analytics here.</p>
             <Link
               href="/practice"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#00592B] text-white rounded-xl hover:bg-[#10B981] transition-colors font-medium"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl hover:bg-accent transition-colors font-medium active:scale-[0.97]"
             >
-              <PlayCircle className="w-5 h-5" /> Start Practicing
+              <PlayCircle className="w-5 h-5" /> Start practicing
             </Link>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <StatCard
-                icon={<BookOpen className="w-5 h-5 text-[#00592B]" />}
-                iconBg="bg-[#00592B]/10"
-                label="Questions Answered"
-                value={String(analytics.total_questions)}
-                hint="Across all sections"
-              />
-              <StatCard
-                icon={<Target className="w-5 h-5 text-[#10B981]" />}
-                iconBg="bg-[#10B981]/10"
-                label="Overall Accuracy"
-                value={`${analytics.accuracy}%`}
-                hint={`${analytics.correct_answers} correct`}
-              />
-              <StatCard
-                icon={<Clock className="w-5 h-5 text-[#00592B]" />}
-                iconBg="bg-[#00592B]/10"
-                label="Time Spent"
-                value={formatTime(analytics.time_spent_seconds)}
-                hint="Total practice time"
-              />
-              <StatCard
-                icon={<BarChart3 className="w-5 h-5 text-amber-600" />}
-                iconBg="bg-amber-100"
-                label="Sections Studied"
-                value={String(analytics.by_section.length)}
-                hint={analytics.by_section.map((s) => SECTION_LABEL[s.section] || s.section).join(', ') || '—'}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+              <StatCard icon={<BookOpen className="w-5 h-5 text-primary" />} iconBg="bg-primary/10" label="Questions answered" value={String(analytics.total_questions)} hint="Across all sections" />
+              <StatCard icon={<Target className="w-5 h-5 text-accent" />} iconBg="bg-accent/10" label="Overall accuracy" value={`${analytics.accuracy}%`} hint={`${analytics.correct_answers} correct`} />
+              <StatCard icon={<Clock className="w-5 h-5 text-primary" />} iconBg="bg-primary/10" label="Time spent" value={formatTime(analytics.time_spent_seconds)} hint="Total practice time" />
+              <StatCard icon={<BarChart3 className="w-5 h-5 text-amber-600" />} iconBg="bg-amber-100" label="Sections studied" value={String(analytics.by_section.length)} hint={analytics.by_section.map((s) => SECTION_LABEL[s.section] || s.section).join(', ') || '—'} />
             </div>
 
             {(mathSection || rwSection) && (
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#00592B]/10">
-                <h3 className="text-lg font-bold text-[#1A1A1A] mb-6">Section Performance</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {rwSection && <SectionBar label="Reading & Writing" data={rwSection} barClass="bg-[#10B981]" />}
-                  {mathSection && <SectionBar label="Math" data={mathSection} barClass="bg-[#00592B]" />}
+              <div className="bg-card p-5 rounded-2xl shadow-sm border border-border">
+                <h3 className="text-base font-bold text-foreground mb-5">Section performance</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {rwSection && <SectionBar label="Reading & Writing" data={rwSection} barClass="bg-accent" />}
+                  {mathSection && <SectionBar label="Math" data={mathSection} barClass="bg-primary" />}
                 </div>
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#00592B]/10 flex flex-col">
-                <h3 className="text-lg font-bold text-[#1A1A1A] mb-6">Recent Activity</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="bg-card p-5 rounded-2xl shadow-sm border border-border flex flex-col">
+                <h3 className="text-base font-bold text-foreground mb-4">Recent activity</h3>
                 {analytics.recent_activity.length === 0 ? (
-                  <p className="text-[#1A1A1A]/50 text-sm">Nothing yet.</p>
+                  <p className="text-text-3 text-sm">Nothing yet.</p>
                 ) : (
-                  <div className="space-y-3 flex-1">
+                  <div className="space-y-2 flex-1">
                     {analytics.recent_activity.slice(0, 6).map((item) => (
                       <div
                         key={`${item.question_id}-${item.answered_at}`}
-                        className="flex items-start gap-3 p-3 rounded-xl border border-[#00592B]/5 bg-[#FAFAF8]/50"
+                        className="flex items-start gap-3 p-3 rounded-xl border border-border bg-background/50"
                       >
-                        <div
-                          className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center ${
-                            item.is_correct ? 'bg-[#10B981]/10' : 'bg-rose-100'
-                          }`}
-                        >
-                          {item.is_correct ? (
-                            <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
-                          ) : (
-                            <XCircle className="w-4 h-4 text-rose-600" />
-                          )}
+                        <div className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center ${item.is_correct ? 'bg-accent/10' : 'bg-rose-100'}`}>
+                          {item.is_correct ? <CheckCircle2 className="w-3.5 h-3.5 text-accent" /> : <XCircle className="w-3.5 h-3.5 text-rose-600" />}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-[#1A1A1A] truncate">{item.snippet || '(no preview)'}</p>
-                          <p className="text-xs text-[#1A1A1A]/50 mt-1">
+                          <p className="text-sm text-foreground truncate">{item.snippet || '(no preview)'}</p>
+                          <p className="text-xs text-text-3 mt-0.5">
                             {SECTION_LABEL[item.section] || item.section}
                             {item.skill ? ` · ${item.skill}` : ''} · {formatRelative(item.answered_at)}
                           </p>
@@ -228,37 +190,34 @@ export default function ProgressPage() {
                 )}
               </div>
 
-              <div className="bg-white border-2 border-[#10B981]/20 p-6 rounded-2xl shadow-sm flex flex-col">
-                <h3 className="text-lg font-bold text-[#1A1A1A] mb-2 flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-amber-500" /> Improvement Focus
+              <div className="bg-card border-2 border-accent/20 p-5 rounded-2xl shadow-sm flex flex-col">
+                <h3 className="text-base font-bold text-foreground mb-1 flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-amber-500" /> Improvement focus
                 </h3>
-                <p className="text-[#1A1A1A]/50 text-sm mb-6">
+                <p className="text-text-3 text-sm mb-4">
                   {analytics.weak_skills.length === 0
                     ? 'Answer at least 3 questions in a skill to see weakest areas.'
-                    : 'Skills with the lowest accuracy across your practice (min 3 attempts).'}
+                    : 'Skills with the lowest accuracy (min 3 attempts).'}
                 </p>
 
-                <div className="space-y-4 flex-1">
+                <div className="space-y-3 flex-1">
                   {analytics.weak_skills.map((item) => (
-                    <div
-                      key={item.skill}
-                      className="p-4 rounded-xl border border-[#00592B]/10 hover:border-[#10B981]/30 hover:shadow-md transition-all group"
-                    >
-                      <div className="flex justify-between items-start mb-3">
+                    <div key={item.skill} className="p-3 rounded-xl border border-border hover:border-accent/30 hover:shadow-sm transition-[border-color,box-shadow] duration-[var(--dur)] ease-[var(--ease)] group">
+                      <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h4 className="font-bold text-[#1A1A1A]">{item.skill}</h4>
-                          <p className="text-xs text-[#1A1A1A]/40 mt-1 uppercase tracking-wide font-medium">
+                          <h4 className="font-bold text-foreground text-sm">{item.skill}</h4>
+                          <p className="text-xs text-text-3 mt-0.5 uppercase tracking-wide font-medium">
                             {SECTION_LABEL[item.section] || item.section}
                             {item.domain ? ` · ${item.domain}` : ''}
                           </p>
                         </div>
-                        <div className="bg-rose-50 px-2 py-1 rounded text-rose-600 font-bold text-sm">
+                        <div className="bg-rose-50 px-2 py-0.5 rounded text-rose-600 font-bold text-sm tabular-nums">
                           {item.accuracy}% ({item.correct}/{item.total})
                         </div>
                       </div>
                       <Link
                         href={`/practice?skill=${encodeURIComponent(item.skill)}`}
-                        className="flex items-center justify-between w-full bg-[#10B981]/10 text-[#00592B] px-4 py-2 rounded-lg font-medium transition-colors group-hover:bg-[#00592B] group-hover:text-white"
+                        className="flex items-center justify-between w-full bg-accent/10 text-primary px-3 py-2 rounded-lg font-medium text-sm transition-colors group-hover:bg-primary group-hover:text-white active:scale-[0.97]"
                       >
                         <span className="flex items-center gap-2">
                           <PlayCircle className="w-4 h-4" /> Practice this skill
@@ -277,25 +236,13 @@ export default function ProgressPage() {
   );
 }
 
-function StatCard({
-  icon,
-  iconBg,
-  label,
-  value,
-  hint,
-}: {
-  icon: React.ReactNode;
-  iconBg: string;
-  label: string;
-  value: string;
-  hint: string;
-}) {
+function StatCard({ icon, iconBg, label, value, hint }: { icon: React.ReactNode; iconBg: string; label: string; value: string; hint: string }) {
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#00592B]/10">
-      <div className={`w-10 h-10 rounded-full ${iconBg} flex items-center justify-center mb-4`}>{icon}</div>
-      <h3 className="text-[#1A1A1A]/50 text-sm font-medium">{label}</h3>
-      <p className="text-3xl font-bold text-[#1A1A1A] mt-1">{value}</p>
-      <p className="text-[#1A1A1A]/40 text-sm mt-2 truncate">{hint}</p>
+    <div className="bg-card p-5 rounded-2xl shadow-sm border border-border">
+      <div className={`w-9 h-9 rounded-full ${iconBg} flex items-center justify-center mb-3`}>{icon}</div>
+      <h3 className="text-text-3 text-sm font-medium">{label}</h3>
+      <p className="text-2xl font-bold text-foreground mt-0.5 tabular-nums">{value}</p>
+      <p className="text-text-3 text-xs mt-1 truncate">{hint}</p>
     </div>
   );
 }
@@ -304,16 +251,13 @@ function SectionBar({ label, data, barClass }: { label: string; data: SectionBre
   return (
     <div>
       <div className="flex justify-between text-sm mb-2">
-        <span className="font-semibold text-[#1A1A1A]/70">{label}</span>
-        <span className="text-[#1A1A1A]/50">
-          <span className="font-bold text-[#1A1A1A]">{data.accuracy}%</span> · {data.correct}/{data.total}
+        <span className="font-semibold text-text-2">{label}</span>
+        <span className="text-text-3">
+          <span className="font-bold text-foreground tabular-nums">{data.accuracy}%</span> · {data.correct}/{data.total}
         </span>
       </div>
-      <div className="w-full bg-[#1A1A1A]/10 rounded-full h-2.5">
-        <div
-          className={`${barClass} h-2.5 rounded-full transition-all duration-500`}
-          style={{ width: `${Math.min(100, data.accuracy)}%` }}
-        />
+      <div className="w-full bg-foreground/10 rounded-full h-2">
+        <div className={`${barClass} h-2 rounded-full transition-[width] duration-700 ease-[var(--ease)]`} style={{ width: `${Math.min(100, data.accuracy)}%` }} />
       </div>
     </div>
   );
