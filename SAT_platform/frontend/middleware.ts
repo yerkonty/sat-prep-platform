@@ -15,16 +15,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const loggedIn = request.cookies.get('logged_in')?.value;
-  if (loggedIn !== 'true') {
+  const refreshToken = request.cookies.get('refresh_token')?.value;
+  if (!refreshToken) {
     return NextResponse.redirect(new URL('/login', request.url));
-  }
-
-  if (pathname.startsWith('/admin')) {
-    const role = request.cookies.get('user_role')?.value;
-    if (role !== 'admin') {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
   }
 
   return NextResponse.next();

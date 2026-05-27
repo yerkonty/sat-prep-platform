@@ -190,7 +190,7 @@ Three distinct uses:
 
 2. **Math question extraction (offline pipeline).** As described above — Claude vision converts PDFs to structured JSON.
 
-3. **Code assistance during development.** We used Claude Code (the CLI tool from Anthropic) extensively to scaffold features faster. Every architectural decision and the *understanding* of the system is the developer's, but the implementation was significantly accelerated by AI pair-programming.
+3. **Code assistance during development.** We used AI coding assistants extensively to scaffold features faster, and the project is now maintained through Codex-based workflows in `CODEX.md`. Every architectural decision and the *understanding* of the system is the developer's, but the implementation was significantly accelerated by AI pair-programming.
 
 ---
 
@@ -368,7 +368,7 @@ Even after the demo, here are well-scoped next steps:
 ## 14. Anticipated Q&A (Defense Cheat Sheet)
 
 ### "Did you build this yourself or did AI do it for you?"
-Both. The project's **architecture** — what features exist, how the database is structured, how the practice test mimics Bluebook, how the data pipeline works — was designed deliberately. The **implementation** was significantly accelerated using Claude Code (Anthropic's coding assistant), which is the modern equivalent of using IDEs, autocompletion, and Stack Overflow. The understanding required to design, debug, and deploy the system is the same as in any software project. When deployment failed (Railway, then Python 3.14, then IPv6, then `DATETIME` vs `TIMESTAMP`), AI couldn't auto-fix any of those — they required reading logs, understanding the systems involved, and choosing among multiple plausible fixes.
+Both. The project's **architecture** — what features exist, how the database is structured, how the practice test mimics Bluebook, how the data pipeline works — was designed deliberately. The **implementation** was significantly accelerated using AI coding assistants, and the repo now uses Codex-oriented operating instructions in `CODEX.md`. The understanding required to design, debug, and deploy the system is the same as in any software project. When deployment failed (Railway, then Python 3.14, then IPv6, then `DATETIME` vs `TIMESTAMP`), AI couldn't auto-fix any of those — they required reading logs, understanding the systems involved, and choosing among multiple plausible fixes.
 
 ### "Why didn't you use a no-code tool like Bubble or Wix?"
 No-code tools couldn't deliver:

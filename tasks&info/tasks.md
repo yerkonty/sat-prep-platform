@@ -13,7 +13,7 @@ All 9 steps shipped in commit `75895e8`. Invite-only registration, role system (
 
 # Phase: Production Hardening & Polish (P2 - Current)
 
-- [ ] Run `/self-review` on the Security Backbone commit — validate no regressions, dead code, or missed edge cases across all 20 changed files.
+- [ ] Run a Codex self-review on the Security Backbone commit — validate no regressions, dead code, or missed edge cases across all 20 changed files.
 - [ ] Stripe webhook integration — finish wiring subscription events so `subscription_plan` updates automatically.
 - [ ] Smoke-test the full invite → register → practice → answer flow end-to-end in a browser (authenticated).
 - [ ] Deploy Security Backbone changes to production (Vercel + Railway + Supabase).

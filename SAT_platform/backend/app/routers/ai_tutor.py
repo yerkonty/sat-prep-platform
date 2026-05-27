@@ -100,5 +100,5 @@ def chat_with_tutor(
 
     except HTTPException:
         raise
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=f"AI service error: {str(e)}")
+    except Exception:
+        raise HTTPException(status_code=502, detail="AI service unavailable")

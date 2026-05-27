@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import api from '@/lib/api';
+import api, { clearAccessToken, setAccessToken } from '@/lib/api';
 
 interface User {
   id: string;
@@ -30,26 +30,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      const storedToken = localStorage.getItem('token');
-      if (storedToken) {
-        setToken(storedToken);
+      try {
+        const refreshRes = await api.post('/api/auth/refresh');
+        const newToken = refreshRes.data.access_token;
+        setAccessToken(newToken);
+        setToken(newToken);
         try {
-          const response = await api.get('/api/auth/profile');
-          setUser(response.data);
+          const profileRes = await api.get('/api/auth/profile');
+          setUser(profileRes.data);
         } catch {
-          try {
-            const refreshRes = await api.post('/api/auth/refresh');
-            const newToken = refreshRes.data.access_token;
-            localStorage.setItem('token', newToken);
-            setToken(newToken);
-            const profileRes = await api.get('/api/auth/profile');
-            setUser(profileRes.data);
-          } catch {
-            localStorage.removeItem('token');
-            setToken(null);
-            setUser(null);
-          }
+          clearAccessToken();
+          setToken(null);
+          setUser(null);
         }
+      } catch {
+        clearAccessToken();
+        setToken(null);
+        setUser(null);
       }
       setIsLoading(false);
     };
@@ -60,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     const response = await api.post('/api/auth/login', { email, password });
     const { access_token, user } = response.data;
-    localStorage.setItem('token', access_token);
+    setAccessToken(access_token);
     setToken(access_token);
     setUser(user);
   };
@@ -68,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loginWithGoogle = async (credential: string) => {
     const response = await api.post('/api/auth/google', { credential });
     const { access_token, user } = response.data;
-    localStorage.setItem('token', access_token);
+    setAccessToken(access_token);
     setToken(access_token);
     setUser(user);
   };
@@ -81,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       invite_token: inviteToken,
     });
     const { access_token, user } = response.data;
-    localStorage.setItem('token', access_token);
+    setAccessToken(access_token);
     setToken(access_token);
     setUser(user);
   };
@@ -92,7 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       // continue logout even if API call fails
     }
-    localStorage.removeItem('token');
+    clearAccessToken();
     setToken(null);
     setUser(null);
   };

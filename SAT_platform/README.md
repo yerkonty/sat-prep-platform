@@ -4,6 +4,20 @@
 
 A comprehensive full-stack web application for SAT preparation featuring AI-powered tutoring, question banks, progress analytics, and subscription-based access.
 
+## Working With Codex
+
+The active AI-maintainer workflow for this repo now lives in [`../CODEX.md`](../CODEX.md).
+
+Use it as the replacement for the old Claude Code operating layer:
+
+- Ask for "a self-review" to review local changes
+- Ask to "smoke test the practice flow" for the old smoke-test workflow
+- Ask to "add a migration for ..." for schema changes
+- Ask "what should we build next?" for sprint prioritization
+- Ask to "act as the question pipeline engineer" for PDF parsing and import work
+
+If older notes in `.claude/` disagree with the current code, trust the code and `CODEX.md` first.
+
 ---
 
 ## Technology Stack

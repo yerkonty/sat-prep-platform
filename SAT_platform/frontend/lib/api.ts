@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+let accessToken: string | null = null;
+
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
   headers: {
@@ -8,10 +10,17 @@ const api = axios.create({
   withCredentials: true,
 });
 
+export function setAccessToken(token: string | null) {
+  accessToken = token;
+}
+
+export function clearAccessToken() {
+  accessToken = null;
+}
+
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
 });
@@ -28,9 +37,14 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const requestUrl = String(originalRequest?.url || '');
 
     const status = error.response?.status;
-    if ((status === 401 || status === 403) && !originalRequest._retry) {
+    if (
+      (status === 401 || status === 403) &&
+      !originalRequest._retry &&
+      !requestUrl.includes('/api/auth/refresh')
+    ) {
       originalRequest._retry = true;
 
       if (isRefreshing) {
@@ -47,7 +61,7 @@ api.interceptors.response.use(
       try {
         const res = await api.post('/api/auth/refresh');
         const newToken = res.data.access_token;
-        localStorage.setItem('token', newToken);
+        setAccessToken(newToken);
         isRefreshing = false;
         onRefreshed(newToken);
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
@@ -55,7 +69,7 @@ api.interceptors.response.use(
       } catch {
         isRefreshing = false;
         pendingRequests = [];
-        localStorage.removeItem('token');
+        clearAccessToken();
         window.location.href = '/login';
         return Promise.reject(error);
       }

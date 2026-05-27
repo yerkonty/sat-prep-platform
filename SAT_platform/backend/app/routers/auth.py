@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, Cookie, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, Cookie, status
 from sqlalchemy.orm import Session
 from datetime import timedelta, datetime, timezone
 from typing import Optional
@@ -13,14 +13,21 @@ from app.database import get_db
 from app.models import User, InviteLink, RefreshToken
 from app.security import (
     get_password_hash,
+    hash_opaque_token,
+    password_needs_rehash,
     verify_password,
     create_access_token,
     create_refresh_token_value,
+    token_matches,
 )
 from app.dependencies import get_current_user
 from app.config import settings
+from app.rate_limit import rate_limiter
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+
+PASSWORD_MIN_LENGTH = 12
+ALLOWED_ORIGINS = {"http://localhost:3000", "http://127.0.0.1:3000"}
 
 
 def _utcnow_naive() -> datetime:
@@ -31,7 +38,85 @@ def _is_secure() -> bool:
     return settings.FRONTEND_URL.startswith("https")
 
 
-def _set_auth_cookies(response: Response, refresh_token: str, role: str) -> None:
+def _origin_is_allowed(request: Request) -> bool:
+    allowed_origins = set(ALLOWED_ORIGINS)
+    if settings.FRONTEND_URL:
+        allowed_origins.add(settings.FRONTEND_URL.rstrip("/"))
+
+    origin = request.headers.get("origin")
+    if origin:
+        return origin.rstrip("/") in allowed_origins
+
+    referer = request.headers.get("referer")
+    if not referer:
+        return False
+
+    return any(referer.startswith(origin + "/") or referer == origin for origin in allowed_origins)
+
+
+def _enforce_origin(request: Request) -> None:
+    if not _origin_is_allowed(request):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid request origin")
+
+
+def _client_ip(request: Request) -> str:
+    forwarded_for = request.headers.get("x-forwarded-for")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+    client = request.client.host if request.client else "unknown"
+    return client or "unknown"
+
+
+def _enforce_rate_limit(
+    request: Request,
+    action: str,
+    *,
+    limit: int,
+    window_seconds: int,
+    subject: Optional[str] = None,
+) -> None:
+    parts = [action, _client_ip(request)]
+    if subject:
+        parts.append(subject.strip().lower())
+    key = ":".join(parts)
+    allowed, retry_after = rate_limiter.allow(key, limit=limit, window_seconds=window_seconds)
+    if not allowed:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=f"Too many {action.replace('_', ' ')} attempts. Try again later.",
+            headers={"Retry-After": str(retry_after)},
+        )
+
+
+def _set_no_store_headers(response: Response) -> None:
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["Pragma"] = "no-cache"
+
+
+def _validate_password(password: str) -> None:
+    if len(password) < PASSWORD_MIN_LENGTH:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Password must be at least {PASSWORD_MIN_LENGTH} characters long",
+        )
+    if not any(ch.islower() for ch in password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must include at least one lowercase letter",
+        )
+    if not any(ch.isupper() for ch in password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must include at least one uppercase letter",
+        )
+    if not any(ch.isdigit() for ch in password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must include at least one number",
+        )
+
+
+def _set_auth_cookies(response: Response, refresh_token: str) -> None:
     max_age = settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400
     secure = _is_secure()
     response.set_cookie(
@@ -42,26 +127,10 @@ def _set_auth_cookies(response: Response, refresh_token: str, role: str) -> None
         samesite="lax",
         max_age=max_age,
     )
-    response.set_cookie(
-        key="logged_in",
-        value="true",
-        httponly=False,
-        secure=secure,
-        samesite="lax",
-        max_age=max_age,
-    )
-    response.set_cookie(
-        key="user_role",
-        value=role,
-        httponly=False,
-        secure=secure,
-        samesite="lax",
-        max_age=max_age,
-    )
 
 
 def _clear_auth_cookies(response: Response) -> None:
-    for key in ("refresh_token", "logged_in", "user_role"):
+    for key in ("refresh_token",):
         response.delete_cookie(key=key)
 
 
@@ -77,13 +146,14 @@ def _issue_tokens(
     rt = RefreshToken(
         id=str(uuid.uuid4()),
         user_id=user.id,
-        token=rt_value,
+        token=hash_opaque_token(rt_value),
         expires_at=_utcnow_naive() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
     )
     db.add(rt)
     db.commit()
 
-    _set_auth_cookies(response, rt_value, user.role)
+    _set_auth_cookies(response, rt_value)
+    _set_no_store_headers(response)
     return access_token
 
 
@@ -156,7 +226,14 @@ class VerificationRequest(BaseModel):
 # ---------- Registration (invite-gated) ----------
 
 @router.post("/register", response_model=AuthResponse)
-def register(request: RegisterRequest, response: Response, db: Session = Depends(get_db)):
+def register(
+    request: RegisterRequest,
+    response: Response,
+    http_request: Request,
+    db: Session = Depends(get_db),
+):
+    _enforce_rate_limit(http_request, "register", limit=6, window_seconds=900)
+    _validate_password(request.password)
     invite = (
         db.query(InviteLink)
         .filter(InviteLink.token == request.invite_token, InviteLink.is_active == True)
@@ -199,7 +276,13 @@ def register(request: RegisterRequest, response: Response, db: Session = Depends
 # ---------- Login ----------
 
 @router.post("/login", response_model=AuthResponse)
-def login(request: LoginRequest, response: Response, db: Session = Depends(get_db)):
+def login(
+    request: LoginRequest,
+    response: Response,
+    http_request: Request,
+    db: Session = Depends(get_db),
+):
+    _enforce_rate_limit(http_request, "login", limit=8, window_seconds=300, subject=request.email)
     user = db.query(User).filter(User.email == request.email).first()
 
     if not user or not verify_password(request.password, user.password_hash):
@@ -209,6 +292,8 @@ def login(request: LoginRequest, response: Response, db: Session = Depends(get_d
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account is deactivated")
 
     user.last_active = _utcnow_naive()
+    if password_needs_rehash(user.password_hash):
+        user.password_hash = get_password_hash(request.password)
     db.commit()
 
     access_token = _issue_tokens(user, db, response)
@@ -222,7 +307,13 @@ class GoogleAuthRequest(BaseModel):
 
 
 @router.post("/google", response_model=AuthResponse)
-def google_auth(request: GoogleAuthRequest, response: Response, db: Session = Depends(get_db)):
+def google_auth(
+    request: GoogleAuthRequest,
+    response: Response,
+    http_request: Request,
+    db: Session = Depends(get_db),
+):
+    _enforce_rate_limit(http_request, "google_login", limit=10, window_seconds=300)
     if not settings.GOOGLE_CLIENT_ID:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Google OAuth not configured")
 
@@ -294,22 +385,25 @@ def validate_invite(token: str, db: Session = Depends(get_db)):
 
 @router.post("/refresh")
 def refresh(
+    request: Request,
     response: Response,
     refresh_token: Optional[str] = Cookie(default=None),
     db: Session = Depends(get_db),
 ):
+    _enforce_origin(request)
+    _enforce_rate_limit(request, "refresh", limit=20, window_seconds=300)
     if not refresh_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="No refresh token")
 
     rt = (
         db.query(RefreshToken)
         .filter(
-            RefreshToken.token == refresh_token,
+            RefreshToken.token.in_([refresh_token, hash_opaque_token(refresh_token)]),
             RefreshToken.is_revoked == False,
         )
         .first()
     )
-    if not rt or rt.expires_at < _utcnow_naive():
+    if not rt or not token_matches(refresh_token, rt.token) or rt.expires_at < _utcnow_naive():
         _clear_auth_cookies(response)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired refresh token")
 
@@ -329,12 +423,18 @@ def refresh(
 
 @router.post("/logout")
 def logout(
+    request: Request,
     response: Response,
     refresh_token: Optional[str] = Cookie(default=None),
     db: Session = Depends(get_db),
 ):
+    _enforce_origin(request)
     if refresh_token:
-        rt = db.query(RefreshToken).filter(RefreshToken.token == refresh_token).first()
+        rt = (
+            db.query(RefreshToken)
+            .filter(RefreshToken.token.in_([refresh_token, hash_opaque_token(refresh_token)]))
+            .first()
+        )
         if rt:
             rt.is_revoked = True
             db.commit()
@@ -379,10 +479,16 @@ def change_password(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    _validate_password(request.new_password)
     if not verify_password(request.current_password, current_user.password_hash):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Current password is incorrect")
 
     current_user.password_hash = get_password_hash(request.new_password)
+    (
+        db.query(RefreshToken)
+        .filter(RefreshToken.user_id == current_user.id, RefreshToken.is_revoked == False)
+        .update({RefreshToken.is_revoked: True}, synchronize_session=False)
+    )
     db.commit()
     return {"message": "Password changed successfully"}
 
@@ -390,10 +496,15 @@ def change_password(
 # ---------- Password reset ----------
 
 @router.post("/request-password-reset")
-def request_password_reset(payload: PasswordResetRequest, db: Session = Depends(get_db)):
+def request_password_reset(
+    payload: PasswordResetRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    _enforce_rate_limit(request, "password_reset", limit=5, window_seconds=900, subject=payload.email)
     user = db.query(User).filter(User.email == payload.email).first()
     if user:
-        user.reset_token = str(uuid.uuid4())
+        user.reset_token = hash_opaque_token(str(uuid.uuid4()))
         user.reset_token_expires = _utcnow_naive() + timedelta(hours=1)
         db.commit()
     return {"message": "If the email exists, a reset link was issued."}
@@ -401,13 +512,24 @@ def request_password_reset(payload: PasswordResetRequest, db: Session = Depends(
 
 @router.post("/reset-password")
 def reset_password(payload: PasswordResetConfirm, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.reset_token == payload.token).first()
+    _validate_password(payload.new_password)
+    token_hash = hash_opaque_token(payload.token)
+    user = (
+        db.query(User)
+        .filter(User.reset_token.in_([payload.token, token_hash]))
+        .first()
+    )
     if not user or not user.reset_token_expires or user.reset_token_expires < _utcnow_naive():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid or expired token")
 
     user.password_hash = get_password_hash(payload.new_password)
     user.reset_token = None
     user.reset_token_expires = None
+    (
+        db.query(RefreshToken)
+        .filter(RefreshToken.user_id == user.id, RefreshToken.is_revoked == False)
+        .update({RefreshToken.is_revoked: True}, synchronize_session=False)
+    )
     db.commit()
     return {"message": "Password has been reset"}
 
@@ -416,14 +538,19 @@ def reset_password(payload: PasswordResetConfirm, db: Session = Depends(get_db))
 
 @router.post("/request-verification")
 def request_verification(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    current_user.verification_token = str(uuid.uuid4())
+    current_user.verification_token = hash_opaque_token(str(uuid.uuid4()))
     db.commit()
-    return {"message": "Verification issued", "verification_token": current_user.verification_token}
+    return {"message": "Verification issued"}
 
 
 @router.post("/verify-email")
 def verify_email(payload: VerificationRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.verification_token == payload.token).first()
+    token_hash = hash_opaque_token(payload.token)
+    user = (
+        db.query(User)
+        .filter(User.verification_token.in_([payload.token, token_hash]))
+        .first()
+    )
     if not user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token")
 

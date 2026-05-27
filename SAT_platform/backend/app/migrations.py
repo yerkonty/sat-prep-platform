@@ -1,5 +1,6 @@
 from sqlalchemy import inspect, text
 from sqlalchemy.engine import Engine
+from app.security import hash_opaque_token
 
 
 def run_startup_migrations(engine: Engine) -> None:
@@ -82,8 +83,31 @@ def run_startup_migrations(engine: Engine) -> None:
             statements.append("ALTER TABLE exam_attempts ADD COLUMN started_at TIMESTAMP")
 
     if not statements:
-        return
+        pass
 
     with engine.begin() as conn:
         for stmt in statements:
             conn.execute(text(stmt))
+        if "refresh_tokens" in tables:
+            rows = conn.execute(text("SELECT id, token FROM refresh_tokens")).fetchall()
+            for row in rows:
+                if row.token and not row.token.startswith("sha256:"):
+                    conn.execute(
+                        text("UPDATE refresh_tokens SET token = :token WHERE id = :id"),
+                        {"id": row.id, "token": hash_opaque_token(row.token)},
+                    )
+        if "users" in tables:
+            rows = conn.execute(
+                text("SELECT id, reset_token, verification_token FROM users")
+            ).fetchall()
+            for row in rows:
+                if row.reset_token and not row.reset_token.startswith("sha256:"):
+                    conn.execute(
+                        text("UPDATE users SET reset_token = :token WHERE id = :id"),
+                        {"id": row.id, "token": hash_opaque_token(row.reset_token)},
+                    )
+                if row.verification_token and not row.verification_token.startswith("sha256:"):
+                    conn.execute(
+                        text("UPDATE users SET verification_token = :token WHERE id = :id"),
+                        {"id": row.id, "token": hash_opaque_token(row.verification_token)},
+                    )
